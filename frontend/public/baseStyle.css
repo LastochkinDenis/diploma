@@ -1,0 +1,24 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'M PLUS Rounded 1c';
+    font-weight: 400;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+ul {
+    list-style: none;
+}
+
+.flex-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
