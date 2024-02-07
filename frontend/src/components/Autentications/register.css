@@ -1,0 +1,59 @@
+.authentivations__wraper {
+    background-color: #E1E8FA;
+    border-radius: 15px;
+    padding: 2%;
+    width: 35%;
+}
+.authentivations__form-item label p {
+    font-size: 20px;
+}
+.authentivations__form-item input {
+    width: 98%;
+
+    padding: 2%;
+
+    padding-right: 0;
+    padding-left: 2%;
+
+    font-size: 18px;
+
+    border-radius: 15px;
+
+    border: none;
+    outline: none;
+}
+.error-mesage {
+    color: red;
+    font-size: 16px;
+}
+.submitButton {
+    width: 100%;
+    padding: 4% 1%;
+
+    border-radius: 15px;
+    border: none;
+    outline: none;
+
+    cursor: pointer;
+
+    background-color: #D9D9D9;
+
+    margin-top: 3%;
+
+    font-size: 20px;
+}
+@media (max-width: 1530px) {
+    .authentivations__wraper {
+        width: 35%;
+    }
+}
+@media (max-width: 1200px) {
+    .authentivations__wraper {
+        width: 45%;
+    }
+}
+@media (max-width: 1030px) {
+    .authentivations__wraper {
+        width: 70%;
+    }
+}

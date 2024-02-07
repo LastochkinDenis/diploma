@@ -5,6 +5,7 @@ from string import ascii_letters
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
+import pytz
 
 file_dire = os.path.join(settings.BASE_DIR, 'config.py')
 
@@ -20,6 +21,10 @@ LETTERS = ascii_letters + '123456789!@#$%^&*()_-=+;:{}<>/.,'
 class Token:
 
     def chekToken(self, token):
+
+        if not token:
+            False
+
         payload = self.getPyaload(token)
         varifiableToken = jwt.encode(payload, TOKEN_SECRET, algorithm='HS256')
 
@@ -32,14 +37,18 @@ class Token:
 
         return jwt.encode(payload, TOKEN_SECRET, algorithm='HS256')
     
-    def getPyaload(self, token):
+    @classmethod
+    def getPyaload(cls, token):
         return jwt.decode(token, TOKEN_SECRET, algorithms=['HS256'])
 
 class AcescToken(Token):
     
     
-    def createToken(self, payload):
-        exp = datetime.now() + timedelta(minutes=10)
+    def createToken(self, payload, timeZone):
+        now = datetime.now()
+
+        exp = pytz.timezone(timeZone).localize(now) + timedelta(minutes=10)
+
         return super().createToken(payload=payload, exp=exp)
 
     def updateToken(self, updatableToken, payload):
@@ -57,7 +66,9 @@ class RefreshToken(Token):
                 return refresh
             
     def createToken(self):
-        exp = datetime.now() + timedelta(days=60)
+        now = datetime.now()
+
+        exp = now + timedelta(days=30)
         return super().createToken({'refresh': self.getRefresh}, exp)
     
     def updateToken(self, updatableToken):

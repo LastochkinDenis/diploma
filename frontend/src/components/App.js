@@ -1,58 +1,39 @@
+import '../axios/settings';
+import {getUserInfo} from '../api/getUserInfo';
+
+
 import { Component, Fragment } from 'react'
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
+import Header from './Header/Header';
 import MegnifyinGlassIcon from '../icon/MegnifyinGlassIcon.svg';
+import Register from './Autentications/register';
+import Autentications from './Autentications/authentivations';
+import { connect } from 'react-redux';
 
-class App extends Component {
+
+class AppUnconnect extends Component {
 
   constructor(props) {
     super(props);
+  }
+
+  async componentDidMount() {
+    let user = await getUserInfo();
+
+    if(user)
+      this.props.putUserData({'user': user});
   }
   
   render() {
     return (
     <Fragment>
-      <header className='flex-block'>
-        <nav className='header-navigate'>
-          <ul>
-            <li className='header-navigate-logo'>
-              <a><div className='circle'>{ /* temporarily */ }</div></a>
-            </li>
-            <li>
-              <a href='#'>Каталог</a>
-            </li>
-            <li>
-              <a href='#'>Мое обусение</a>
-            </li>
-            <li>
-              <a href='#'>Преподавание</a>
-            </li>
-          </ul>
-        </nav>
-
-        <div className='header-profile-wraper flex-block'>
-        {/* --------------- */ }
-          <div className='search-wraper'>
-            <img src={MegnifyinGlassIcon} />
-            <input className='search' placeholder='Поиск...' />
-          </div>
-        {/* --------------- */ }
-          {/* <div className='profile flex-block'>
-              <a href='#'>
-                <p>NameUser</p>
-              </a>
-              <a href='#'>
-                <div className='sqrt'></div>
-              </a>
-          </div> */}
-          <div className='profile flex-block'>
-            <a href='#' className='authenticatin-batten'>Регистрация</a>
-            <a href='#' className='authenticatin-batten'>Войти</a>
-          </div>
-        </div>
-      </header>
+      <Header />
       <main>
-      <p>Главная страниа</p>
+        <Routes>
+          <Route path='/register' element=<Register /> />
+          <Route path='/login' element=<Autentications /> />
+        </Routes>
       </main>
       <footer></footer>
     </Fragment>
@@ -60,5 +41,12 @@ class App extends Component {
   }
 
 }
+
+const actionBroker = (dispath) => ({
+  putUserData: (key) => {dispath({type: 'user/putUserData', payload: key})}
+});
+
+const AppConnect = connect(undefined, actionBroker);
+const App = AppConnect(AppUnconnect);
 
 export default App;

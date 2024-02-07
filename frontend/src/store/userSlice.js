@@ -14,9 +14,13 @@ export const userSlice = createSlice({
         getFirstName: (state, action) => {},
         getEmail: (state, action) => {},
         putUserData: (state, action) => {
-            state.user.lastName = action.payload.lastName;
-            state.user.firstName = action.payload.firstName;
-            state.user.email = action.payload.email;
+            const { lastName, firstName, email } = action.payload.user;
+            state.user = {
+                ...state.user,
+                lastName,
+                firstName,
+                email
+            };
         }
     }
 })

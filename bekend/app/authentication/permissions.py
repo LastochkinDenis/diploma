@@ -1,3 +1,6 @@
+from .jwtToken import RefreshToken, AcescToken
+
+
 from rest_framework.permissions import BasePermission
 
 class AuthenticationPermissions(BasePermission):
@@ -25,3 +28,18 @@ class LogoutPermissions(BasePermission):
             return True
         
         return False
+    
+class UserPermissions(BasePermission):
+
+    def has_permission(self, request, view):
+        
+        refreshToken = RefreshToken()
+        axescToken = AcescToken()
+
+        refresh = request.COOKIES.get('refresh', {})
+        axesc = request.COOKIES.get('axesc', {})
+
+        if not refreshToken.chekToken(refresh):
+            return False
+
+        return True

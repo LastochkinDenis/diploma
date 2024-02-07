@@ -4,26 +4,37 @@ from datetime import datetime, timedelta
 from .serailizer import RegisterUser
 from .jwtToken import AcescToken, RefreshToken
 from .models import RefreshUser
-from .permissions import AuthenticationPermissions, LogoutPermissions
+from .permissions import AuthenticationPermissions, LogoutPermissions, UserPermissions
+from user.models import User
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
+from rest_framework.exceptions import ValidationError
 from django.contrib.auth import authenticate
 from django.core.exceptions import ObjectDoesNotExist
+from django.conf import settings
+import pytz 
 
 from django.utils import timezone
 
 
-def createJWT(user):
-    response = Response()
+def createJWT(user, response, timeZone):
+
+    now = datetime.now()
+
+    targetTimeZone = pytz.timezone(timeZone)
 
     acescToken = AcescToken()
     refreshToken = RefreshToken()
+
+    print(targetTimeZone, targetTimeZone.localize(now))
+
     response.set_cookie('acses', acescToken.createToken({
-        'idUser': user.pk
-    }), path='/', expires=datetime.now() + timedelta(minutes=10))
+        'idUser': user.pk,
+    }, timeZone
+    ), path='/')
 
     refresh = refreshToken.createToken()
     
@@ -41,7 +52,8 @@ def createJWT(user):
     response.set_cookie('refresh', refresh, 
                         expires=datetime.now() + timedelta(days=30),
                         path='/',
-                        httponly=True)
+                        httponly=True,
+                        )
 
     return response
 
@@ -69,13 +81,22 @@ class RegsiterUserApi(APIView):
 
     def post(self, requset):
         data = requset.data.get('user', {})
+        
+        try:
+            serializer = RegisterUser(data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        except ValidationError as e:
+            error = e.detail
+            if 'user with this email already exists.' == error.get('email')[0]:
+                return Response({
+                    'error': 'user with this email already exists.'
+                }, status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = RegisterUser(data=data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
 
-        response = createJWT(user)
-        response.data = {'user': serializer.data}
+        response = Response()
+        response.data = {'isCrate': True}
         response.status_code = status.HTTP_201_CREATED
         return response
 
@@ -89,11 +110,13 @@ class LoginUserApi(APIView):
 
         userEmail = data.get('email')
         userPassword = data.get('password')
+        timeZone = data.get('timezone')
 
         user = authenticate(request, email=userEmail, password=userPassword)
 
         if user:
-            response = createJWT(user)
+            response = createJWT(user, Response(), timeZone)
+            
             response.data = {'user': {
                 'email': user.email,
                 'firstName': user.firstName,
@@ -102,7 +125,41 @@ class LoginUserApi(APIView):
             response.status_code = status.HTTP_200_OK
             return response
 
-        return Response('User do not found', status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'User do not found.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+@api_view(['GET'])
+@permission_classes([UserPermissions])
+def getUserInfoApi(request):
+    
+    acesc = request.COOKIES.get('acesc', {})
+    refresh = request.COOKIES.get('refresh', {})
+
+    if acesc:
+        acescPyaload = AcescToken.getPyaload()
+
+        try:
+            user = User.objects.get(id=int(acescPyaload.get('user')))
+        except ObjectDoesNotExist:
+            pass
+
+        Response({'user': {
+            'email': user.email,
+            'firstName': user.firstName,
+            'lastName': user.lastName
+        }}, status=status.HTTP_200_OK)
+    
+    try:
+        refreshUser = RefreshUser.objects.get(refresh=refresh)
+    except:
+        return Response(status=status.HTTP_403_UNAUTHORIZED)
+
+    return Response({'user': {
+            'email': refreshUser.user.email,
+            'firstName': refreshUser.user.firstName,
+            'lastName': refreshUser.user.lastName
+        }}, status=status.HTTP_200_OK)
+
         
 
 class LogoutUserApi(APIView):
