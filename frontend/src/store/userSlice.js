@@ -21,6 +21,14 @@ export const userSlice = createSlice({
                 firstName,
                 email
             };
+        },
+        deleteUserData: (state, action) => {
+            state.user = {
+                ...state.user,
+                'lastName': '',
+                'firstName': '',
+                'email': ''
+            }
         }
     }
 })

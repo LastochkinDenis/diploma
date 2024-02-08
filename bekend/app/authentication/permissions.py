@@ -21,10 +21,9 @@ class AuthenticationPermissions(BasePermission):
 class LogoutPermissions(BasePermission):
 
     def has_permission(self, request, view):
-        acses = request.COOKIES.get('acses', {})
         refresh = request.COOKIES.get('refresh', {})
 
-        if acses and refresh:
+        if refresh:
             return True
         
         return False

@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { logoutApi } from '../../api/authenticationApi';
 
 import './header.css';
 import MegnifyinGlassIcon from '../../icon/MegnifyinGlassIcon.svg';
@@ -11,6 +12,14 @@ function Header(props) {
     const [isOpenMenu, setOpenMenu] = useState(false);
     const [isOpneProfil, setOpenProfil] = useState(false);
     const user = useSelector((state) => state.user).user;
+    const dispatch = useDispatch();
+
+    const logout = async (evt) => {
+     evt.preventDefault();
+     const isLogout =  await logoutApi();
+     if(isLogout)
+          dispatch({type: 'user/deleteUserData', payload: {}});
+    }
 
     const renderUserBlock = () => {
 
@@ -37,7 +46,7 @@ function Header(props) {
                               <ul>
                                    <li><a href='#'>Профиль</a></li>
                                    <li><a href='#'>Настройки</a></li>
-                                   <li><a href='#'>Выйти</a></li>
+                                   <li><a href='#' onClick={logout}>Выйти</a></li>
                               </ul>
                          </nav>
                     </div>
