@@ -1,6 +1,6 @@
 import './register.css';
 import { loginApi } from '../../api/authenticationApi';
-import { putUserData } from '../../store/userSlice';
+import PasswordInput from '../passwordInput/passwordInput';
 
 import { Component } from "react";
 import { Navigate } from 'react-router-dom';
@@ -104,7 +104,7 @@ class AutenticationsUnconnected extends Component {
                     <div className="authentivations__form-item">
                         <label>
                             <p>Пароль:</p>
-                            <input type="text" placeholder="Пароль" onChange={this.handlePasswordChange}/>
+                            <PasswordInput handlePasswordChange={this.handlePasswordChange} />
                         </label>
                         {this.state.errorPassword && <p className='error-mesage'>{this.state.errorPassword}</p>}
                     </div>

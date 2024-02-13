@@ -1,5 +1,6 @@
 import './register.css';
 import {regsiterApi} from '../../api/authenticationApi.js';
+import PasswordInput from '../passwordInput/passwordInput';
 
 import { Component } from "react";
 import { Navigate } from "react-router-dom";
@@ -149,14 +150,14 @@ export default class Register extends Component {
                     <div className="authentivations__form-item">
                         <label>
                             <p>Пароль:</p>
-                            <input type="text" placeholder="Пароль" onChange={this.handlepasswordChange}/>
+                            <PasswordInput handlePasswordChange={this.handlepasswordChange} />
                         </label>
                         {this.state.errorPassword && <p className='error-mesage'>{this.state.errorPassword}</p>}
                     </div>
                     <div className="authentivations__form-item">
                         <label>
                             <p>Пароль:</p>
-                            <input type="text" placeholder="Пароль" onChange={this.handlePassword2Change}/>
+                            <PasswordInput handlePasswordChange={this.handlePassword2Change} />
                         </label>
                         <p className='error-mesage'></p>
                     </div>
