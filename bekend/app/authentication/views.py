@@ -189,7 +189,7 @@ class LogoutUserApi(APIView):
 
         return response
 
-@api_view(['POST'])
+@api_view(['GET'])
 def updateAcsesToken(requset):
     refreshToken = RefreshToken()
     acescToken = AcescToken()
@@ -213,6 +213,6 @@ def updateAcsesToken(requset):
 
     newAcesc = acescToken.createToken(payload=payload)
 
-    response.set_cookie('acses', newAcesc, path='/', expires=datetime.now() + timedelta(minutes=10))
+    response.set_cookie('acses', newAcesc, path='/')
     response.status_code = status.HTTP_200_OK
     return response

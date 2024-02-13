@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { logoutApi } from '../../api/authenticationApi';
+import { logoutApi, loginApi } from '../../api/authenticationApi';
 
 import './header.css';
 import MegnifyinGlassIcon from '../../icon/MegnifyinGlassIcon.svg';
@@ -17,6 +17,7 @@ function Header(props) {
     const logout = async (evt) => {
      evt.preventDefault();
      const isLogout =  await logoutApi();
+
      if(isLogout)
           dispatch({type: 'user/deleteUserData', payload: {}});
     }

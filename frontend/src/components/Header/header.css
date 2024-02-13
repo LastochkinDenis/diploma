@@ -131,12 +131,12 @@ header {
     padding: 0.5%;
     border-radius: 0 0 15px 15px;
 
-    top: -8%;
+    top: -12%;
 
     margin-left: -40px;
 } 
 .header__profile-menu.activeF {
-    top: 8%;
+    top: 100px;
 }
 @media (max-width: 1900px), (min-width: 1900px)  {
     header {
@@ -148,7 +148,7 @@ header {
         width: 1170px;
     }
     .header__profile-menu.activeF {
-        top: 7%;
+        top: 100px;
     }
 }
 @media (max-width: 1200px) {
@@ -233,6 +233,9 @@ header {
     .header__profile__authentication {
         margin-right: 5%;
     }
+    .header__profile-menu.activeF {
+        top: 80px;
+    }
 }
 @media (max-width: 540px) {
     .header__profile {
@@ -242,6 +245,6 @@ header {
         margin-right: 13%;
     }
     .header__profile-menu.activeF {
-        top: 6%;
+        top: 80px;
     }
 }

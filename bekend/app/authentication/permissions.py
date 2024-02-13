@@ -36,7 +36,9 @@ class UserPermissions(BasePermission):
         axescToken = AcescToken()
 
         refresh = request.COOKIES.get('refresh', {})
-        axesc = request.COOKIES.get('axesc', {})
+
+        if not refresh:
+            return False
 
         if not refreshToken.chekToken(refresh):
             return False

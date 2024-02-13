@@ -4,7 +4,7 @@ export async function regsiterApi(userData) {
     let isCrate = false;
     let erorrResponse = '';
 
-    await axios.post('http://localhost:8000/api/1.0v/authentication/register/', {
+    await axios.post('authentication/register/', {
         'user' : userData 
     })
     .then(response => {
@@ -23,7 +23,7 @@ export async function loginApi(userData) {
     let erorrResponse = ''
 
 
-    await axios.post('http://localhost:8000/api/1.0v/authentication/login/',{
+    await axios.post('authentication/login/',{
         'user': userData
     })
     .then(response => {

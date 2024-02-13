@@ -6,7 +6,7 @@ export async function getUserInfo() {
     
     let user;
 
-    await axios.get('http://localhost:8000/api/1.0v/authentication/userInfo/')
+    await axios.get('authentication/userInfo/')
     .then(response => {
         user = response.data.user
     })
