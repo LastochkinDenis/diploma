@@ -9,11 +9,17 @@ def courseImagePath(instance):
     return 'course/course_' + instance.name.replace(' ', '_').lower() + '/image'
 
 class Course(models.Model):
+
+    KINDS_OF_STATUS = (
+        ('a', 'active'),
+        ('d', 'draft'),
+        ('r', 'remove')
+    )
     
     name = models.CharField(max_length=100)
     description = models.TextField()
     imageCourse = models.ImageField(upload_to=courseImagePath, null=True)
-    isActive = models.BooleanField(default=True)
+    status = models.CharField(max_length=1, choices=KINDS_OF_STATUS, default='d')
     tags = models.ManyToManyField('Tag', db_table='CourseTag')
     authors = models.ManyToManyField(User, db_table='AuthCourse')
     slug = AutoSlugField(unique=True, populate_from='name', slugify=genarationSlug)

@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 
-from .serailizer import RegisterUser
+from .serializer import RegisterUser
 from .jwtToken import AcescToken, RefreshToken
 from .models import RefreshUser
 from .permissions import AuthenticationPermissions, LogoutPermissions, UserPermissions
