@@ -1,0 +1,1 @@
+default_app_config = 'course_content.apps.CourseContentConfig'
