@@ -6,7 +6,7 @@ export async function getUserInfo() {
     
     let user;
 
-    await axios.get('authentication/userInfo/')
+    await axios.get('authentication/userinfo/')
     .then(response => {
         user = response.data.user
     })
