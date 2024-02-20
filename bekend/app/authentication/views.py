@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 
 from .serializer import RegisterUser
-from .jwtToken import AcescToken, RefreshToken
+from .jwtToken import AccessToken, RefreshToken
 from .models import RefreshUser
 from .permissions import AuthenticationPermissions, LogoutPermissions, UserPermissions
 from user.models import User
@@ -20,20 +20,16 @@ import pytz
 from django.utils import timezone
 
 
-def createJWT(user, response, timeZone):
+def createJWT(user, response):
 
     now = datetime.now()
 
-    targetTimeZone = pytz.timezone(timeZone)
-
-    acescToken = AcescToken()
+    accessToken = AccessToken()
     refreshToken = RefreshToken()
 
-    print(targetTimeZone, targetTimeZone.localize(now))
-
-    response.set_cookie('acses', acescToken.createToken({
+    response.set_cookie('access', accessToken.createToken({
         'idUser': user.pk,
-    }, timeZone
+    }
     ), path='/')
 
     refresh = refreshToken.createToken()
@@ -110,12 +106,11 @@ class LoginUserApi(APIView):
 
         userEmail = data.get('email')
         userPassword = data.get('password')
-        timeZone = data.get('timezone')
 
         user = authenticate(request, email=userEmail, password=userPassword)
 
         if user:
-            response = createJWT(user, Response(), timeZone)
+            response = createJWT(user, Response())
             
             response.data = {'user': {
                 'email': user.email,
@@ -132,33 +127,34 @@ class LoginUserApi(APIView):
 @permission_classes([UserPermissions])
 def getUserInfoApi(request):
     
-    acesc = request.COOKIES.get('acesc', {})
+    access = request.COOKIES.get('access', {})
     refresh = request.COOKIES.get('refresh', {})
 
-    if acesc:
-        acescPyaload = AcescToken.getPyaload()
+    if access:
+        accessPyaload = AccessToken.getPyaload(access)
 
         try:
-            user = User.objects.get(id=int(acescPyaload.get('user')))
+            user = User.objects.get(id=int(accessPyaload.get('idUser')))
         except ObjectDoesNotExist:
-            pass
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
-        Response({'user': {
+        return Response({'user': {
             'email': user.email,
             'firstName': user.firstName,
             'lastName': user.lastName
         }}, status=status.HTTP_200_OK)
     
-    try:
-        refreshUser = RefreshUser.objects.get(refresh=refresh)
-    except:
-        return Response(status=status.HTTP_403_UNAUTHORIZED)
+    return Response(status=status.HTTP_403_FORBIDDEN)
+    # try:
+    #     refreshUser = RefreshUser.objects.get(refresh=refresh)
+    # except:
+    #     return Response(status=status.HTTP_403_UNAUTHORIZED)
 
-    return Response({'user': {
-            'email': refreshUser.user.email,
-            'firstName': refreshUser.user.firstName,
-            'lastName': refreshUser.user.lastName
-        }}, status=status.HTTP_200_OK)
+    # return Response({'user': {
+    #         'email': refreshUser.user.email,
+    #         'firstName': refreshUser.user.firstName,
+    #         'lastName': refreshUser.user.lastName
+    #     }}, status=status.HTTP_200_OK)
 
         
 
@@ -167,10 +163,8 @@ class LogoutUserApi(APIView):
     permission_classes = [LogoutPermissions]
 
     def post(self, request):
-        acescToken = AcescToken()
         refreshToken = RefreshToken()
         
-        acesc = request.COOKIES.get('acses')
         refresh = request.COOKIES.get('refresh')
 
         try:
@@ -181,7 +175,7 @@ class LogoutUserApi(APIView):
         
         response = Response()
 
-        response.delete_cookie('acses', path='/')
+        response.delete_cookie('access', path='/')
         response.delete_cookie('refresh', path='/')
 
         response.data = 'User log out'
@@ -192,7 +186,7 @@ class LogoutUserApi(APIView):
 @api_view(['GET'])
 def updateAcsesToken(requset):
     refreshToken = RefreshToken()
-    acescToken = AcescToken()
+    accessToken = AccessToken()
 
     try:
         refreshUser = RefreshUser.objects.get(refresh=requset.COOKIES.get('refresh', ''))
@@ -201,7 +195,7 @@ def updateAcsesToken(requset):
 
     response = Response()
 
-    refresh = refreshToken.getPyaload(requset.data.get('refresh'))
+    refresh = refreshToken.getPyaload(requset.COOKIES.get('refresh', ''))
     exp = datetime.fromtimestamp(refresh.get('exp'))
 
     if exp < datetime.now():
@@ -209,10 +203,10 @@ def updateAcsesToken(requset):
 
     payload = {
         'idUser': refreshUser.user.id
-    }    
+    }
 
-    newAcesc = acescToken.createToken(payload=payload)
+    newAccess = accessToken.createToken(payload=payload)
 
-    response.set_cookie('acses', newAcesc, path='/')
+    response.set_cookie('access', newAccess, path='/')
     response.status_code = status.HTTP_200_OK
     return response

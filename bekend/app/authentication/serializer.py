@@ -1,4 +1,4 @@
-from .jwtToken import AcescToken, RefreshToken
+from .jwtToken import AccessToken, RefreshToken
 from .models import RefreshUser
 from user.models import User
 

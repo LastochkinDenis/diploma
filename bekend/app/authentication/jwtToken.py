@@ -41,13 +41,12 @@ class Token:
     def getPyaload(cls, token):
         return jwt.decode(token, TOKEN_SECRET, algorithms=['HS256'])
 
-class AcescToken(Token):
+class AccessToken(Token):
     
     
-    def createToken(self, payload, timeZone):
-        now = datetime.now()
+    def createToken(self, payload):
 
-        exp = pytz.timezone(timeZone).localize(now) + timedelta(minutes=10)
+        exp = datetime.now() + timedelta(minutes=10)
 
         return super().createToken(payload=payload, exp=exp)
 
