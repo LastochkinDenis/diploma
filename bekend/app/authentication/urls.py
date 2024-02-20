@@ -7,5 +7,5 @@ urlpatterns = [
     path('login/', LoginUserApi.as_view()),
     path('updateacesc/', updateAcsesToken),
     path('logout/', LogoutUserApi.as_view()),
-    path('userInfo/', getUserInfoApi)
+    path('userinfo/', getUserInfoApi)
 ]

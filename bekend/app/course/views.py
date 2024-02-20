@@ -1,17 +1,18 @@
 from .models import Course
-from .serializer import CourseSerializer
+from .serializer import CourseSerializer, UpdateSerializer
 from authentication.permissions import AuthorizedUserPermissions
 from authentication.jwtToken import AccessToken
+from .permissions import UpdateCoursePermissions
 
 from rest_framework.views import APIView
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, UpdateAPIView
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
 
 
-class CreateCourse(CreateAPIView):
+class CreateCourseApi(CreateAPIView):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
     permission_classes = [AuthorizedUserPermissions]
@@ -28,7 +29,7 @@ class CreateCourse(CreateAPIView):
         return context
 
 @api_view(['GET'])
-def getInfoCourse(request, slug):
+def getInfoCourseApi(request, slug):
     try:
         course = Course.objects.get(slug=slug)
     except ObjectDoesNotExist:
@@ -43,3 +44,12 @@ def getInfoCourse(request, slug):
 
     return Response(context, status=status.HTTP_200_OK)
     
+class UpdateCorseApi(UpdateAPIView):
+    queryset = Course.objects.all()
+    serializer_class = UpdateSerializer
+    permission_classes = [AuthorizedUserPermissions, UpdateCoursePermissions]
+
+    def get_object(self):
+        slug = self.kwargs.get('slug', '')
+
+        return Course.objects.get(slug=slug)

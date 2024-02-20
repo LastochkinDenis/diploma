@@ -4,6 +4,8 @@ from .genarationSlug import genarationSlug
 
 from django.db import models
 from autoslug import AutoSlugField
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 def courseImagePath(instance):
     return 'course/course_' + instance.name.replace(' ', '_').lower() + '/image'
@@ -27,6 +29,11 @@ class Course(models.Model):
     class Meta:
         verbose_name = 'Course'
         verbose_name_plural = 'Courses'
+
+@receiver(pre_save, sender=Course)
+def updateNameCourse(sender, instance, **kwarg):
+    if instance.name:
+        instance.slug = genarationSlug(instance.name)
 
 class UserCertificate(models.Model):
 
