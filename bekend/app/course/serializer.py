@@ -6,7 +6,7 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 
 
-class CreateCourseSerializer(ModelSerializer):
+class CourseSerializer(ModelSerializer):
 
     def create(self, validated_data):
 

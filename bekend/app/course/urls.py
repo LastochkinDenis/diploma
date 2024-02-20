@@ -1,7 +1,8 @@
-from .views import CreateCourse
+from .views import CreateCourse, getInfoCourse
 from django.urls import path
 
 
 urlpatterns = [
-    path('cratecouruse/', CreateCourse.as_view())
+    path('cratecourse/', CreateCourse.as_view()),
+    path('course/<slug:slug>', getInfoCourse),
 ]
