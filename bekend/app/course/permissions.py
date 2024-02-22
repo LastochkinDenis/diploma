@@ -19,11 +19,9 @@ class UpdateCoursePermissions(BasePermission):
             accessPayload = accessToken.getPyaload(request.COOKIES.get('access', ''))
         except ExpiredSignatureError:
             return False
-        #course33-3
         try:
             authors = Course.objects.get(slug=slug, authors__id=accessPayload.get('idUser'))
         except ObjectDoesNotExist:
-            print(1)
             return False
 
         return True

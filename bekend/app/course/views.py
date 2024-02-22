@@ -1,8 +1,9 @@
-from .models import Course
+from .models import Course, Tag
 from .serializer import CourseSerializer, UpdateSerializer
 from authentication.permissions import AuthorizedUserPermissions
 from authentication.jwtToken import AccessToken
 from .permissions import UpdateCoursePermissions
+from user.models import User 
 
 from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView, UpdateAPIView
@@ -51,5 +52,73 @@ class UpdateCorseApi(UpdateAPIView):
 
     def get_object(self):
         slug = self.kwargs.get('slug', '')
-
+    
         return Course.objects.get(slug=slug)
+
+class AddAuthCourse(APIView):
+
+    permission_classes = [AuthorizedUserPermissions, UpdateCoursePermissions]
+
+    def post(self, request, slug):
+        
+        auths = request.data.get('authors', [])
+        authAdded = []
+
+        if not auths:
+            return Response(data={
+                'error': 'author didn\'t get'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            course = Course.objects.get(slug=slug)
+        except ObjectDoesNotExist:
+            return Response(data={
+                'error': 'course didn\'t find'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        for IdAuth in auths:
+            try:
+                auth = User.objects.get(id=int(IdAuth))
+            except:
+                continue
+            
+            authAdded.append(IdAuth)
+            course.authors.add(auth)
+        
+        return Response({
+            'authors': authAdded
+        }, status=status.HTTP_200_OK)
+
+class AddTagsCourse(APIView):
+
+    permission_classes = [AuthorizedUserPermissions, UpdateCoursePermissions]
+
+    def put(self, request, slug):
+
+        tags = request.data.get('tags', None)
+        tagsAdded = []
+
+        if not tags:
+            return Response(data={
+                'error': 'tags did\'t get'
+            },status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            course = Course.objects.get(slug=slug)
+        except ObjectDoesNotExist:
+            return Response(data={
+                'error': 'course didn\'t find'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        for tagName in tags:
+            try:
+                tag = Tag.objects.get(name=tagName)
+            except ObjectDoesNotExist:
+                continue
+            
+            tagsAdded.append(tag.name)
+            course.tags.add(tag)
+        
+        return Response(data={
+            'tags': tagsAdded
+        }, status=status.HTTP_201_CREATED)
