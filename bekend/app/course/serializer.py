@@ -8,11 +8,19 @@ from rest_framework import serializers
 
 class CourseSerializer(ModelSerializer):
 
+    imageCourse = serializers.SerializerMethodField()
+
+    def get_imageCourse(self, obj):
+        if obj.imageCourse:
+            return 'http://127.0.0.1:8000' + obj.imageCourse.url
+        return ''
+
+
     def create(self, validated_data):
 
         course = Course.objects.create(name=validated_data.get('name'), 
                                        description=validated_data.get('description'),
-                                       imageCourse=validated_data.get('imageCourse', None))
+                                       )
         
         user = User.objects.get(id=self.context.get('user'))
         course.authors.add(user)
@@ -23,7 +31,7 @@ class CourseSerializer(ModelSerializer):
     
     class Meta:
         model = Course
-        fields = ['name','description','status' , 'slug']
+        fields = ['name','description','status' , 'slug', 'imageCourse']
     
 class UpdateSerializer(ModelSerializer):
 

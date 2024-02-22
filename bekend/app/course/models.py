@@ -7,7 +7,7 @@ from autoslug import AutoSlugField
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
-def courseImagePath(instance):
+def courseImagePath(instance, filename):
     return 'course/course_' + instance.name.replace(' ', '_').lower() + '/image'
 
 class Course(models.Model):

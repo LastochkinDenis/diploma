@@ -52,7 +52,7 @@ class UpdateCorseApi(UpdateAPIView):
 
     def get_object(self):
         slug = self.kwargs.get('slug', '')
-    
+
         return Course.objects.get(slug=slug)
 
 class AddAuthCourse(APIView):
