@@ -59,5 +59,4 @@ class AuthorizedUserPermissions(BasePermission):
         
         if not access and not accessToken.chekToken(accessToken):
             return False
-
         return True

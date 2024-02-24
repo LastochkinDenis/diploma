@@ -54,7 +54,7 @@ class Task(models.Model):
         verbose_name = 'Task'
         verbose_name_plural = 'Tasks'
 
-def courseProgramFilePath(instance):
+def courseProgramFilePath(instance, filename):
     return 'course/course_' + instance.task.topicNavigate.idTopic.idCource.name.replace(' ', '_').lower() + '/program'
 
 class ProgramTask(models.Model):

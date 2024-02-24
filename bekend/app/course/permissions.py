@@ -23,5 +23,4 @@ class UpdateCoursePermissions(BasePermission):
             authors = Course.objects.get(slug=slug, authors__id=accessPayload.get('idUser'))
         except ObjectDoesNotExist:
             return False
-
         return True
