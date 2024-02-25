@@ -40,16 +40,21 @@ class TopicNavigate(models.Model):
 
 class TopicInfo(models.Model):
     name = models.CharField(max_length=50)
-    text = ArrayField(base_field=models.TextField())
+    text = ArrayField(base_field=models.JSONField())
     slug = AutoSlugField(unique=True, populate_from='name', slugify=genarationSlug)
 
     class Meta:
         verbose_name = 'Topic info'
         verbose_name_plural = 'Topics info'
 
+@receiver(pre_save, sender=TopicInfo)
+def updateNameTopicInfo(sender, instance, **kwarg):
+    if instance.name:
+        instance.slug = genarationSlug(instance.name)
+
 class Task(models.Model):
     name = models.CharField(max_length=50)
-    desctiption = ArrayField(base_field=models.TextField())
+    desctiption = ArrayField(base_field=models.JSONField())
 
     contentType = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     objectId = models.PositiveIntegerField()

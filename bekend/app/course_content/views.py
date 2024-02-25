@@ -73,7 +73,7 @@ class UpdateTopicSerialNumberApi(APIView):
                     'error': 'serial number is wrong'
                 }, status=status.HTTP_400_BAD_REQUEST)
 
-            topicList.insert(serialNumber, topicUpdate)
+            topicList.insert(serialNumber - 1, topicUpdate)
 
             for number, topic in enumerate(topicList, start=1):
                 topic.serialNumber = number
@@ -102,3 +102,45 @@ def UpdateTopicNameApi(request, slug, slugtopic):
     return Response(data={
         'course': serializer.data
     }, status=status.HTTP_201_CREATED)
+
+class CreateTopicInfoApi(APIView):
+
+    permission_classes = [AuthorizedUserPermissions, UpdateCoursePermissions]
+
+    def post(self, request, slug, slugtopic):
+        
+        infoList = []
+
+        try:
+            topic = Topic.objects.get(slug=slugtopic)
+        except ObjectDoesNotExist:
+            return Response(data={
+                'error': 'Topic did\'t find'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        topicInfoData = request.data.get('topicInfo', None)
+
+        if topicInfoData is None or not request.data.get('name'):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        for info in topicInfoData:
+            if info.get('type') == 'text' and len(info.get('data')) > 1:
+                infoList.append(info)
+
+            if info.get('type') == 'image':
+                pass
+        
+        topicInfo = TopicInfo.objects.create(
+            name=request.data.get('name'),
+            text=infoList
+        )
+
+        topicNavigate = TopicNavigate.objects.create(
+            idTopic=topic,
+            contentObject=topicInfo
+        )
+
+        return Response(data={
+            'name': topicInfo.name,
+
+        },status=status.HTTP_201_CREATED)
