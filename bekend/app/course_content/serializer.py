@@ -30,6 +30,9 @@ class TopicSerializer(ModelSerializer):
 
 class UpdateTopicSerializer(ModelSerializer):
 
+    idCourse = serializers.PrimaryKeyRelatedField(required=False, queryset=Course.objects.all())
+    serialNumber = serializers.IntegerField(required=False)
+
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
         instance.serialNumber = validated_data.get('serialNumber', instance.serialNumber)

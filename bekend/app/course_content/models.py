@@ -7,6 +7,8 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.postgres.fields import ArrayField
 from autoslug import AutoSlugField
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 
 class Topic(models.Model):
@@ -18,6 +20,11 @@ class Topic(models.Model):
     class Meta:
         verbose_name = 'Topic'
         verbose_name_plural = 'Topics'
+
+@receiver(pre_save, sender=Topic)
+def updateNameTopic(sender, instance, **kwarg):
+    if instance.name:
+        instance.slug = genarationSlug(instance.name)
 
 class TopicNavigate(models.Model):
     idTopic = models.ForeignKey(Topic, on_delete=models.CASCADE)
