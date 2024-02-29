@@ -9,7 +9,9 @@ import Header from './Header/Header';
 import MegnifyinGlassIcon from '../icon/MegnifyinGlassIcon.svg';
 import Register from './Autentications/register';
 import Autentications from './Autentications/authentivations';
+import CourseHomePage from './CourseHomePage/CourseHomePage';
 import { connect } from 'react-redux';
+import CourseDashboard from './CourseAuthorDashboard/CorseDashboard';
 
 
 class AppUnconnect extends Component {
@@ -33,6 +35,8 @@ class AppUnconnect extends Component {
         <Routes>
           <Route path='/register' element=<Register /> />
           <Route path='/login' element=<Autentications /> />
+          <Route path='/coursedashboard' element=<CourseDashboard/> />
+          <Route path='/coursehome' element=<CourseHomePage/> />
         </Routes>
       </main>
       <footer></footer>

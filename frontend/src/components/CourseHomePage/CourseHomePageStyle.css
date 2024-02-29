@@ -1,0 +1,17 @@
+.InformationForCreateCourse h1 {
+    text-align: center;
+}
+.textForCreateCourse {
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+.wrapepr__button-create-corse {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.button-create-corse {
+    background-color: #D9D9D9;
+    border-radius: 15px;
+    padding: 1% 2%;
+}

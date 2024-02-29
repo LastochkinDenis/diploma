@@ -1,6 +1,6 @@
 import './passwordInputStyle.css';
-import eyesClosed from '../../icon/eyesClosed.svg';
-import eyesOpen from '../../icon/eyesOpen.svg';
+import eyesClosed from '../../../icon/eyesClosed.svg';
+import eyesOpen from '../../../icon/eyesOpen.svg';
 
 import { useState } from 'react';
 

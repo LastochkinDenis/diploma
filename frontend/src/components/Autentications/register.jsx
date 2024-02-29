@@ -1,6 +1,6 @@
 import './register.css';
 import {regsiterApi} from '../../api/authenticationApi.js';
-import PasswordInput from '../passwordInput/passwordInput';
+import PasswordInput from './passwordInput/passwordInput.jsx';
 
 import { Component } from "react";
 import { Navigate } from "react-router-dom";
