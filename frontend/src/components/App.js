@@ -12,6 +12,7 @@ import Autentications from './Autentications/authentivations';
 import CourseHomePage from './CourseHomePage/CourseHomePage';
 import { connect } from 'react-redux';
 import CourseDashboard from './CourseAuthorDashboard/CorseDashboard';
+import CourseCreate from './CourseCreatePage/CourseCreate';
 
 
 class AppUnconnect extends Component {
@@ -37,6 +38,7 @@ class AppUnconnect extends Component {
           <Route path='/login' element=<Autentications /> />
           <Route path='/coursedashboard' element=<CourseDashboard/> />
           <Route path='/coursehome' element=<CourseHomePage/> />
+          <Route path='/coursecreate' element=<CourseCreate/> />
         </Routes>
       </main>
       <footer></footer>

@@ -4,7 +4,6 @@ import PasswordInput from './passwordInput/passwordInput';
 
 import { Component } from "react";
 import { Navigate } from 'react-router-dom';
-import axios from 'axios';
 import { connect } from 'react-redux';
 
 class AutenticationsUnconnected extends Component {

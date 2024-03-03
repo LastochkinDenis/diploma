@@ -2,6 +2,7 @@ import './CourseHomePageStyle.css';
 
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 export default function CourseHomePage(props) {
@@ -30,7 +31,7 @@ export default function CourseHomePage(props) {
                 <p>Если вы готовы поделиться своими знаниями и вдохновить других на обучение, присоединяйтесь к нашему сообществу преподавателей. Создайте свой курс прямо сейчас и помогите другим достичь новых высот в своем обучении и развитии.</p>
             </section>
             <div class='wrapepr__button-create-corse'>
-                <a href='#' className='button-create-corse'>Содать курс</a>
+                <Link to='/coursecreate' className='button-create-corse'>Содать курс</Link>
             </div>
         </div>
     )

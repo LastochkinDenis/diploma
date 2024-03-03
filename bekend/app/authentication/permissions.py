@@ -2,6 +2,21 @@ from .jwtToken import RefreshToken, AccessToken
 
 
 from rest_framework.permissions import BasePermission
+from jwt.exceptions import ExpiredSignatureError, DecodeError
+
+
+def catchErrorToken(func):
+
+    def wraper(*args, **kwargs):
+        try:
+            permission = func(*args, **kwargs)
+        except ExpiredSignatureError:
+            return False
+        except DecodeError:
+            return False
+        return permission
+    
+    return wraper
 
 class AuthenticationPermissions(BasePermission):
 
@@ -30,6 +45,7 @@ class LogoutPermissions(BasePermission):
     
 class UserPermissions(BasePermission):
 
+    @catchErrorToken
     def has_permission(self, request, view):
         
         refreshToken = RefreshToken()
@@ -46,6 +62,7 @@ class UserPermissions(BasePermission):
     
 class AuthorizedUserPermissions(BasePermission):
     
+    @catchErrorToken
     def has_permission(self, request, view):
 
         refreshToken = RefreshToken()
@@ -54,9 +71,15 @@ class AuthorizedUserPermissions(BasePermission):
         refresh = request.COOKIES.get('refresh', None)
         access = request.COOKIES.get('access', None)
 
-        if not refresh and not refreshToken.chekToken(refresh):
-            return False
+        try:
+            if not refresh and not refreshToken.chekToken(refresh):
+                return False
         
-        if not access and not accessToken.chekToken(accessToken):
+            if not access and not accessToken.chekToken(accessToken):
+                return False            
+        except ExpiredSignatureError:
             return False
+        except DecodeError:
+            return False
+
         return True
