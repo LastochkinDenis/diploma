@@ -11,6 +11,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
+from jwt.exceptions import ExpiredSignatureError
 
 
 class CreateCourseApi(CreateAPIView):
@@ -122,3 +123,27 @@ class AddTagsCourse(APIView):
         return Response(data={
             'tags': tagsAdded
         }, status=status.HTTP_201_CREATED)
+
+
+@api_view(['GET'])
+@permission_classes([AuthorizedUserPermissions])
+def GetCorseListApi(request):
+
+    accessToken = AccessToken()
+
+    try:
+        access = accessToken.getPyaload(request.COOKIES.get('access', None))
+    except ExpiredSignatureError:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+    
+    try:
+        courses = Course.objects.filter(authors__id=int(access.get('idUser')))
+    except ObjectDoesNotExist:
+        return Response(data={
+            'error': 'course did\'n find'
+        } ,status=status.HTTP_400_BAD_REQUEST)
+
+    serializer = CourseSerializer(courses, many=True)
+
+    return Response(data=serializer.data, status=status.HTTP_200_OK)
+
