@@ -127,7 +127,7 @@ class AddTagsCourse(APIView):
 
 @api_view(['GET'])
 @permission_classes([AuthorizedUserPermissions])
-def GetCorseListApi(request):
+def GetCourseListApi(request):
 
     accessToken = AccessToken()
 
@@ -136,12 +136,15 @@ def GetCorseListApi(request):
     except ExpiredSignatureError:
         return Response(status=status.HTTP_403_FORBIDDEN)
     
-    try:
-        courses = Course.objects.filter(authors__id=int(access.get('idUser')))
-    except ObjectDoesNotExist:
-        return Response(data={
-            'error': 'course did\'n find'
-        } ,status=status.HTTP_400_BAD_REQUEST)
+    courses = Course.objects.filter(authors__id=int(access.get('idUser')))
+
+    if courses.count() == 0:
+        return Response(
+            data={
+                'error': 'User don\'t have course'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+            )
 
     serializer = CourseSerializer(courses, many=True)
 
