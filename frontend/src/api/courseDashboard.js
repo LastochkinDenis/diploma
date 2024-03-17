@@ -20,5 +20,21 @@ export async function courseCreate(data) {
         console.log(error.response.data.error);
     })
 
-    return isCreate, errros;
+    return {isCreate, errros};
+}
+
+export async function getCourseList() {
+
+    let courseList = [];
+    let error;
+
+    await axios.get('course/courselist/')
+    .then(response => {
+        courseList = response.data;
+    })
+    .catch(error => {
+        error = 'user don\'t have course';
+    })
+
+    return {courseList, error}
 }

@@ -75,7 +75,7 @@ class CourseCreateUnconected extends Component {
 
         let {isCreate, errors} = await courseCreate(this.state.formData);
 
-
+        console.log(isCreate);
 
         if(isCreate) {
             this.setState((state) => ({isCreate: true}));
@@ -87,7 +87,7 @@ class CourseCreateUnconected extends Component {
             return <Navigate to='/login' />
         }
         if(this.state.isCreate)
-            return <Navigate to='/' />
+            return <Navigate to='/coursehome' />
         return (
             <div className='form__wraper'>
                 <h1>Создание курса</h1>

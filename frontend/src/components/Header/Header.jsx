@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutApi, loginApi } from '../../api/authenticationApi';
+import { useClickOutSide } from '../hooks/useClickOutside';
+
 
 import './header.css';
 import MegnifyinGlassIcon from '../../icon/MegnifyinGlassIcon.svg';
@@ -13,6 +15,11 @@ function Header(props) {
     const [isOpneProfil, setOpenProfil] = useState(false);
     const user = useSelector((state) => state.user).user;
     const dispatch = useDispatch();
+    const refProfilMenu = useRef(null);
+    const refNavMenu = useRef(null);
+
+    useClickOutSide(refProfilMenu, () => {setOpenProfil(false)});
+    useClickOutSide(refNavMenu, () => {setOpenMenu(false)});
 
     const logout = async (evt) => {
      evt.preventDefault();
@@ -33,7 +40,7 @@ function Header(props) {
                )
           }
           return (
-               <div className='header__profile'>
+               <div className='header__profile' ref={refProfilMenu}>
                 <a>{user.firstName + " " + user.lastName}</a>
                 <div className='header__profile_picture'>
                     <div className='sqrt' onClick={() => {
@@ -57,12 +64,12 @@ function Header(props) {
     }
 
     return (
-        <header>
+        <header ref={refNavMenu}>
            <div className='header__logo'>
                 <div className='circle'></div>
            </div>
            <button className='header__menu-button'
-           onClick={() => {
+           onClick={(evt) => {
                setOpenMenu(!isOpenMenu);
                setOpenProfil(false);
            }}>

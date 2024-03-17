@@ -6,12 +6,12 @@ import { Component, Fragment } from 'react'
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Header from './Header/Header';
-import MegnifyinGlassIcon from '../icon/MegnifyinGlassIcon.svg';
+// import MegnifyinGlassIcon from '../icon/MegnifyinGlassIcon.svg';
 import Register from './Autentications/register';
 import Autentications from './Autentications/authentivations';
 import CourseHomePage from './CourseHomePage/CourseHomePage';
 import { connect } from 'react-redux';
-import CourseDashboard from './CourseAuthorDashboard/CorseDashboard';
+import CourseDashboard from './CourseAuthorDashboard/CourseDashboard';
 import CourseCreate from './CourseCreatePage/CourseCreate';
 
 
