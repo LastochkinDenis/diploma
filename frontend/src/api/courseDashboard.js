@@ -38,3 +38,16 @@ export async function getCourseList() {
 
     return {courseList, error}
 }
+
+export async function  deleteCourse(courseSlug) {
+
+    let isDelete = false;
+
+    axios.post(`course/${courseSlug}/delete/`)
+    .then(response => {
+        isDelete = true;
+    })
+    .catch(error => console.log(error))
+
+    return isDelete;
+}

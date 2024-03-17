@@ -1,7 +1,6 @@
 .course-main {
     width: 100%;
 }
-
 .course-main > hr {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -115,11 +114,8 @@
     display: block;
     position: absolute;
     background-color: #fff;
-    right: -130px;
-    top: 25px;
-}
-.toll-menu > ul > li {
-    padding: 4%;
+    right: 12px;
+    top: 52px;
 }
 .toll-menu > ul > li:hover {
     background-color: rgba(71, 62, 62, 0.205);
@@ -129,7 +125,24 @@
     background-color: rgba(255, 255, 255, 0);
     border: none;
     outline: none;
+    width: 100%;
+    text-align: left;
+    padding: 4%;
 }
 .toll-menu-active {
     display: block;
+}
+@media (max-width: 1030px) {
+    .course-main {
+        width: 80%;
+    }
+}
+@media (max-width: 1030px) {
+    .control-panale {
+        display: block;
+    }
+    .control-panale-serch-course {
+        width: 100%;
+        margin-bottom: 1%;
+    }
 }

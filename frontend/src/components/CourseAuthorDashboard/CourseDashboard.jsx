@@ -3,8 +3,10 @@ import MegnifyinGlassIcon from  '../../icon/MegnifyinGlassIcon.svg';
 import ContextMenuIcon from '../../icon/contextMenu.svg';
 import './CourseDashboardStyle.css';
 import CourseItem from './compenets/CourseItem.jsx';
+import modalDelete from './compenets/modalDelete/modalDelete.jsx';
 
 import { Component, createRef } from "react";
+import ModalDelete from './compenets/modalDelete/modalDelete.jsx';
 
 
 export default class CourseDashboard extends Component {
@@ -16,7 +18,9 @@ export default class CourseDashboard extends Component {
             showCourseList: this.props.courseList,
             serch: '',
             resetSerch: false,
-            redirectCrate: false
+            redirectCrate: false,
+            modalDelete: false,
+            selectCourse: {}
         }
     }
 
@@ -24,7 +28,8 @@ export default class CourseDashboard extends Component {
     tollMenuRef = createRef()
 
     shouldComponentUpdate(nextProps, nextState) {
-        if(this.state.resetSerch !== nextState.resetSerch || nextState.redirectCrate) {
+        if(this.state.resetSerch !== nextState.resetSerch ||
+             nextState.redirectCrate || this.state.modalDelete || nextState.modalDelete) {
             return true;
         }
         if(this.state.showCourseList === nextState.showCourseList){
@@ -72,12 +77,19 @@ export default class CourseDashboard extends Component {
         this.setState((state) => ({serch: this.serchRef.current.value}));
     }
 
-    handleContectMenu = () => {
-
-    }
-
     addCourse = () => {
         this.setState((state) => ({redirectCrate: true}));
+    }
+
+    setModalDelete = (isShow, selectCourse = {}) => {
+        if(Object.entries(selectCourse).length > 0) 
+            this.setState((state) => ({modalDelete: isShow, selectCourse: selectCourse}));
+        this.setState((state) => ({modalDelete: isShow}));
+    }
+
+    deleteCourseList = (course) => {
+        let courses = this.state.showCourseList.filter((c) => {return course.slug !== c.slug});
+        this.setState((state) => ({showCourseList: courses}));
     }
 
     render() {
@@ -88,6 +100,9 @@ export default class CourseDashboard extends Component {
         <div className="course-main">
             <h1>Курсы</h1>
             <hr/>
+            {this.state.modalDelete && <ModalDelete course={this.state.selectCourse} 
+            setModalDelete={this.setModalDelete}
+            deleteCourseList={this.deleteCourseList} />}
             <div className="control-panale">
                 <div className="control-panale-serch-course">
                     <div className="serch-course__wraper">
@@ -105,7 +120,7 @@ export default class CourseDashboard extends Component {
             </div>
             <div className='course-list'>
             {
-                this.state.showCourseList.map(course => <CourseItem course={course} />)
+                this.state.showCourseList.map(course => <CourseItem course={course} setModalDelete={this.setModalDelete} />)
             }
             </div>
         </div>

@@ -35,7 +35,9 @@ export default function CourseItem(props) {
                         <button>Редактировать</button>
                     </li>
                     <li>
-                        <button>Удалить</button>
+                        <button onClick={() => {
+                            props.setModalDelete(true, props.course);
+                        }}>Удалить</button>
                     </li>
                 </ul>
             </div>}

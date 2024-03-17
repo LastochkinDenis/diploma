@@ -31,7 +31,7 @@ class CreateCourseApi(CreateAPIView):
         return context
 
 @api_view(['GET'])
-def getInfoCourseApi(request, slug):
+def GetInfoCourseApi(request, slug):
     try:
         course = Course.objects.get(slug=slug)
     except ObjectDoesNotExist:
@@ -136,7 +136,8 @@ def GetCourseListApi(request):
     except ExpiredSignatureError:
         return Response(status=status.HTTP_403_FORBIDDEN)
     
-    courses = Course.objects.filter(authors__id=int(access.get('idUser')))
+    courses = Course.objects.filter(authors__id=int(access.get('idUser')),
+                                    status__in=('a','d'))
 
     if courses.count() == 0:
         return Response(
@@ -150,3 +151,17 @@ def GetCourseListApi(request):
 
     return Response(data=serializer.data, status=status.HTTP_200_OK)
 
+@api_view(['POST'])
+@permission_classes([AuthorizedUserPermissions, UpdateCoursePermissions])
+def DeleteCourseApi(requst, slug):
+    try:
+        course = Course.objects.get(slug=slug)
+    except ObjectDoesNotExist:
+        return Response(data={
+            'error': 'course didn\'t find'
+        }, status=status.HTTP_404_NOT_FOUND)
+    
+    course.status = 'r'
+    course.save()
+
+    return Response(status=status.HTTP_201_CREATED)
