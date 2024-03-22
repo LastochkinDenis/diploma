@@ -1,0 +1,40 @@
+body {
+    overflow-x: hidden;
+}
+.course-edit {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+.course-edit-footer {
+    width: 100%;
+    background-color: #E1E8FA;
+    position: fixed;
+    bottom: 0;
+    height: 60px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+}
+.course-edit__wraper {
+    display: flex;
+    justify-content: space-between;
+
+}
+.course-edit-footer::after {
+    content: '';
+    background-color: #E1E8FA;
+    right: 100%;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+.save-button {
+    padding: 0.5% 3%;
+    border: none;
+    outline: none;
+    background-color: #E1FAF4;
+}
