@@ -1,6 +1,6 @@
 import { useClickOutSide } from '../../hooks/useClickOutside.js';
 import ContextMenuIcon from '../../../icon/contextMenu.svg';
-
+import { Link } from 'react-router-dom';
 
 import { useState, useRef, useEffect } from 'react';
 
@@ -32,7 +32,7 @@ export default function CourseItem(props) {
             { showMenuToll && <div className='toll-menu'>
                 <ul>
                     <li>
-                        <button>Редактировать</button>
+                        <Link to={`/course/${props.course.slug}/edit/descrition`}>Редактировать</Link>
                     </li>
                     <li>
                         <button onClick={() => {

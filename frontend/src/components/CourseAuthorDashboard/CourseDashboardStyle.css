@@ -120,7 +120,7 @@
 .toll-menu > ul > li:hover {
     background-color: rgba(71, 62, 62, 0.205);
 }
-.toll-menu button {
+.toll-menu button, .toll-menu a {
     font-size: 18px;
     background-color: rgba(255, 255, 255, 0);
     border: none;

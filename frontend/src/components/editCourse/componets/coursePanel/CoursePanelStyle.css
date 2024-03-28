@@ -41,3 +41,18 @@
 .menu-course-name-deactiv {
     transform: rotate(-90deg);
 }
+.red-block-p {
+    width: 100px;
+    height: 90px;
+    background-color: red;
+    border-radius: 5px;
+    margin-right: 2%;
+    border: 1px solid #000;
+}
+.course-panel-head-image {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 5px;
+    margin-right: 2%;
+    border: 1px solid #000;
+}

@@ -51,3 +51,17 @@ export async function  deleteCourse(courseSlug) {
 
     return isDelete;
 }
+
+export async function getInfoDesctiptionCourse(idCourse) {
+
+    let data = {}
+
+    await axios.get(`course/${idCourse}`)
+    .then((response) => {
+        data = response.data.course;    
+    })
+    .catch(error => {
+        console.log(error);
+    });
+    return data
+}

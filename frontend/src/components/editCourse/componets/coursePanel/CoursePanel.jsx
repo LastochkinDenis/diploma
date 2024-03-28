@@ -13,10 +13,10 @@ export default function CoursePanal(props) {
     return (
         <div className="course-panel">
             <div className="course-panel-head">
-                {/* {props.course.image && <img src={props.course.image} className="course-panel-head-image" />} */}
-                {/* {!props.course.image && <div className="red-block"></div>} */}
-                <div className="red-block"></div>
-                <p className="course-panel-head-name">1</p>
+                {props.course.imageCourse && <img src={props.course.imageCourse} className="course-panel-head-image" />}
+                {!props.course.imageCourse && <div className="red-block"></div>}
+                {/* <div className="red-block-p"></div> */}
+                <p className="course-panel-head-name">{props.course.name}</p>
             </div>
             <button className="course-panel-button-publish">
                 Опубликовать
@@ -28,7 +28,7 @@ export default function CoursePanal(props) {
                         <img className={menuCourseContent ? '': 'menu-course-name-deactiv'} src={ArrowToDown}/>
                     </div>
                     {menuCourseContent && <ul>
-                        <li><a href="#">Описание</a></li>
+                        <li><Link to={`descrition`}>Описание</Link></li>
                         <li><a href="#">Содержание</a></li>
                     </ul>}
                 </div>

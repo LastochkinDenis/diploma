@@ -21,7 +21,7 @@ body {
 }
 .course-edit__wraper {
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
 
 }
 .course-edit-footer::after {

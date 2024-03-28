@@ -1,0 +1,66 @@
+.course-desctiption {
+    width: 100%;
+    margin-left: 4%;
+}
+.course-desctiption-image__wraper {
+    border: 1px solid #000;
+    border-radius: 15px;
+    overflow: hidden;
+    width: 200px;
+    height: 200px;
+    position: relative;
+    cursor: pointer;
+}
+.course-desctiption-image__wraper:hover .course-desctiption-image-hover {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.course-desctiption-image-hover {
+    display: none;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: #fff;
+}
+.red-blockD {
+    width: 100%;
+    height: 100%;
+    background-color: red;
+    border-radius: 15px;
+}
+.course-desctiption-image__wraper img {
+    width: 100%;
+    height: 100%;
+}
+.course-desctiption-image__wraper input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+.course-desctiption-item p {
+    font-size: 24px;
+}
+.course-desctiption-item input {
+    width: 100%;
+    border: 1px solid #000;
+    padding: 1%;
+    outline: none;
+    border-radius: 15px;
+    font-size: 16px
+}
+.course-desctiption-item textarea {
+    width: 100%;
+    border: 1px solid #000;
+    padding: 1%;
+    outline: none;
+    border-radius: 15px;
+    resize: none;
+    font-size: 16px
+}

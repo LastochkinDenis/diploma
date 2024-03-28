@@ -31,7 +31,7 @@ class CreateCourseApi(CreateAPIView):
         return context
 
 @api_view(['GET'])
-def GetInfoCourseApi(request, slug):
+def GetInfoDesctiptionCourseApi(request, slug):
     try:
         course = Course.objects.get(slug=slug)
     except ObjectDoesNotExist:
@@ -44,9 +44,9 @@ def GetInfoCourseApi(request, slug):
     context['authors'] = ['{} {}'.format(auth.firstName, auth.lastName) for auth in course.authors.all()]
     context['tags'] = [tag.name for tag in course.tags.all()]
 
-    return Response(context, status=status.HTTP_200_OK)
-    
-class UpdateCorseApi(UpdateAPIView):
+    return Response(data={'course' : context}, status=status.HTTP_200_OK)
+        
+class UpdateDescriptionCorseApi(UpdateAPIView):
     queryset = Course.objects.all()
     serializer_class = UpdateSerializer
     permission_classes = [AuthorizedUserPermissions, UpdateCoursePermissions]
