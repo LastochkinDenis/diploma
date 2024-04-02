@@ -1,0 +1,8 @@
+.modale-content-button button:first-child {
+    background-color: #448550;
+}
+.modale-content-button button:last-child {
+    background-color: #EB5B31;
+    white-space: nowrap;
+    width: 50%;
+}

@@ -1,20 +1,31 @@
 import "./EditCourse.css";
 import CoursePanal from "./componets/coursePanel/CoursePanel";
-import { getInfoDesctiptionCourse } from "../../api/courseDashboard";
+import {
+  getInfoDesctiptionCourse,
+  handleCourseEditApi,
+} from "../../api/courseDashboard";
+import ModalSave from "./componets/modalSave/ModalSave";
 
 import { Outlet, useParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 
 export default function EditCourse(props) {
   const { idCourse } = useParams();
-  const isUpdate = useSelector((state) => state.courseEdit).courseEdit.isUpdate;
-  const [course, setCourse] = useState({name: "", description: "", imageCourse: ""});
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [course, setCourse] = useState({
+    name: "",
+    description: "",
+    imageCourse: "",
+  });
+  const [showModalSave, setShowModalSave] = useState(false);
+  const [linkClick, setLinkClick] = useState("");
+  const [dataToUpdate, setDataToUpdate] = useState(undefined);
+  const [linkRequestForServer, setLinkRequestForServer] = useState("");
 
   useEffect(() => {
     const getData = async () => {
-        const data = await getInfoDesctiptionCourse(idCourse)
-        setCourse(data);
+      const data = await getInfoDesctiptionCourse(idCourse);
+      setCourse(data);
     };
 
     getData();
@@ -37,6 +48,11 @@ export default function EditCourse(props) {
     const clickLink = (evt) => {
       if (isUpdate) {
         evt.preventDefault();
+        setShowModalSave(true);
+
+        let link = evt.target.href.replace("http://localhost:3000/#", "");
+
+        setLinkClick(link);
       }
     };
 
@@ -50,14 +66,37 @@ export default function EditCourse(props) {
       });
   }, [isUpdate]);
 
+  const HandleSaveChange = async (evt) => {
+    return await handleCourseEditApi(linkRequestForServer, dataToUpdate);
+  };
+
   return (
     <div className="course-edit">
+      {showModalSave && (
+        <ModalSave
+          setShowModalSave={setShowModalSave}
+          handleSaveChange={HandleSaveChange}
+          link={linkClick}
+        />
+      )}
       <div className="course-edit__wraper">
-        <CoursePanal course={course}/>
-        <Outlet context={[course, setCourse]}/>
+        <CoursePanal course={course} />
+        <Outlet
+          context={[
+            course,
+            setCourse,
+            idCourse,
+            setIsUpdate,
+            setLinkRequestForServer,
+            dataToUpdate,
+            setDataToUpdate,
+          ]}
+        />
       </div>
       <div className="course-edit-footer">
-        <button className="save-button">Сохранить</button>
+        <button className="save-button" onClick={HandleSaveChange}>
+          Сохранить
+        </button>
       </div>
     </div>
   );
