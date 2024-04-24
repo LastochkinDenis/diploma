@@ -69,10 +69,27 @@ export async function handleCourseEditApi(linkAPI, data) {
   let erorr = {};
   let isDone = false;
 
+  console.log(data.imageCourse);
+  console.log(data.fileCourse);
+
+  let headers = {}
+
+  if(data.imageCourse || data.fileCourse) {
+    headers = {
+      'Content-Type': 'multipart/form-data'
+    }
+  }
+  else {
+    headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    }
+  }
+
   await axios
-    .put(`course/${linkAPI}`, data, {
+    .put(`${linkAPI}`, data, {
       headers: {
-        'Content-Type': 'multipart/form-data'
+        ...headers
       }
     })
     .then((response) => {
@@ -81,4 +98,17 @@ export async function handleCourseEditApi(linkAPI, data) {
     .catch((error) => console.log(error));
 
   return isDone;
+}
+
+export async function getCourseContent(courseSlug) {
+
+  let data = {}
+
+  await axios.get(`coursecontent/${courseSlug}/content/`)
+  .then(response => {
+    data = response.data
+  })
+  .catch(erorr => console.log(erorr));
+
+  return data;
 }

@@ -42,6 +42,8 @@ class TopicInfo(models.Model):
     name = models.CharField(max_length=50)
     text = ArrayField(base_field=models.JSONField())
     slug = AutoSlugField(unique=True, populate_from='name', slugify=genarationSlug)
+    topicNavigate = GenericRelation(TopicNavigate, content_type_field='contentType', object_id_field='objectId')
+
 
     class Meta:
         verbose_name = 'Topic info'
@@ -54,8 +56,7 @@ def updateNameTopicInfo(sender, instance, **kwarg):
 
 class Task(models.Model):
     name = models.CharField(max_length=50)
-    desctiption = ArrayField(base_field=models.JSONField())
-
+    desctiption = ArrayField(base_field=models.JSONField(), null=True)
     contentType = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     objectId = models.PositiveIntegerField()
     conetntObject = GenericForeignKey(ct_field='contentType', fk_field='objectId')
@@ -80,6 +81,7 @@ class ProgramTask(models.Model):
 class QuestionTask(models.Model):
     choiceQuestions = ArrayField(base_field=models.CharField(max_length=50), size=10)
     choiceRight = ArrayField(base_field=models.CharField(max_length=50), size=10)
+    task = GenericRelation(Task, content_type_field='contentType', object_id_field='objectId')
 
     class Meta:
         verbose_name = 'Question task'
@@ -87,6 +89,7 @@ class QuestionTask(models.Model):
 
 class OpenQuestion(models.Model):
     rigthText = models.CharField(max_length=50)
+    task = GenericRelation(Task, content_type_field='contentType', object_id_field='objectId')
 
     class Meta:
         verbose_name = 'Open question'

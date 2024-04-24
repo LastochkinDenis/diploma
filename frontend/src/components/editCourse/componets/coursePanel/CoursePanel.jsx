@@ -29,7 +29,7 @@ export default function CoursePanal(props) {
                     </div>
                     {menuCourseContent && <ul>
                         <li><Link to={`descrition`}>Описание</Link></li>
-                        <li><a href="#">Содержание</a></li>
+                        <li><Link to='content'>Содержание</Link></li>
                     </ul>}
                 </div>
             </div>

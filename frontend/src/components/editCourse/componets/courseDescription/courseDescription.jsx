@@ -22,7 +22,7 @@ export default function CourseDescrition(props) {
       setCourse({ ...course, imageCourse: reader.result });
       setIsUpdate(true);
       setDataToUpdate({ ...dataToUpdate, imageCourse: file });
-      setLinkRequestForServer(`${idCourse}/update/desription/`);
+      setLinkRequestForServer(`/course/${idCourse}/update/desription/`);
     };
 
     if (file) {
@@ -35,7 +35,7 @@ export default function CourseDescrition(props) {
     setCourse({ ...course, name });
     setIsUpdate(true);
     setDataToUpdate({ ...dataToUpdate, name: name });
-    setLinkRequestForServer(`${idCourse}/update/desription/`);
+    setLinkRequestForServer(`/course/${idCourse}/update/desription/`);
   };
 
   const handleDescriptionCourse = (evt) => {
@@ -43,11 +43,12 @@ export default function CourseDescrition(props) {
     setCourse({ ...course, description });
     setIsUpdate(true);
     setDataToUpdate({ ...dataToUpdate, description: description });
-    setLinkRequestForServer(`${idCourse}/update/desription/`);
+    setLinkRequestForServer(`/course/${idCourse}/update/desription/`);
   };
 
   return (
     <div className="course-desctiption">
+      <h1>Описание курса</h1>
       <div className="course-desctiption-image">
         <div className="course-desctiption-image__wraper">
           <label>

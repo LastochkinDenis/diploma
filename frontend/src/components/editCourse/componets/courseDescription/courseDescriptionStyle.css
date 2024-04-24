@@ -1,5 +1,4 @@
 .course-desctiption {
-    width: 100%;
     margin-left: 4%;
 }
 .course-desctiption-image__wraper {
@@ -53,7 +52,8 @@
     padding: 1%;
     outline: none;
     border-radius: 15px;
-    font-size: 16px
+    font-size: 16px;
+    padding-right: 0;
 }
 .course-desctiption-item textarea {
     width: 100%;
@@ -62,5 +62,6 @@
     outline: none;
     border-radius: 15px;
     resize: none;
-    font-size: 16px
+    font-size: 16px;
+    padding-right: 0;
 }

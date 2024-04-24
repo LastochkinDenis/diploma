@@ -38,3 +38,6 @@ body {
     outline: none;
     background-color: #E1FAF4;
 }
+.course-edit-block {
+    flex: 1 1 auto;
+}

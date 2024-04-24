@@ -14,6 +14,7 @@ import CourseDashboard from "./CourseAuthorDashboard/CourseDashboard";
 import CourseCreate from "./CourseCreatePage/CourseCreate";
 import EditCourse from "./editCourse/EditCourse";
 import CourseDescrition from "./editCourse/componets/courseDescription/courseDescription";
+import ContentCourse from "./editCourse/componets/contentCourse/contentCourse";
 
 class AppUnconnect extends Component {
   constructor(props) {
@@ -39,6 +40,7 @@ class AppUnconnect extends Component {
             <Route path="/coursecreate" element=<CourseCreate /> />
             <Route path="/course/:idCourse/edit" element={<EditCourse />}>
               <Route path="descrition" element={<CourseDescrition />} />
+              <Route path="content" element={<ContentCourse />} />
             </Route>
           </Routes>
         </main>

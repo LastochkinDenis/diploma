@@ -153,7 +153,7 @@ def GetCourseListApi(request):
 
 @api_view(['POST'])
 @permission_classes([AuthorizedUserPermissions, UpdateCoursePermissions])
-def DeleteCourseApi(requst, slug):
+def DeleteCourseApi(request, slug):
     try:
         course = Course.objects.get(slug=slug)
     except ObjectDoesNotExist:

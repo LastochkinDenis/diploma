@@ -19,7 +19,7 @@ export default function EditCourse(props) {
   });
   const [showModalSave, setShowModalSave] = useState(false);
   const [linkClick, setLinkClick] = useState("");
-  const [dataToUpdate, setDataToUpdate] = useState(undefined);
+  const [dataToUpdate, setDataToUpdate] = useState({});
   const [linkRequestForServer, setLinkRequestForServer] = useState("");
 
   useEffect(() => {
@@ -67,6 +67,8 @@ export default function EditCourse(props) {
   }, [isUpdate]);
 
   const HandleSaveChange = async (evt) => {
+    setIsUpdate(false);
+    setDataToUpdate({});
     return await handleCourseEditApi(linkRequestForServer, dataToUpdate);
   };
 
@@ -81,17 +83,19 @@ export default function EditCourse(props) {
       )}
       <div className="course-edit__wraper">
         <CoursePanal course={course} />
-        <Outlet
-          context={[
-            course,
-            setCourse,
-            idCourse,
-            setIsUpdate,
-            setLinkRequestForServer,
-            dataToUpdate,
-            setDataToUpdate,
-          ]}
-        />
+        <div className="course-edit-block">
+          <Outlet
+            context={[
+              course,
+              setCourse,
+              idCourse,
+              setIsUpdate,
+              setLinkRequestForServer,
+              dataToUpdate,
+              setDataToUpdate,
+            ]}
+          />
+        </div>
       </div>
       <div className="course-edit-footer">
         <button className="save-button" onClick={HandleSaveChange}>

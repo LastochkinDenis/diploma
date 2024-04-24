@@ -10,14 +10,15 @@ class TopicSerializer(ModelSerializer):
 
     def create(self, validated_data):
 
-        print(self.context.get('course'))
-
         topic = Topic.objects.create(
             name=validated_data.get('name'),
             idCourse=self.context.get('course')
         )
 
         return topic
+    
+    def getUrlTopic(self, obj):
+        pass
     
     idCourse = serializers.PrimaryKeyRelatedField(required=False, queryset=Course.objects.all())
     serialNumber = serializers.IntegerField(required=False)
