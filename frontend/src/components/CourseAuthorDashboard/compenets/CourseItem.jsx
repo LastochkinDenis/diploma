@@ -16,14 +16,14 @@ export default function CourseItem(props) {
 
     return (
         <section className='course-item' ref={refItem}>
-            <a href='#'>
+            <Link to={`/course/${props.course.slug}/edit/content`}>
                 <div className='course-item-header'>
                     {props.course.imageCourse === "" || props.course.imageCourse === '<empty string>' ?
                      <div className='red-block'></div> :
                       <img className='image-course' src={props.course.imageCourse} />}
                     <p className='course-name'>{props.course.name}</p>
                 </div>
-            </a>
+            </Link>
             <div className='context-menu'>
                 <button onClick={showTollMenuClick}>
                     <img src={ContextMenuIcon} />

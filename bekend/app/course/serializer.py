@@ -53,4 +53,8 @@ class UpdateSerializer(ModelSerializer):
         model = Course
         fields = ['name','description','status', 'imageCourse']
 
-    
+class AuthorsSerializer(ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['id', 'lastName', 'firstName', 'email']

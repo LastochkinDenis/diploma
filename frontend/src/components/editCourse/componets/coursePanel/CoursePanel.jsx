@@ -40,7 +40,7 @@ export default function CoursePanal(props) {
                         <img className={menuSetingsCourse ? '': 'menu-course-name-deactiv'} src={ArrowToDown}/>
                     </div>
                     {menuSetingsCourse && <ul>
-                        <li><a href="#">Преподователи</a></li>
+                        <li><Link to='author'>Преподователи</Link></li>
                     </ul>}
                 </div>
             </div>

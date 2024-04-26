@@ -2,7 +2,7 @@ from .models import Topic
 from course.models import Course
 
 
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, Serializer
 from rest_framework import serializers 
 
 

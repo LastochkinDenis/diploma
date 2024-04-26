@@ -1,12 +1,12 @@
 from .models import Course, Tag
-from .serializer import CourseSerializer, UpdateSerializer
+from .serializer import CourseSerializer, UpdateSerializer, AuthorsSerializer
 from authentication.permissions import AuthorizedUserPermissions
 from authentication.jwtToken import AccessToken
 from .permissions import UpdateCoursePermissions
 from user.models import User 
 
 from rest_framework.views import APIView
-from rest_framework.generics import CreateAPIView, UpdateAPIView
+from rest_framework.generics import CreateAPIView, UpdateAPIView, ListAPIView
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
@@ -165,3 +165,59 @@ def DeleteCourseApi(request, slug):
     course.save()
 
     return Response(status=status.HTTP_201_CREATED)
+
+class Authors(ListAPIView):
+
+    permission_classes = [AuthorizedUserPermissions, UpdateCoursePermissions]
+    serializer_class = AuthorsSerializer
+
+    def get_queryset(self):
+        
+        course = Course.objects.get(slug=self.kwargs.get('slug', ''))
+        
+        return course.authors.all()
+
+    def post(self, request, slug):
+        email = request.data.get('email')
+        
+        try:
+            course = Course.objects.get(slug=slug)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        try:
+            user = User.objects.get(email=email)
+            course.authors.add(user)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = AuthorsSerializer(data=course.authors.all(), many=True)
+        serializer.is_valid()
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request, slug):
+        email = request.data.get('email')
+
+        try:
+            course = Course.objects.get(slug=slug)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+            
+        try:
+            user = User.objects.get(email=email)
+            course.authors.remove(user)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = AuthorsSerializer(data=course.authors.all(), many=True)
+        serializer.is_valid()
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+"""
+    {
+        "delete": [email],
+        "add": [email]
+    }
+"""

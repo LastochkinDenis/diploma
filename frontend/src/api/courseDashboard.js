@@ -69,9 +69,6 @@ export async function handleCourseEditApi(linkAPI, data) {
   let erorr = {};
   let isDone = false;
 
-  console.log(data.imageCourse);
-  console.log(data.fileCourse);
-
   let headers = {}
 
   if(data.imageCourse || data.fileCourse) {
@@ -109,6 +106,59 @@ export async function getCourseContent(courseSlug) {
     data = response.data
   })
   .catch(erorr => console.log(erorr));
+
+  return data;
+}
+
+export async function getAuthorList(slug) {
+
+  let data = []
+
+  await axios.get(`course/${slug}/author/`)
+  .then(response => {
+    data = response.data
+  })
+  .catch(error => console.log(error));
+
+  return data;
+}
+
+export async function addAuthorList(slug, email) {
+  let data = [];
+
+  await axios.post(`course/${slug}/author/`, {
+    email: email
+  })
+  .then(response => {
+    data = response.data;
+  })
+  .catch(error => console.log(error));
+
+  return data;
+}
+
+export async function deleteAuthorList(slug, email) {
+  let data = [];
+
+  await axios.delete(`course/${slug}/author/`, {
+    data: {email: email}
+  })
+  .then(response => {
+    data = response.data;
+  })
+  .catch(error => console.log(error));
+
+  return data;
+}
+
+export async function getLessonsSlug(courseSlug, topicSlug) {
+  let data = []
+
+  await axios.get(`coursecontent/${courseSlug}/lessons/${topicSlug}/`)
+  .then(response => {
+    data = response.data;
+  })
+  .catch(error => console.log(error));
 
   return data;
 }

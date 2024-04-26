@@ -329,6 +329,22 @@ class CourseContent(APIView):
             task.serialNumber = index
             task.save()
 
+@permission_classes([AuthorizedUserPermissions])
+@api_view(['GET'])
+def getLessonsSlug(request, slug, slugTopic):
+    try:
+        topic = Topic.objects.get(slug=slugTopic)
+    except ObjectDoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    topicsNavigate = topic.topicnavigate_set.all().order_by('serialNumber')
+    lessonsSlug = []
+
+    for topic in topicsNavigate:
+        lessonsSlug.append(topic.contentObject.slug)
+
+    return Response(data=lessonsSlug ,status=status.HTTP_200_OK)
+
 
 """
 {

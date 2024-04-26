@@ -67,9 +67,16 @@ export default function EditCourse(props) {
   }, [isUpdate]);
 
   const HandleSaveChange = async (evt) => {
+
+    let result = false;
+
+    if(Object.keys(dataToUpdate).length > 1)
+      result = await handleCourseEditApi(linkRequestForServer, dataToUpdate);
+
     setIsUpdate(false);
     setDataToUpdate({});
-    return await handleCourseEditApi(linkRequestForServer, dataToUpdate);
+
+    return result;
   };
 
   return (
