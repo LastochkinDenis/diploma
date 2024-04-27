@@ -19,6 +19,7 @@
     font-size: 16px;
     width: 90%;
     padding: 1%;
+    outline: none;
 }
 .lesson-list {
     display: flex;
@@ -36,4 +37,24 @@
     display: block;
     width: 100%;
     height: 100%;
+}
+.type-lesson {
+    background-color: #fff;
+    border: 1px solid #000;
+    border-radius: 15px;
+    display: flex;
+    padding: 1%;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.type-lesson-active {
+    background-color: #D9D5D5;
+}
+.modal-content {
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
+    width: 50%;
 }
