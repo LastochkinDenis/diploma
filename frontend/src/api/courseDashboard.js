@@ -162,3 +162,15 @@ export async function getLessonsSlug(courseSlug, topicSlug) {
 
   return data;
 }
+
+export async function getDataLessonEdit(courseSlug, topicSlug, lessonSlug) {
+  let data = {}
+
+  await axios.get(`coursecontent/${courseSlug}/topic/${topicSlug}/lesson/${lessonSlug}/`)
+  .then(response => {
+    data = response.data
+  })
+  .catch(error => console.log(error));
+
+  return data;
+}

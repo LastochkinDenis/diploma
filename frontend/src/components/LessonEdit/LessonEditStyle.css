@@ -1,3 +1,6 @@
+.lesson-edit-head {
+    margin-bottom: 1%;
+}
 .lesson-settings {
     display: flex;
     justify-content: space-between;
@@ -52,9 +55,15 @@
     background-color: #D9D5D5;
 }
 .modal-content {
+    width: 50%;
+}
+.types-lessons {
     display: grid;
     grid-template-columns: repeat(2, 50%);
     grid-column-gap: 5px;
     grid-row-gap: 5px;
-    width: 50%;
+    width: 100%;
+}
+.lesson-content {
+    margin-bottom: 5%;
 }

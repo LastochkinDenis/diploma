@@ -58,7 +58,9 @@ export default function ModalTypeLesson(props) {
     <div className="modal">
       <div className="modal__wraper">
         <div className="modal-content" ref={ref}>
-          {printTypeCourse()}
+          <div className="types-lessons">
+            {printTypeCourse()}
+          </div>
         </div>
       </div>
     </div>

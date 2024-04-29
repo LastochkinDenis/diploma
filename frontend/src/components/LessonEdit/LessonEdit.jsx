@@ -1,10 +1,11 @@
 import "./LessonEditStyle.css";
 import "../CourseAuthorDashboard/CourseDashboardStyle.css";
+import { getLessonsSlug, getDataLessonEdit } from "../../api/courseDashboard";
+import ModalTypeLesson from "./component/modalTypeLesson/modalTypeLesson";
+import TopicInfo from "./component/TopicInfo/TopicInfo";
 
 import { Link, useOutletContext, useParams } from "react-router-dom";
 import { Component, createRef } from "react";
-import { getLessonsSlug } from "../../api/courseDashboard";
-import ModalTypeLesson from "./component/modalTypeLesson/modalTypeLesson";
 
 class LessonEditClass extends Component {
   constructor(props) {
@@ -29,11 +30,10 @@ class LessonEditClass extends Component {
         },
         { type: "ProgramTask", text: "программная задача", languageName: "C#" },
       ],
-      typeActive: {type:"TextInfo", languageName: ""},
+      typeActive: { type: "OpenQuestion", languageName: "" },
+      dataLesson: {name: ''}
     };
   }
-
-  nameLessonRef = createRef(undefined);
   // /course/course2-3/edit/topic/test1api11/lesson/edit/1
   async componentDidMount() {
     let lessonsSlug = await getLessonsSlug(
@@ -41,7 +41,26 @@ class LessonEditClass extends Component {
       this.props.topicSlug
     );
 
-    this.setState((state) => ({ lessonsSlug: lessonsSlug }));
+    let dataLesson = await getDataLessonEdit(
+      this.props.idCourse,
+      this.props.topicSlug,
+      this.props.lessonSlug
+    );
+
+    if(dataLesson.type === 'TextInfo'&& dataLesson.languageName === '' ){
+      this.props.setLinkRequestForServer(`coursecontent/${this.props.idCourse}/topicinfo/${this.props.topicSlug}/edit/${this.props.lessonSlug}`);
+    }
+
+    this.setState((state) => ({
+      lessonsSlug: lessonsSlug,
+      typeActive: {
+        type: dataLesson.type,
+        languageName: dataLesson.languageName,
+      },
+      dataLesson: {
+        ...dataLesson
+      }
+    }));
   }
 
   printLessonList = () => {
@@ -69,7 +88,23 @@ class LessonEditClass extends Component {
   };
 
   setActivType = (lessonType, language) => {
-    this.setState(state => ({typeActive: {type: lessonType, language: language}}));
+    this.setState((state) => ({
+      typeActive: { type: lessonType, language: language },
+    }));
+  };
+
+  handleChangeNameLesson = (evt) => {
+    this.props.setDataToUpdate({
+      ...this.props.dataToUpdate,
+      name: evt.target.value,
+    });
+    this.props.setIsUpdate(true);
+  };
+
+  printLesson = () => {
+    if(this.state.dataLesson.type === 'TextInfo'&& this.state.dataLesson.languageName === ''){
+      return <TopicInfo text={this.state.dataLesson.text} />
+    }
   }
 
   render() {
@@ -89,7 +124,7 @@ class LessonEditClass extends Component {
             <div className="lesson-settings-name">
               <div className="red-block"></div>
               <label>
-                <input ref={this.nameLessonRef} />
+                <input onChange={this.handleChangeNameLesson} defaultValue={this.state.dataLesson.name}/>
               </label>
             </div>
             <button className="course-button" onClick={this.openModalType}>
@@ -98,7 +133,9 @@ class LessonEditClass extends Component {
           </div>
           <div className="lesson-list">{this.printLessonList()}</div>
         </div>
-        <div className="lesson-content"></div>
+        <div className="lesson-content">
+          {this.printLesson()}
+        </div>
       </div>
     );
   }
@@ -106,6 +143,10 @@ class LessonEditClass extends Component {
 
 export default function LessonEdit(props) {
   const { idCourse, topicSlug, lessonSlug } = useParams();
+  let setIsUpdate = useOutletContext()[3];
+  let setLinkRequestForServer = useOutletContext()[4];
+  let dataToUpdate = useOutletContext()[5];
+  let setDataToUpdate = useOutletContext()[6];
 
   if (idCourse !== undefined && lessonSlug !== undefined)
     return (
@@ -113,6 +154,11 @@ export default function LessonEdit(props) {
         idCourse={idCourse}
         topicSlug={topicSlug}
         lessonSlug={lessonSlug}
+        setIsUpdate={setIsUpdate}
+        setDataToUpdate={setDataToUpdate}
+        dataToUpdate={dataToUpdate}
+        setLinkRequestForServer={setLinkRequestForServer}
+        key={lessonSlug}
       />
     );
   return <p></p>;

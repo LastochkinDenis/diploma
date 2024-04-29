@@ -70,8 +70,12 @@ export default function EditCourse(props) {
 
     let result = false;
 
-    if(Object.keys(dataToUpdate).length > 1)
+    console.log(dataToUpdate, linkRequestForServer)
+
+    if(Object.keys(dataToUpdate).length >= 1) {
+      
       result = await handleCourseEditApi(linkRequestForServer, dataToUpdate);
+    }
 
     setIsUpdate(false);
     setDataToUpdate({});

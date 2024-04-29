@@ -38,9 +38,12 @@ class TopicNavigate(models.Model):
         verbose_name = 'Topic navigate'
         verbose_name_plural = 'Topics navigate'
 
+def courseTextInfoFilePath(instance, filename):
+    return 'course/course_' + instance.topicNavigate.first().idTopic.idCourse.name.replace(' ', '_').lower() + '/html'
+
 class TopicInfo(models.Model):
     name = models.CharField(max_length=50)
-    text = ArrayField(base_field=models.JSONField())
+    text = models.FileField(upload_to=courseTextInfoFilePath)
     slug = AutoSlugField(unique=True, populate_from='name', slugify=genarationSlug)
     topicNavigate = GenericRelation(TopicNavigate, content_type_field='contentType', object_id_field='objectId')
 

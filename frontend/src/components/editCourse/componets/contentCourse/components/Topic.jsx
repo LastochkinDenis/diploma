@@ -48,7 +48,7 @@ export default function Topic(props) {
       ...topic,
       content: {
         ...topic.content,
-        [serialNumber]: { name: taskName, slug: randomSlug },
+        [serialNumber]: { name: taskName, slug: randomSlug, isCreate: true },
       },
     });
 
@@ -142,6 +142,8 @@ export default function Topic(props) {
           task={topic.content[key]}
           deleteTask={deleteTask}
           index={index}
+          courseSlug={props.courseSlug}
+          topicSlug={topic.info.slug}
         />
       );
       index++;

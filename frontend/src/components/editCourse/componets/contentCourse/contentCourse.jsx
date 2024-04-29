@@ -41,12 +41,14 @@ class Content extends Component {
     let topicList = [];
 
     for (let topic of Object.values(this.state.content)) {
+      console.log(topic)
       topicList.push(
         <Topic
           topic={topic}
           courseSlug={this.props.courseSlug}
           deleteTopic={this.deleteTopic}
           addTask={this.addTask}
+          key={`${topic.info.serialNumber}Topic`}
         />
       );
     }

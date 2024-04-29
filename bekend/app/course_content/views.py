@@ -6,12 +6,15 @@ from .serializer import TopicSerializer, UpdateTopicSerializer
 from course.permissions import UpdateCoursePermissions
 from authentication.permissions import AuthorizedUserPermissions
 
+from datetime import datetime
+import io
 
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView
+from django.core.files.base import ContentFile
 from rest_framework.decorators import api_view, permission_classes
 
 
@@ -293,7 +296,7 @@ class CourseContent(APIView):
         
         task = TopicInfo.objects.create(
             name=data.get('name'),
-            text = []
+            text = ''
         )
 
         TopicNavigate.objects.create(
@@ -319,7 +322,7 @@ class CourseContent(APIView):
 
         if task is None:
             return
-        
+
         task.topicNavigate.first().delete()
         task.delete()
 
@@ -345,7 +348,89 @@ def getLessonsSlug(request, slug, slugTopic):
 
     return Response(data=lessonsSlug ,status=status.HTTP_200_OK)
 
+class GetLessonEdit(APIView):
 
+    permission_classes = [AuthorizedUserPermissions, UpdateCoursePermissions]
+
+    def get(self, request, slug, slugTopic, slugLesson):
+
+        lesson = None
+        data = {}
+
+        try:
+            lesson = Task.objects.get(slug=slugLesson)
+        except ObjectDoesNotExist:
+            pass
+
+        try:
+            if lesson is None:
+                lesson = TopicInfo.objects.get(slug=slugLesson)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        if isinstance(lesson, Task) and lesson.contentType.model == 'programtask':
+            data = self.getTaksProgramData(lesson)
+        elif isinstance(lesson, Task) and lesson.contentType.model == 'openquestion':
+            data = self.getOpenQuestionData(lesson)
+        elif isinstance(lesson, Task) and lesson.contentType.model == 'questiontask':
+            data = self.getQuestionTaskData(lesson)
+        elif isinstance(lesson, TopicInfo):
+            data = self.getTopicInfoData(lesson)
+            
+        return Response(data=data, status=status.HTTP_200_OK)
+
+    def getTopicInfoData(self, lesson):
+        text = ''
+
+        if lesson.text:
+            text = lesson.text.read()
+
+        return {'text': text, 'name': lesson.name, 'type': 'TextInfo', 'languageName': ""}
+
+    def getTaksProgramData(self, lesson):
+        pass
+    
+    def getQuestionTaskData(self, lesson):
+        pass
+
+    def getOpenQuestionData(self, lesson):
+        pass
+
+
+class TopicInfoEditApi(APIView):
+
+    permission_classes = [AuthorizedUserPermissions, UpdateCoursePermissions]
+
+    # def get(self, request, slugCourse, slugTopic, slugTopicInfo):
+    #     try:
+    #         topicInfo = TopicInfo.objects.get(slug=slugTopicInfo)
+    #     except ObjectDoesNotExist:
+    #         return Response(status=status.HTTP_404_NOT_FOUND)
+        
+    #     return Response(data={'name': topicInfo.name,'text': topicInfo.text}, status=status.HTTP_200_OK)
+    
+    def put(self, request, slug, slugTopic, slugLesson):
+        data = request.data
+
+        try:
+            topicInfo = TopicInfo.objects.get(slug=slugLesson)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        if data.get('text', False):
+
+            text = bytes(data.get('text'), 'utf-8')
+
+            if topicInfo.text:
+                topicInfo.text.save(topicInfo.text, ContentFile(text), save=True)
+            else:          
+                topicInfo.text.save(f'{datetime.now().strftime("%Y-%m-%d-%s.html")}.html', ContentFile(text), save=True)
+
+        topicInfo.name = data.get('name') or topicInfo.name
+
+        topicInfo.save()
+
+        return Response(status=status.HTTP_201_CREATED)
 """
 {
     'serialNumberTopic': {
