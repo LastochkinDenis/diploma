@@ -5,6 +5,7 @@ from course.models import Course
 from .serializer import TopicSerializer, UpdateTopicSerializer
 from course.permissions import UpdateCoursePermissions
 from authentication.permissions import AuthorizedUserPermissions
+from .descriptionEdit import descriptionEdit
 
 from datetime import datetime
 import io
@@ -394,26 +395,39 @@ class GetLessonEdit(APIView):
         pass
 
     def getOpenQuestionData(self, lesson):
-        pass
+        description = ''
+
+        if lesson.description:
+            description = lesson.description.read()
+
+        print('------------')
+        print(lesson.conetntObject.rigthText)
+
+        return {'description': description, 'name': lesson.name, 'rigthText': lesson.conetntObject.rigthText, 'type': 'OpenQuestion', 'languageName': ""}
 
 
 class TopicInfoEditApi(APIView):
 
     permission_classes = [AuthorizedUserPermissions, UpdateCoursePermissions]
-
-    # def get(self, request, slugCourse, slugTopic, slugTopicInfo):
-    #     try:
-    #         topicInfo = TopicInfo.objects.get(slug=slugTopicInfo)
-    #     except ObjectDoesNotExist:
-    #         return Response(status=status.HTTP_404_NOT_FOUND)
-        
-    #     return Response(data={'name': topicInfo.name,'text': topicInfo.text}, status=status.HTTP_200_OK)
     
     def put(self, request, slug, slugTopic, slugLesson):
         data = request.data
+        oldLesson = None
+
+        print(data)
 
         try:
-            topicInfo = TopicInfo.objects.get(slug=slugLesson)
+            if data.get('changeType', False) and data.get('changeType').get('lessonType') == 'TextInfo':
+                topicInfo = TopicInfo()
+                topicInfo.slug = slugLesson
+
+                try:
+                    oldLesson = TopicInfo.objects.get(slug=slugLesson)
+                except ObjectDoesNotExist:
+                    oldLesson = Task.objects.get(slug=slugLesson)
+
+            else:
+                topicInfo = TopicInfo.objects.get(slug=slugLesson)
         except ObjectDoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -424,13 +438,75 @@ class TopicInfoEditApi(APIView):
             if topicInfo.text:
                 topicInfo.text.save(topicInfo.text, ContentFile(text), save=True)
             else:          
-                topicInfo.text.save(f'{datetime.now().strftime("%Y-%m-%d-%s.html")}.html', ContentFile(text), save=True)
+                topicInfo.text.save(f'{datetime.now().strftime("%Y-%m-%d-%s")}.html', ContentFile(text), save=True)
 
         topicInfo.name = data.get('name') or topicInfo.name
 
-        topicInfo.save()
+        if oldLesson is not None:
+            topicInfo.save()
+            navigate = oldLesson.topicNavigate.first()
+            navigate.contentObject = topicInfo
+            navigate.save()
+            oldLesson.delete()
+        else:
+            topicInfo.save()
 
         return Response(status=status.HTTP_201_CREATED)
+    
+class OpenQuestionEdit(APIView):
+
+    permission_classes = [AuthorizedUserPermissions, UpdateCoursePermissions]
+    
+    def put(self, request, slug, slugTopic, slugLesson):
+        data = request.data
+        oldLesson = None
+
+        print(data)
+
+        try:
+            task = Task.objects.get(slug=slugLesson)
+        except ObjectDoesNotExist:
+            if data.get('changeType', False) and data.get('changeType').get('lessonType') == 'OpenQuestion':
+                task = Task()
+                oldLesson = TopicInfo.objects.get(slug=slugLesson)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        if data.get('description', False):
+            task = descriptionEdit(task=task, description=data.get('description'))
+        
+        if data.get('name', False):
+            task.name = data.get('name')
+    
+        if data.get('rigthText', False):
+            print(data.get('rigthText'))
+            task.conetntObject.rigthText = data.get('rigthText')
+            print(task.conetntObject)
+            print(task.conetntObject.rigthText)
+
+        if data.get('changeType', False) and data.get('changeType').get('lessonType') == 'OpenQuestion':
+            try:
+                task.conetntObject.delete()
+            except AttributeError:
+                pass
+            task.conetntObject = OpenQuestion.objects.create(rigthText = data.get('rigthText', ''))
+        else:
+            task.conetntObject.rigthText = data.get('rigthText', '') or task.conetntObject.rigthText
+        
+        if task.pk is None and oldLesson is not None:
+            task.save()
+            navigate = oldLesson.topicNavigate.first()
+            navigate.contentObject = task
+            navigate.save()
+            oldLesson.delete()
+        else:
+            task.conetntObject.save()
+            task.save()
+
+        return Response(status=status.HTTP_200_OK)
+        
+        
+
 """
 {
     'serialNumberTopic': {

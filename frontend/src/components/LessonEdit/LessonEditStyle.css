@@ -67,3 +67,10 @@
 .lesson-content {
     margin-bottom: 5%;
 }
+.rith-answer input {
+    border: 1px solid #000;
+    border-radius: 15px;
+    font-size: 16px;
+    padding: 1%;
+    outline: none;
+}

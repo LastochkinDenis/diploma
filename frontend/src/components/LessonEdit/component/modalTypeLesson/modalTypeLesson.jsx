@@ -16,7 +16,7 @@ export default function ModalTypeLesson(props) {
     let types = [];
 
     for (let type of props.typeLesson) {
-      if (type.languageName == props.typeActive.language && props.typeActive.type == type.type) {
+      if (type.languageName === props.typeActive.languageName && props.typeActive.type == type.type) {
         types.push(
           <div
             key={

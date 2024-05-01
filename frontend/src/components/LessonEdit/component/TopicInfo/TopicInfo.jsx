@@ -10,7 +10,7 @@ export default function TopicInfo(props) {
     let setDataToUpdate = useOutletContext()[6];
 
     const handleEditorChange = (content) => {
-        setIsUpdate(true)
+        setIsUpdate(true);
         setDataToUpdate({text: content, ...dataToUpdate});
     };
 
@@ -24,7 +24,6 @@ export default function TopicInfo(props) {
       onEditorChange={handleEditorChange}
       initialValue={props.text}
       init={{
-        height: 500,
         toolbar: 'undo redo | blocks fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | removeformat',
         setup: handleEditorInit,
         menubar: false,

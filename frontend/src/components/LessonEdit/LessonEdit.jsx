@@ -3,6 +3,7 @@ import "../CourseAuthorDashboard/CourseDashboardStyle.css";
 import { getLessonsSlug, getDataLessonEdit } from "../../api/courseDashboard";
 import ModalTypeLesson from "./component/modalTypeLesson/modalTypeLesson";
 import TopicInfo from "./component/TopicInfo/TopicInfo";
+import OpenQuestion from "./component/OpenQuestion/OpenQuestion";
 
 import { Link, useOutletContext, useParams } from "react-router-dom";
 import { Component, createRef } from "react";
@@ -15,9 +16,9 @@ class LessonEditClass extends Component {
       lesson: {},
       showModalType: false,
       typeLesson: [
-        { type: "TextInfo", text: "информационый текст" },
-        { type: "QuestionTask", text: "задача с выбором ответа" },
-        { type: "OpenQuestion", text: "открытый вопрос" },
+        { type: "TextInfo", text: "информационый текст", languageName: '' },
+        { type: "QuestionTask", text: "задача с выбором ответа", languageName: ''},
+        { type: "OpenQuestion", text: "открытый вопрос", languageName: ''},
         {
           type: "ProgramTask",
           text: "программная задача",
@@ -46,10 +47,6 @@ class LessonEditClass extends Component {
       this.props.topicSlug,
       this.props.lessonSlug
     );
-
-    if(dataLesson.type === 'TextInfo'&& dataLesson.languageName === '' ){
-      this.props.setLinkRequestForServer(`coursecontent/${this.props.idCourse}/topicinfo/${this.props.topicSlug}/edit/${this.props.lessonSlug}`);
-    }
 
     this.setState((state) => ({
       lessonsSlug: lessonsSlug,
@@ -88,9 +85,12 @@ class LessonEditClass extends Component {
   };
 
   setActivType = (lessonType, language) => {
+    let name = document.querySelector('#nameLesson');
     this.setState((state) => ({
-      typeActive: { type: lessonType, language: language },
+      typeActive: { type: lessonType, languageName: language },
     }));
+    this.props.setIsUpdate(true);
+    this.props.setDataToUpdate({...this.props.dataToUpdate, changeType: {lessonType, language}, name: name.value});
   };
 
   handleChangeNameLesson = (evt) => {
@@ -102,8 +102,13 @@ class LessonEditClass extends Component {
   };
 
   printLesson = () => {
-    if(this.state.dataLesson.type === 'TextInfo'&& this.state.dataLesson.languageName === ''){
-      return <TopicInfo text={this.state.dataLesson.text} />
+    if(this.state.typeActive.type === 'TextInfo'&& this.state.typeActive.languageName === ''){
+      this.props.setLinkRequestForServer(`coursecontent/${this.props.idCourse}/topicinfo/${this.props.topicSlug}/edit/${this.props.lessonSlug}`);
+      return <TopicInfo text={this.state.dataLesson.text} setIsUpdate={this.props.setIsUpdate} setDataToUpdate={this.setDataToUpdate} dataToUpdate={this.props.dataToUpdate} />
+    }
+    else if(this.state.typeActive.type === 'OpenQuestion'&& this.state.typeActive.languageName === '') {
+      this.props.setLinkRequestForServer(`coursecontent/${this.props.idCourse}/openquestion/${this.props.topicSlug}/edit/${this.props.lessonSlug}`);
+      return <OpenQuestion rigthText={this.state.dataLesson.rigthText} description={this.state.dataLesson.description}  setIsUpdate={this.props.setIsUpdate} setDataToUpdate={this.props.setDataToUpdate} dataToUpdate={this.props.dataToUpdate} />
     }
   }
 
@@ -124,7 +129,7 @@ class LessonEditClass extends Component {
             <div className="lesson-settings-name">
               <div className="red-block"></div>
               <label>
-                <input onChange={this.handleChangeNameLesson} defaultValue={this.state.dataLesson.name}/>
+                <input onChange={this.handleChangeNameLesson} defaultValue={this.state.dataLesson.name} id='nameLesson' />
               </label>
             </div>
             <button className="course-button" onClick={this.openModalType}>
