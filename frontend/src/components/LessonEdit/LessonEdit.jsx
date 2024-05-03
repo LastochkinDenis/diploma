@@ -4,6 +4,8 @@ import { getLessonsSlug, getDataLessonEdit } from "../../api/courseDashboard";
 import ModalTypeLesson from "./component/modalTypeLesson/modalTypeLesson";
 import TopicInfo from "./component/TopicInfo/TopicInfo";
 import OpenQuestion from "./component/OpenQuestion/OpenQuestion";
+import QuestionTask from "./component/QuestionTask/QuestionTask";
+import ProgramTask from "./component/ProgramTask/ProgramTask";
 
 import { Link, useOutletContext, useParams } from "react-router-dom";
 import { Component, createRef } from "react";
@@ -109,6 +111,14 @@ class LessonEditClass extends Component {
     else if(this.state.typeActive.type === 'OpenQuestion'&& this.state.typeActive.languageName === '') {
       this.props.setLinkRequestForServer(`coursecontent/${this.props.idCourse}/openquestion/${this.props.topicSlug}/edit/${this.props.lessonSlug}`);
       return <OpenQuestion rigthText={this.state.dataLesson.rigthText} description={this.state.dataLesson.description}  setIsUpdate={this.props.setIsUpdate} setDataToUpdate={this.props.setDataToUpdate} dataToUpdate={this.props.dataToUpdate} />
+    }
+    else if(this.state.typeActive.type === 'QuestionTask'&& this.state.typeActive.languageName === '') {
+      this.props.setLinkRequestForServer(`coursecontent/${this.props.idCourse}/questiontask/${this.props.topicSlug}/edit/${this.props.lessonSlug}`);
+      return <QuestionTask answerChoices={this.state.dataLesson.answerChoices} description={this.state.dataLesson.description}  setIsUpdate={this.props.setIsUpdate} setDataToUpdate={this.props.setDataToUpdate} dataToUpdate={this.props.dataToUpdate}/>
+    }
+    else if(this.state.typeActive.type === 'ProgramTask') {
+      this.props.setLinkRequestForServer(`coursecontent/${this.props.idCourse}/programtask/${this.props.topicSlug}/edit/${this.props.lessonSlug}`);
+      return <ProgramTask fileName={this.state.dataLesson.fileName} languageName={this.state.typeActive.languageName} description={this.state.dataLesson.description}  setIsUpdate={this.props.setIsUpdate} setDataToUpdate={this.props.setDataToUpdate} dataToUpdate={this.props.dataToUpdate}/>
     }
   }
 

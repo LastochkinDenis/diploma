@@ -9,8 +9,11 @@ from .descriptionEdit import descriptionEdit
 
 from datetime import datetime
 import io
+import os
+import base64
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import QueryDict
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
@@ -389,19 +392,34 @@ class GetLessonEdit(APIView):
         return {'text': text, 'name': lesson.name, 'type': 'TextInfo', 'languageName': ""}
 
     def getTaksProgramData(self, lesson):
-        pass
+        description = ''
+        fileName = ''
+
+        if lesson.description:
+            description = lesson.description.read()
+        
+        if lesson.conetntObject.testFile:
+            fileName = str(lesson.conetntObject.testFile).split('/')[-1]
+        
+        return {'description': description, 'name': lesson.name, 'type': 'ProgramTask', 'languageName': lesson.conetntObject.programLanguage, 'fileName': fileName}
     
     def getQuestionTaskData(self, lesson):
-        pass
+        description = ''
+        answerChoices = {}
+
+        if lesson.description:
+            description = lesson.description.read()
+
+        for answer in lesson.conetntObject.choiceQuestions:
+            answerChoices[answer] = answer in lesson.conetntObject.choiceRight
+
+        return {'description': description, 'name': lesson.name, 'type': 'QuestionTask', 'languageName': "", 'answerChoices': answerChoices}
 
     def getOpenQuestionData(self, lesson):
         description = ''
 
         if lesson.description:
             description = lesson.description.read()
-
-        print('------------')
-        print(lesson.conetntObject.rigthText)
 
         return {'description': description, 'name': lesson.name, 'rigthText': lesson.conetntObject.rigthText, 'type': 'OpenQuestion', 'languageName': ""}
 
@@ -413,8 +431,6 @@ class TopicInfoEditApi(APIView):
     def put(self, request, slug, slugTopic, slugLesson):
         data = request.data
         oldLesson = None
-
-        print(data)
 
         try:
             if data.get('changeType', False) and data.get('changeType').get('lessonType') == 'TextInfo':
@@ -431,15 +447,6 @@ class TopicInfoEditApi(APIView):
         except ObjectDoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        if data.get('text', False):
-
-            text = bytes(data.get('text'), 'utf-8')
-
-            if topicInfo.text:
-                topicInfo.text.save(topicInfo.text, ContentFile(text), save=True)
-            else:          
-                topicInfo.text.save(f'{datetime.now().strftime("%Y-%m-%d-%s")}.html', ContentFile(text), save=True)
-
         topicInfo.name = data.get('name') or topicInfo.name
 
         if oldLesson is not None:
@@ -451,6 +458,16 @@ class TopicInfoEditApi(APIView):
         else:
             topicInfo.save()
 
+        if data.get('text', False):
+
+            text = bytes(data.get('text'), 'utf-8')
+
+            if topicInfo.text:
+                topicInfo.text.save(topicInfo.text, ContentFile(text), save=True)
+            else:          
+                topicInfo.text.save(f'{datetime.now().strftime("%Y-%m-%d-%s")}.html', ContentFile(text), save=True)
+        topicInfo.save()
+
         return Response(status=status.HTTP_201_CREATED)
     
 class OpenQuestionEdit(APIView):
@@ -461,34 +478,21 @@ class OpenQuestionEdit(APIView):
         data = request.data
         oldLesson = None
 
-        print(data)
-
         try:
             task = Task.objects.get(slug=slugLesson)
+            if data.get('changeType', False) and data.get('changeType').get('lessonType') == 'OpenQuestion':
+                oldLesson = Task.objects.get(slug=slugLesson)
         except ObjectDoesNotExist:
             if data.get('changeType', False) and data.get('changeType').get('lessonType') == 'OpenQuestion':
                 task = Task()
                 oldLesson = TopicInfo.objects.get(slug=slugLesson)
             else:
-                return Response(status=status.HTTP_404_NOT_FOUND)
-        
-        if data.get('description', False):
-            task = descriptionEdit(task=task, description=data.get('description'))
-        
+                return Response(status=status.HTTP_404_NOT_FOUND)      
         if data.get('name', False):
             task.name = data.get('name')
     
-        if data.get('rigthText', False):
-            print(data.get('rigthText'))
-            task.conetntObject.rigthText = data.get('rigthText')
-            print(task.conetntObject)
-            print(task.conetntObject.rigthText)
 
         if data.get('changeType', False) and data.get('changeType').get('lessonType') == 'OpenQuestion':
-            try:
-                task.conetntObject.delete()
-            except AttributeError:
-                pass
             task.conetntObject = OpenQuestion.objects.create(rigthText = data.get('rigthText', ''))
         else:
             task.conetntObject.rigthText = data.get('rigthText', '') or task.conetntObject.rigthText
@@ -498,13 +502,168 @@ class OpenQuestionEdit(APIView):
             navigate = oldLesson.topicNavigate.first()
             navigate.contentObject = task
             navigate.save()
-            oldLesson.delete()
+            if isinstance(oldLesson, TopicInfo):
+                oldLesson.delete()
         else:
             task.conetntObject.save()
             task.save()
 
+        if data.get('rigthText', False):
+            task.conetntObject.rigthText = data.get('rigthText')
+        
+        if data.get('description', False):
+            task = descriptionEdit(task=task, description=data.get('description'))
+        
+        task.save()
+
         return Response(status=status.HTTP_200_OK)
         
+class QuestionTaskEdit(APIView):
+
+    permission_classes = [AuthorizedUserPermissions, UpdateCoursePermissions]
+
+    def put(self, request, slug, slugTopic, slugLesson):
+        data = request.data
+        oldLesson = None
+
+        try:
+            task = Task.objects.get(slug=slugLesson)
+            if data.get('changeType', False) and data.get('changeType').get('lessonType') == 'QuestionTask':
+                oldLesson = Task.objects.get(slug=slugLesson)
+        except ObjectDoesNotExist:
+            if data.get('changeType', False) and data.get('changeType').get('lessonType') == 'QuestionTask':
+                task = Task()
+                oldLesson = TopicInfo.objects.get(slug=slugLesson)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        if data.get('name', False):
+            task.name = data.get('name')
+            
+        if data.get('changeType', False) and data.get('changeType').get('lessonType') == 'QuestionTask':            
+            choiceQuestions, choiceRight = self.getAnswer(data.get('answerChoices', {}))
+
+            task.conetntObject = QuestionTask.objects.create(choiceQuestions=choiceQuestions, choiceRight=choiceRight)
+
+            task.save()
+            navigate = oldLesson.topicNavigate.first()
+            navigate.contentObject = task
+            navigate.save()
+            if isinstance(oldLesson, TopicInfo):
+                oldLesson.delete()
+        else:
+            choiceQuestions, choiceRight = self.getAnswer(data.get('answerChoices'))
+
+            task.conetntObject = QuestionTask.objects.create(choiceQuestions=choiceQuestions, choiceRight=choiceRight)
+            task.conetntObject.save()
+            task.save()
+
+        if data.get('description', False):
+            task = descriptionEdit(task=task, description=data.get('description'))
+            task.save()
+
+        return Response(status=status.HTTP_200_OK)
+    
+    def getAnswer(self, data):
+        choiceQuestions = []
+        choiceRight = []
+
+        for answer in data.keys():
+            if data.get(answer):
+                choiceRight.append(answer)
+            choiceQuestions.append(answer)
+
+        return choiceQuestions, choiceRight
+
+class ProgramTaskEdit(APIView):
+
+    permission_classes = [AuthorizedUserPermissions, UpdateCoursePermissions]
+
+    def put(self, request, slug, slugTopic, slugLesson):
+        data = request.data
+
+        oldLesson = None
+
+        prograLangueage = {
+                'Python': 'py', 
+                'Java': 'jv',
+                'C#': 'c#'
+            }
+        try:
+            task = Task.objects.get(slug=slugLesson)
+            if data.get('changeType', False) and data.get('changeType').get('lessonType') == 'ProgramTask':
+                oldLesson = Task.objects.get(slug=slugLesson)
+        except ObjectDoesNotExist:
+            if data.get('changeType', False) and data.get('changeType').get('lessonType') == 'ProgramTask':
+                task = Task()
+                oldLesson = TopicInfo.objects.get(slug=slugLesson)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        if data.get('name', False):
+            task.name = data.get('name')
+        
+        if data.get('changeType', False) and data.get('changeType').get('lessonType') == 'ProgramTask':
+
+            navigate = oldLesson.topicNavigate.first()
+            programTask = ProgramTask()
+            programTask.save()
+            task.conetntObject = programTask
+            task.save()
+            navigate.contentObject = task
+            navigate.save()
+
+            if data.get('file', False):
+                programTask.programLanguage = prograLangueage.get(data.get('language'), '')
+                try:
+                    programTask = self.updateFileTest(programTask, data.get('file'))
+                except TypeError:
+                    task.conetntObject.testFile.save(data['file']['fileName'], ContentFile(data['file']['file']), save=True)
+                    task.conetntObject.save()
+                programTask.save()
+            else:
+                task.conetntObject = ProgramTask.objects.create(programLanguage=prograLangueage.get(data.get('language')), testFile='')
+            task.save()
+            
+
+            if isinstance(oldLesson, TopicInfo):
+                oldLesson.delete()
+        else:
+            task.conetntObject.programLanguage = prograLangueage.get('languageName', None) or task.conetntObject.programLanguage
+            if data.get('file', False):
+                task.conetntObject = self.updateFileTest(task.conetntObject, data.get('file'))
+            task.save()
+        
+        if data.get('description', False):
+            task = descriptionEdit(task=task, description=data.get('description'))
+            task.save()
+
+        return Response(status=status.HTTP_200_OK)
+    
+    def getFileExtension(self, file):
+        return os.path.splitext(file)[1]
+    
+    def updateFileTest(sefl, lesson, file):
+        fileTest = file.get('file').split(',')[1]
+
+        decode_file = base64.b64decode(fileTest)
+
+        extension = {
+            'py': '.py',
+            'jv': '.java',
+            'c#': '.cs'
+        }
+
+        extensionFile = sefl.getFileExtension(file.get('fileName'))
+
+        if extension.get(lesson.programLanguage, '') == extensionFile or lesson.pk is None:
+            lesson.testFile.save(file.get('fileName'), ContentFile(decode_file), save=True)
+            lesson.save()
+        else:
+            raise TypeError
+
+        return lesson
+
         
 
 """

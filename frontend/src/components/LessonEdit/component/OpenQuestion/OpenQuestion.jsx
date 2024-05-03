@@ -5,17 +5,24 @@ export default function OpenQuestion(props) {
     
     const handleEditorChange = (content) => {
         props.setIsUpdate(true);
-        props.setDataToUpdate({description: content, ...props.dataToUpdate});
+        props.setDataToUpdate((prevData) => ({
+            ...prevData,
+            description: content,
+          }));
     };
 
     const handleChangeAnswer = (evt) => {
         props.setIsUpdate(true);
-        props.setDataToUpdate({rigthText: evt.target.value, ...props.dataToUpdate});
+        props.setDataToUpdate((prevData) => ({
+            ...prevData,
+            rigthText: evt.target.value,
+          }));
     }
 
     useEffect(() => {
-        document.querySelector('.rith-answer input').value = props.rigthText;        
-    }, []);
+        if(props.rigthText)
+            document.querySelector('.rith-answer input').value = props.rigthText;        
+    }, [props.rigthText]);
 
     const handleEditorInit = () => {
 

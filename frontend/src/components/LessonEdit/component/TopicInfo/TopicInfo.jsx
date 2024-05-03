@@ -11,7 +11,10 @@ export default function TopicInfo(props) {
 
     const handleEditorChange = (content) => {
         setIsUpdate(true);
-        setDataToUpdate({text: content, ...dataToUpdate});
+        setDataToUpdate((prevData) => ({
+          ...prevData,
+          text: content,
+        }));
     };
 
     const handleEditorInit = () => {

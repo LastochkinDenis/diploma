@@ -74,3 +74,15 @@
     padding: 1%;
     outline: none;
 }
+.answer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 35%;
+    margin-bottom: 1%;
+}
+.answer button {
+    border: none;
+    outline: none;
+    background-color: #fff;
+}

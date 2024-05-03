@@ -39,7 +39,7 @@ class TopicNavigate(models.Model):
         verbose_name_plural = 'Topics navigate'
 
 def courseTextInfoFilePath(instance, filename):
-    return 'course/course_' + instance.topicNavigate.first().idTopic.idCourse.name.replace(' ', '_').lower() + '/html/'
+    return 'course/course_' + instance.topicNavigate.first().idTopic.idCourse.name.replace(' ', '_').lower() + '/html'
 
 class TopicInfo(models.Model):
     name = models.CharField(max_length=50)
@@ -74,7 +74,7 @@ class Task(models.Model):
         verbose_name_plural = 'Tasks'
 
 def courseProgramFilePath(instance, filename):
-    return 'course/course_' + instance.task.topicNavigate.idTopic.idCource.name.replace(' ', '_').lower() + '/program/'
+    return 'course/course_' + instance.task.first().topicNavigate.first().idTopic.idCourse.name.replace(' ', '_').lower() + '/'
 
 class ProgramTask(models.Model):
 
