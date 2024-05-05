@@ -1,5 +1,5 @@
 from .models import Course, Tag
-from .serializer import CourseSerializer, UpdateSerializer, AuthorsSerializer
+from .serializer import CourseSerializer, UpdateSerializer, AuthorsSerializer, CourseRecomendSerializer
 from authentication.permissions import AuthorizedUserPermissions
 from authentication.jwtToken import AccessToken
 from .permissions import UpdateCoursePermissions
@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
 from jwt.exceptions import ExpiredSignatureError
+from django.db.models import F, Q
 
 
 class CreateCourseApi(CreateAPIView):
@@ -214,6 +215,18 @@ class Authors(ListAPIView):
         serializer.is_valid()
 
         return Response(data=serializer.data, status=status.HTTP_200_OK)
+    
+@api_view(['GET'])
+def GetCourseRecomend(request):
+    q = Q(status__exact='d') | Q(status__exact='a')
+    courses = Course.objects.filter(q).order_by('?')[:12]
+
+
+    serializer = CourseRecomendSerializer(data=courses, many=True)
+    serializer.is_valid()
+    print(courses)
+
+    return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 """
     {

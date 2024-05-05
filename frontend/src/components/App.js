@@ -17,6 +17,7 @@ import CourseDescrition from "./editCourse/componets/courseDescription/courseDes
 import ContentCourse from "./editCourse/componets/contentCourse/contentCourse";
 import AuthorList from "./AuthorsList/AuthorList";
 import LessonEdit from "./LessonEdit/LessonEdit";
+import Home from "./Home/Home";
 
 class AppUnconnect extends Component {
   constructor(props) {
@@ -31,10 +32,11 @@ class AppUnconnect extends Component {
 
   render() {
     return (
-      <Fragment>
-        <Header />
-        <main>
-          <Routes>
+      <div>
+      <Header />
+      <main>
+        <Routes>
+            <Route path="/" element=<Home /> />
             <Route path="/register" element=<Register />/>
             <Route path="/login" element=<Autentications /> />
             <Route path="/coursedashboard" element=<CourseDashboard /> />
@@ -47,12 +49,19 @@ class AppUnconnect extends Component {
               <Route path="topic/:topicSlug/lesson/edit/:lessonSlug" element={<LessonEdit />} />
             </Route>
           </Routes>
-        </main>
-        <footer></footer>
-      </Fragment>
+      </main>
+      </div>
     );
   }
 }
+
+{/* <Fragment>
+        <Header />
+        <main>
+          
+        </main>
+        <footer></footer>
+      </Fragment> */}
 
 const actionBroker = (dispath) => ({
   putUserData: (key) => {

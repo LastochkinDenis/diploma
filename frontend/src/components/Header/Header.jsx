@@ -81,7 +81,7 @@ function Header(props) {
                     { user.email && <li className='header__nav-item'><a href='#'>Мое обучение</a></li>}
                     <li className='header__nav-item'><Link to='coursehome'>Преподавание</Link></li>
                </ul>
-               <div className='header__search'>
+               <div className='search__wraper'>
                     <label for='search'>
                         <img src={MegnifyinGlassIcon} />
                     </label>
