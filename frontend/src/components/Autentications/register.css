@@ -1,6 +1,8 @@
-main {
+main .authentivations {
     display: flex;
     justify-content: center;
+    width: 100%;
+    margin: 0 auto;
 }
 .authentivations__wraper {
     background-color: #E1E8FA;

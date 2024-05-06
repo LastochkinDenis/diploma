@@ -78,7 +78,7 @@ function Header(props) {
            <nav className={`header__nav ${isOpenMenu  ? " active" : ""}`}>
                <ul className={"header__nav-list"}>
                     <li className='header__nav-item'><a href='#'>Каталог</a></li>
-                    { user.email && <li className='header__nav-item'><a href='#'>Мое обучение</a></li>}
+                    { user.email && <li className='header__nav-item'><Link to='mytraining'>Мое обучение</Link></li>}
                     <li className='header__nav-item'><Link to='coursehome'>Преподавание</Link></li>
                </ul>
                <div className='search__wraper'>

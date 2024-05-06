@@ -273,7 +273,25 @@ def CourseEnrollment(request, slug):
     course.students.add(user)
 
     return Response(status=status.HTTP_200_OK)
-    
+
+@api_view(['GET'])
+@permission_classes([AuthorizedUserPermissions])
+def GetTrainingUser(request):
+
+    accessToken = AccessToken()
+
+    try:
+        access = accessToken.getPyaload(request.COOKIES.get('access', None))
+    except ExpiredSignatureError:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    user = User.objects.get(id=int(access.get('idUser')))
+
+    courses = user.stundets_course.all()
+    serializer = CourseSerializer(data=courses, many=True)
+    serializer.is_valid()
+    return Response(data=serializer.data, status=status.HTTP_200_OK)
+
 """
     {
         "delete": [email],

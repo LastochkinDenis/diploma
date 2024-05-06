@@ -89,7 +89,8 @@ class AutenticationsUnconnected extends Component {
         if(this.state.isLogin)
             return <Navigate  to='/' />
         return (
-            <div className='authentivations__wraper'>
+            <div className='authentivations'>
+                <div className='authentivations__wraper'>
                 <h1>Авторизация</h1>
                 <hr />
                 <form onSubmit={this.handleFormSubmit}>
@@ -109,6 +110,7 @@ class AutenticationsUnconnected extends Component {
                     </div>
                     <button className='submitButton'>Войти</button>
                 </form>
+            </div>
             </div>
         )
     }

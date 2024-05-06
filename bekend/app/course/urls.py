@@ -1,6 +1,7 @@
 from .views import (CreateCourseApi, GetInfoDesctiptionCourseApi, UpdateDescriptionCorseApi,
                     AddAuthCourse, AddTagsCourse, GetCourseListApi,
-                    DeleteCourseApi, Authors, GetCourseRecomend, CourseEnrollment)
+                    DeleteCourseApi, Authors, GetCourseRecomend, CourseEnrollment,
+                    GetTrainingUser)
 from django.urls import path
 
 
@@ -14,5 +15,6 @@ urlpatterns = [
     path('<slug:slug>/addtags/', AddTagsCourse.as_view()),
     path('<slug:slug>/delete/', DeleteCourseApi),#
     path('<slug:slug>/author/', Authors.as_view()),
-    path('recomend/', GetCourseRecomend)
+    path('recomend/', GetCourseRecomend),
+    path('training/', GetTrainingUser),
 ]

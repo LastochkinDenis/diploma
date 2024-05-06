@@ -1,0 +1,41 @@
+.trainings {
+    width: 50%;
+}
+.training {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #E1E8FA;
+  border-radius: 15px;
+  margin-bottom: 4%;
+  padding: 3%;
+}
+.training-info {
+  display: flex;
+  align-items: center;
+}
+.training-image {
+    margin-right: 10%;
+}
+.training-image img {
+    border-radius: 15px;
+    max-width: 100px;
+    max-height: 90px;
+}
+@media (max-width:1030px) {
+    .trainings {
+        width: 70%;
+    }
+}
+@media (max-width:600px) {
+    .trainings {
+        width: 80%;
+    }
+    .training {
+        align-items: start;
+        flex-direction: column;       
+      }
+      .training-image {
+        margin-bottom: 3%;
+    }
+}
