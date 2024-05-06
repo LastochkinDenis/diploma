@@ -3,29 +3,11 @@ import MegnifyinGlassIcon from "../../icon/MegnifyinGlassIcon.svg";
 import "./HomeStyle.css";
 
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { getCourseRecomer } from "../../api/homeApi";
 
 export default function Home(props) {
-  const [courseList, setCourseList] = useState([
-    { name: "1" },
-    { name: "2" },
-    { name: "3" },
-    { name: "4" },
-    { name: "5" },
-    { name: "6" },
-    { name: "7" },
-    { name: "8" },
-    { name: "9" },
-    { name: "10" },
-    { name: "11" },
-    { name: "12" },
-    { name: "13" },
-    { name: "14" },
-    { name: "15" },
-    { name: "16" },
-    { name: "17" },
-    { name: "18" },
-  ]);
+  const [courseList, setCourseList] = useState([]);
 
   useEffect(() => {
     let getData = async () => {
@@ -44,7 +26,7 @@ export default function Home(props) {
     for (let course of courseList) {
       colums.push(
         <div className="block-course">
-          <a href="#">
+          <Link to={`/course/${course.slug}/promotion`}>
             <div className="text">
               <p>{course.name}</p>
             </div>
@@ -55,7 +37,7 @@ export default function Home(props) {
               ) : (
                 <div className="red-block"></div>
               )}
-          </a>
+          </Link>
         </div>
       );
       if (index >= 12) {

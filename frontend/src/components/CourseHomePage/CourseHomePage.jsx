@@ -15,7 +15,7 @@ export default function CourseHomePage(props) {
          const getData = async () => {
             let {courseList, error} = await getCourseList();
 
-            if(courseList.length > 0) {
+            if(courseList && courseList.length > 0) {
                 setHaveUserCourse(true);
                 setCourseList(courseList);
             }
