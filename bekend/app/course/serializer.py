@@ -70,4 +70,4 @@ class CourseRecomendSerializer(ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ['name', 'imageCourse']
+        fields = ['name', 'imageCourse', 'slug']

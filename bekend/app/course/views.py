@@ -11,7 +11,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
-from jwt.exceptions import ExpiredSignatureError
+from jwt.exceptions import ExpiredSignatureError, DecodeError
 from django.db.models import F, Q
 
 
@@ -44,6 +44,31 @@ def GetInfoDesctiptionCourseApi(request, slug):
 
     context['authors'] = ['{} {}'.format(auth.firstName, auth.lastName) for auth in course.authors.all()]
     context['tags'] = [tag.name for tag in course.tags.all()]
+    contentCourse = []
+
+    for topic in course.topic_set.all().order_by('serialNumber'):
+        data = {}
+        data['title'] = topic.name
+        data['isOpen'] = False
+        subitems = []
+
+        for lesson in topic.topicnavigate_set.all():
+            subitems.append(lesson.contentObject.name)
+
+        data['subitems'] = subitems
+        contentCourse.append(data)
+
+    context['content'] = contentCourse
+
+    accessToken = AccessToken()
+
+    try:
+        access = accessToken.getPyaload(request.COOKIES.get('access', None))
+        enrollment = bool(course.students.filter(id=int(access.get('idUser'))))
+
+        context['enrollment'] = enrollment
+    except (ExpiredSignatureError, DecodeError):
+        context['enrollment'] = False    
 
     return Response(data={'course' : context}, status=status.HTTP_200_OK)
         
@@ -224,10 +249,31 @@ def GetCourseRecomend(request):
 
     serializer = CourseRecomendSerializer(data=courses, many=True)
     serializer.is_valid()
-    print(courses)
 
     return Response(data=serializer.data, status=status.HTTP_200_OK)
 
+@api_view(['POST'])
+@permission_classes([AuthorizedUserPermissions])
+def CourseEnrollment(request, slug):
+    
+    try:
+        course = Course.objects.get(slug=slug)
+    except ObjectDoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    accessToken = AccessToken()
+
+    try:
+        access = accessToken.getPyaload(request.COOKIES.get('access', None))
+    except ExpiredSignatureError:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    user = User.objects.get(id=int(access.get('idUser')))
+    
+    course.students.add(user)
+
+    return Response(status=status.HTTP_200_OK)
+    
 """
     {
         "delete": [email],
