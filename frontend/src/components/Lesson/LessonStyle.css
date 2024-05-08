@@ -1,0 +1,8 @@
+.lesson__wraper {
+    display: flex;
+    justify-content: space-between;
+}
+.lesson {
+    width: 75%;
+    margin-left: 1%;
+}

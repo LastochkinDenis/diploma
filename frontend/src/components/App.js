@@ -2,7 +2,7 @@ import "../axios/settings";
 import { getUserInfo } from "../api/getUserInfo";
 
 import { Component, Fragment } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Router, Routes } from "react-router-dom";
 import "./App.css";
 import Header from "./Header/Header";
 // import MegnifyinGlassIcon from '../icon/MegnifyinGlassIcon.svg';
@@ -20,6 +20,8 @@ import LessonEdit from "./LessonEdit/LessonEdit";
 import Home from "./Home/Home";
 import CoursePromotion from "./CoursePromotion/CoursePromotion";
 import MyTraining from "./MyTraining/MyTraining";
+import Lesson from "./Lesson/Lesson";
+import LessonRedirect from "./Lesson/LessonRedirect";
 
 class AppUnconnect extends Component {
   constructor(props) {
@@ -39,8 +41,10 @@ class AppUnconnect extends Component {
       <main>
         <Routes>
             <Route path="/" element=<Home /> />
+            <Route path="/course/:idCourse/topic/:topicSlug/lesson/:lessonSlug" element=<Lesson /> /> 
             <Route path="/register" element=<Register />/>
             <Route path="/course/:idCourse/promotion" element=<CoursePromotion /> />
+            <Route path="/course/:idCourse/redirect" element=<LessonRedirect /> />
             <Route path="/login" element=<Autentications /> />
             <Route path="/coursedashboard" element=<CourseDashboard /> />
             <Route path="/coursehome" element=<CourseHomePage /> />

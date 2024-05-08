@@ -69,6 +69,9 @@ class Task(models.Model):
     topicNavigate = GenericRelation(TopicNavigate, content_type_field='contentType', object_id_field='objectId')
     slug = AutoSlugField(unique=True, populate_from='name', slugify=genarationSlug)
 
+    def getCourse(self):
+        return self.topicNavigate.first().idTopic.idCourse
+
     class Meta:
         verbose_name = 'Task'
         verbose_name_plural = 'Tasks'

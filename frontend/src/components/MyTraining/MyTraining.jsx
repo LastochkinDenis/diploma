@@ -10,32 +10,31 @@ export default function MyTraining(props) {
 
   useEffect(() => {
     getTraining().then((data) => {
-        console.log(data)
       setTrainings(data);
     });
   }, []);
 
   return (
-    <div className="trainings">
+    <div className="trainings__wraper">
+      <div className="trainings">
         <h1>Cейчас прохожу</h1>
-      {trainings.map((training, index) => {
-        return (
-          <div className="training" key={index}>
-            <div className="training-info">
-              <div className="training-image">
-                {training.imageCourse && <img src={training.imageCourse} />}
-                {!training.imageCourse && <div className="red-block"></div>}
+        {trainings.map((training, index) => {
+          return (
+            <div className="training" key={index}>
+              <div className="training-info">
+                <div className="training-image">
+                  {training.imageCourse && <img src={training.imageCourse} />}
+                  {!training.imageCourse && <div className="red-block"></div>}
+                </div>
+                <div className="training-name">
+                  <h3>{training.name}</h3>
+                </div>
               </div>
-              <div className="training-name">
-                <h3>{training.name}</h3>
-              </div>
+              <Link to={`/course/${training.slug}/redirect`} className="course-button">Продолжить</Link>
             </div>
-            <button className="course-button">
-                Продолжить
-            </button>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 }

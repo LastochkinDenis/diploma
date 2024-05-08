@@ -68,8 +68,10 @@ class AutenticationsUnconnected extends Component {
         this.state.fornData.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         
         let {user, erorrResponse} = await loginApi(this.state.fornData);
+
+        console.log(user);
         
-        if(Object.keys(user).length > 0){
+        if(user !== undefined && Object.keys(user).length > 0){
             this.props.putUserData(user);
             this.setState((state) => ({isLogin: true}));
         }

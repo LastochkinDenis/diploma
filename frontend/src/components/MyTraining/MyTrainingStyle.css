@@ -1,3 +1,7 @@
+.trainings__wraper {
+    display: flex;
+    justify-content: center;
+}
 .trainings {
     width: 50%;
 }
