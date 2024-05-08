@@ -68,7 +68,7 @@ def GetInfoDesctiptionCourseApi(request, slug):
 
         context['enrollment'] = enrollment
     except (ExpiredSignatureError, DecodeError):
-        context['enrollment'] = False    
+        context['enrollment'] = False
 
     return Response(data={'course' : context}, status=status.HTTP_200_OK)
         
@@ -291,6 +291,21 @@ def GetTrainingUser(request):
     serializer = CourseSerializer(data=courses, many=True)
     serializer.is_valid()
     return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@permission_classes([AuthorizedUserPermissions, UpdateCoursePermissions])
+def PublishCourse(request, slug):
+    try:
+        course = Course.objects.get(slug=slug)
+
+        
+        course.status = 'a'
+
+        course.save()
+
+        return Response(status=status.HTTP_200_OK)
+    except Course.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 """
     {

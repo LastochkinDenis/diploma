@@ -174,3 +174,20 @@ export async function getDataLessonEdit(courseSlug, topicSlug, lessonSlug) {
 
   return data;
 }
+
+export async function PublishCourse(slug) {
+  let data = false;
+
+  await axios.post(`course/${slug}/publish/`)
+  .then(response => {
+    if(response.status == 200) {
+      data = true;
+    }
+  })
+  .catch(error => {
+    console.log(error);
+    data = false;
+  })
+
+  return data;
+}

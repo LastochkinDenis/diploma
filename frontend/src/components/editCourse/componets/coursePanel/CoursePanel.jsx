@@ -1,5 +1,6 @@
 import './CoursePanelStyle.css';
 import ArrowToDown from '../../../../icon/arrowToDown.svg'
+import { PublishCourse } from '../../../../api/courseDashboard';
 
 import { useState } from "react";
 import { Link } from 'react-router-dom'
@@ -8,7 +9,13 @@ import { Link } from 'react-router-dom'
 export default function CoursePanal(props) {
     const [menuCourseContent, setMenuCourseContent] = useState(true);
     const [menuSetingsCourse, setMenuSetingsCourse] = useState(true);
-    const [updateCourse, setUpdateCourse] = useState(false);
+    const handelePublistCourse = async () => {
+        let data = await PublishCourse(props.course.slug);
+        
+        if(data) {
+            props.setCourse({...props.course, status: 'a'})
+        }
+    }
 
     return (
         <div className="course-panel">
@@ -18,9 +25,11 @@ export default function CoursePanal(props) {
                 {/* <div className="red-block-p"></div> */}
                 <p className="course-panel-head-name">{props.course.name}</p>
             </div>
-            <button className="course-panel-button-publish">
+            {props.course.status === 'a' ? <button className="course-panel-button-publish">
+                Опубликовано
+            </button> : <button className="course-panel-button-publish" onClick={handelePublistCourse}>
                 Опубликовать
-            </button>
+            </button>}
             <div className="menu-course">
                 <div className="menu-course__wraper">
                     <div className="menu-course-name" onClick={() => {setMenuCourseContent(!menuCourseContent)}}>

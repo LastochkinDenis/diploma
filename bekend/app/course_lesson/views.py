@@ -32,7 +32,6 @@ def RederectLessonCourse(request, slug):
         access = accessToken.getPyaload(request.COOKIES.get('access', None))
         user = User.objects.get(id=int(access.get('idUser')))
     except (ExpiredSignatureError, DecodeError, ObjectDoesNotExist):
-        print('***********************')
         return Response(status=status.HTTP_403_FORBIDDEN)
     
     userTry = UserTry.objects.filter(user=user,tasks__topicNavigate__idTopic__idCourse=course)

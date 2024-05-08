@@ -92,7 +92,7 @@ export default function EditCourse(props) {
         />
       )}
       <div className="course-edit__wraper">
-        <CoursePanal course={course} />
+        <CoursePanal course={course} setCourse={setCourse}/>
         <div className="course-edit-block">
           <Outlet
             context={[
