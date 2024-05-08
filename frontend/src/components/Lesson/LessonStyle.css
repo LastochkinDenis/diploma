@@ -6,3 +6,22 @@
     width: 75%;
     margin-left: 1%;
 }
+.lesson-content {
+    margin-bottom: 2%;
+}
+@media (max-width: 1530px) {
+    .lesson {
+        width: 80%;
+        margin-left: 1%;
+    }
+}
+@media (max-width: 1200px) {
+    
+}
+@media (max-width: 1030px) {
+    .lesson__wraper {
+        flex-direction: column;
+        justify-content: start;
+        align-items: center;
+    }   
+}

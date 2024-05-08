@@ -12,11 +12,10 @@ class LessonWrap extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      course: { name: "ssss" },
+      course: { name: "" },
       dataAnswer: {},
-      lessonSlug: [],
+      lessonsSlug: [],
       topics: [],
-      dataLesson: [],
       typeLesson: [
         { type: "TextInfo", text: "информационый текст", languageName: '' },
         { type: "QuestionTask", text: "задача с выбором ответа", languageName: ''},
@@ -44,7 +43,7 @@ class LessonWrap extends Component {
         this.props.idCourse,
         this.props.topicSlug
       );
-      this.setState((state) => ({ lessonSlug: lessonsSlug }));
+      this.setState((state) => ({ lessonsSlug: lessonsSlug }));
     }
     if (prevProps.lessonSlug !== this.props.lessonSlug) {
       let dataLesson = await LessonApi(
@@ -74,7 +73,7 @@ class LessonWrap extends Component {
 
     this.setState((state) => ({
       course: { name: dataCourse.course.name },
-      lessonSlug: lessonsSlug,
+      lessonsSlug: lessonsSlug,
       topics: topics,
       dataLesson: dataLesson,
       typeActive: {type: dataLesson.type, languageName: dataLesson.languageName}
@@ -84,10 +83,13 @@ class LessonWrap extends Component {
   handeleSumbmitAnswer = () => {};
 
   printLesson = () => {
-    console.log(this.state.typeActive === 'TextInfo');
-    console.log(this.state.typeActive)
     if(this.state.typeActive.type === 'TextInfo') {
-      return <TopicInfo dataLesson={this.state.dataLesson}/>
+      return <TopicInfo dataLesson={this.state.dataLesson}
+      idCourse={this.props.idCourse}
+      topicSlug={this.props.topicSlug}
+      lessonsSlug={this.state.lessonsSlug}
+      lessonSlug={this.props.lessonSlug}
+       />
     }
   };
 
@@ -98,7 +100,8 @@ class LessonWrap extends Component {
           name={this.state.course.name}
           idCourse={this.props.idCourse}
           topicSlug={this.props.topicSlug}
-          lessonSlug={this.state.lessonSlug}
+          lessonsSlug={this.state.lessonsSlug}
+          lessonSlug={this.props.lessonSlug}
           topics={this.state.topics}
         />
         <div className="lesson">
