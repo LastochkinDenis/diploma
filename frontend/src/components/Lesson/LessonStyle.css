@@ -26,6 +26,35 @@
 a.course-button {
     font-weight: 450;
 }
+.result-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: green;
+    border: 1px solid green;
+    border-radius: 15px;
+    padding: 1%;
+    margin-right: 1%;
+}
+.result-wrong {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: red;
+    border: 1px solid red;
+    border-radius: 15px;
+    padding: 1%;
+    margin-right: 1%;
+}
+.answer-choice label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+}
+.answer-choice label input {
+    margin-right: 1%;
+}
 @media (max-width: 1530px) {
     .lesson {
         width: 80%;

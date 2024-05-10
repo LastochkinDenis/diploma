@@ -89,6 +89,8 @@ class Lesson(APIView):
             return Response(data=self.getTopicInfo(lesson), status=status.HTTP_200_OK)
         if isinstance(lesson, Task) and isinstance(lesson.conetntObject, OpenQuestion):
             return Response(data=self.getOpenQuestion(lesson), status=status.HTTP_200_OK)
+        if isinstance(lesson, Task) and isinstance(lesson.conetntObject, QuestionTask):
+            return Response(data=self.getQuestionTask(lesson), status=status.HTTP_200_OK)
 
         return Response(status=status.HTTP_200_OK)
 
@@ -106,12 +108,15 @@ class Lesson(APIView):
 
     def getOpenQuestion(self, lesson):
         description = ''
-
+        
         userTry = lesson.usertry_set.all()
         lastTry = None
+        result = ''
 
         if userTry.exists():
-            lastTry = userTry.latest('date').objectContent.answer
+            userTry = userTry.latest('date')
+            lastTry = userTry.objectContent.answer
+            result = userTry.result
 
         
         if lesson.description != '':
@@ -119,10 +124,28 @@ class Lesson(APIView):
 
         return {'name': lesson.name, 'description': description,
                 'type': 'OpenQuestion', 'languageName': "", 
-                'lastAnswer': lastTry or '' }
+                'lastAnswer': lastTry or '',
+                'result': result}
 
     def getQuestionTask(self, lesson):
-        pass
+        description = ''
+
+        userTry = lesson.usertry_set.all()
+        lastTry = None
+        result = ''
+
+        if userTry.exists():
+            userTry = userTry.latest('date')
+            lastTry = userTry.objectContent.choiceAnswer
+            result = userTry.result
+        
+        if lesson.description != '':
+            description = lesson.description.read()
+
+        return {'name': lesson.name, 'description': description,
+                'type': 'QuestionTask', 'languageName': "", 
+                'lastAnswer': lastTry or [], 'answer': lesson.conetntObject.choiceQuestions
+                ,'result': result}
 
 class OpenQuestionCheck(APIView):
     permission_classes = [AuthorizedUserPermissions, UserEnrollmentCourse]
@@ -155,6 +178,48 @@ class OpenQuestionCheck(APIView):
         userTry.user = user
 
         userTry.objectContent = UserTryOpenQuestion.objects.create(answer=answer)
+
+        userTry.save()
+        return userTry
+
+class QuestionTaskCheck(APIView):
+
+    permission_classes = [AuthorizedUserPermissions, UserEnrollmentCourse]
+
+    def post(self, request, slug, slugTopic, slugLesson):
+
+        data = request.data
+
+        choiceRight = []
+
+        user = getUser(request)
+
+        if user is None:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        
+        try:
+            lesson = Task.objects.get(slug=slugLesson)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    
+        for answer, choice in data.items():
+            if choice:
+                choiceRight.append(answer)
+        
+        if choiceRight == lesson.conetntObject.choiceRight:
+            self.createUserTry([key for key in data if data[key]], True, lesson, user)
+            return Response(data={'result':True}, status=status.HTTP_200_OK)
+        else:
+            self.createUserTry([key for key in data if data[key]], False, lesson, user)
+            return Response(data={'result':False}, status=status.HTTP_200_OK)
+    
+    def createUserTry(self, answer, result, lesson, user):
+        userTry = UserTry()
+        userTry.result = result
+        userTry.tasks = lesson
+        userTry.user = user
+
+        userTry.objectContent = UserTryQuestionTask.objects.create(choiceAnswer=answer)
 
         userTry.save()
         return userTry

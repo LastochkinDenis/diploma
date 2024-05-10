@@ -12,7 +12,6 @@ export default function Home(props) {
   useEffect(() => {
     let getData = async () => {
       let data = await getCourseRecomer();
-      console.log(data);
       setCourseList(data);
     }
 

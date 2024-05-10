@@ -1,6 +1,21 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function OpenQuestion(props) {
+export default function QuestionTask(props) {
+  const [answerChoice, setAnswerChoice] = useState({});
+
+  useEffect(() => {
+    let choices = {};
+    for (let answer of props.dataLesson.answer) {
+      if (props.dataLesson.lastAnswer.includes(answer)) {
+        choices[answer] = true;
+      } else {
+        choices[answer] = false;
+      }
+    }
+    setAnswerChoice(choices);
+  }, []);
+
   const printNextButton = () => {
     let index = props.lessonsSlug.indexOf(props.lessonSlug);
     if (props.lessonsSlug[index + 1] !== undefined) {
@@ -17,24 +32,45 @@ export default function OpenQuestion(props) {
     }
   };
 
-  const handleChangeAnswer = (evt) => {
+  const handleCheckboxChange = (answer) => {
+    let updatedAnswerChoice = { ...answerChoice };
+
+    updatedAnswerChoice[answer] = !updatedAnswerChoice[answer];
+
+    setAnswerChoice(updatedAnswerChoice);
+
     props.setDataAnswer({
-      dataAnswer: {
-        answer: evt.target.value,
-      },
-      answerLink: `courselesson/course/${props.idCourse}/topic/${props.topicSlug}/lesson/${props.lessonSlug}/openquestion/check`,
+      dataAnswer: updatedAnswerChoice,
+      answerLink: `courselesson/course/${props.idCourse}/topic/${props.topicSlug}/lesson/${props.lessonSlug}/questiontask/check`,
     });
+  };
+
+  const printAnswer = () => {
+    let answerList = [];
+
+    for (let answer in answerChoice) {
+      answerList.push(
+        <div key={answer + "answer"} className="answer-choice">
+          <label>
+            <input
+              type="checkbox"
+              onChange={() => handleCheckboxChange(answer)}
+              checked={answerChoice[answer]}
+            />
+            <p>{answer}</p>
+          </label>
+        </div>
+      );
+    }
+
+    return answerList;
   };
 
   const SubmitAnswer = async () => {
     if (Object.keys(props.dataAnswer).length == 0) {
-      let inputAnswer = document.querySelector(".lesson-content-answer").value;
-
       await props.setDataAnswer({
-        dataAnswer: {
-          answer: inputAnswer,
-        },
-        answerLink: `courselesson/course/${props.idCourse}/topic/${props.topicSlug}/lesson/${props.lessonSlug}/openquestion/check`,
+        dataAnswer: answerChoice,
+        answerLink: `courselesson/course/${props.idCourse}/topic/${props.topicSlug}/lesson/${props.lessonSlug}/questiontask/check`,
       });
     }
     props.handeleSumbmitAnswer();
@@ -57,12 +93,7 @@ export default function OpenQuestion(props) {
         <div
           dangerouslySetInnerHTML={{ __html: props.dataLesson.description }}
         />
-        <input
-          onChange={handleChangeAnswer}
-          className="lesson-content-answer"
-          maxLength={50}
-          defaultValue={props.dataLesson.lastAnswer}
-        />
+        {printAnswer()}
       </div>
       <div className="lesson-content-button">
         {PrintResult()}
