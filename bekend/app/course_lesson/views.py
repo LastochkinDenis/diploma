@@ -5,6 +5,7 @@ from .models import UserTry, UserTryOpenQuestion, UserTryProgramTask, UserTryQue
 from course_content.models import Task, TopicInfo, Topic, TopicNavigate, ProgramTask, QuestionTask, OpenQuestion
 from user.models import User
 from course.models import Course
+from user.getUser import getUser
 
 
 from rest_framework.decorators import api_view, permission_classes
@@ -26,12 +27,9 @@ def RederectLessonCourse(request, slug):
     except ObjectDoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    accessToken = AccessToken()
+    user = getUser(request)
 
-    try:
-        access = accessToken.getPyaload(request.COOKIES.get('access', None))
-        user = User.objects.get(id=int(access.get('idUser')))
-    except (ExpiredSignatureError, DecodeError, ObjectDoesNotExist):
+    if user is None:
         return Response(status=status.HTTP_403_FORBIDDEN)
     
     userTry = UserTry.objects.filter(user=user,tasks__topicNavigate__idTopic__idCourse=course)
@@ -89,11 +87,13 @@ class Lesson(APIView):
         
         if isinstance(lesson, TopicInfo):
             return Response(data=self.getTopicInfo(lesson), status=status.HTTP_200_OK)
+        if isinstance(lesson, Task) and isinstance(lesson.conetntObject, OpenQuestion):
+            return Response(data=self.getOpenQuestion(lesson), status=status.HTTP_200_OK)
 
         return Response(status=status.HTTP_200_OK)
 
     def getTopicInfo(self, lesson):
-
+        
         text = ''
 
         if lesson.text != '':
@@ -105,7 +105,56 @@ class Lesson(APIView):
         pass
 
     def getOpenQuestion(self, lesson):
-        pass
+        description = ''
+
+        userTry = lesson.usertry_set.all()
+        lastTry = None
+
+        if userTry.exists():
+            lastTry = userTry.latest('date').objectContent.answer
+
+        
+        if lesson.description != '':
+            description = lesson.description.read()
+
+        return {'name': lesson.name, 'description': description,
+                'type': 'OpenQuestion', 'languageName': "", 
+                'lastAnswer': lastTry or '' }
 
     def getQuestionTask(self, lesson):
         pass
+
+class OpenQuestionCheck(APIView):
+    permission_classes = [AuthorizedUserPermissions, UserEnrollmentCourse]
+
+    def post(self, request, slug, slugTopic, slugLesson):
+
+        data = request.data
+
+        user = getUser(request)
+
+        if user is None:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+        try:
+            lesson = Task.objects.get(slug=slugLesson)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        if lesson.conetntObject.rigthText == data.get('answer'):
+            self.createUserTry(data.get('answer'), True, lesson, user)
+            return Response(data={'result':True}, status=status.HTTP_200_OK)
+        else:
+            self.createUserTry(data.get('answer'), False, lesson, user)
+            return Response(data={'result':False}, status=status.HTTP_200_OK)
+    
+    def createUserTry(self, answer, result, lesson, user):
+        userTry = UserTry()
+        userTry.result = result
+        userTry.tasks = lesson
+        userTry.user = user
+
+        userTry.objectContent = UserTryOpenQuestion.objects.create(answer=answer)
+
+        userTry.save()
+        return userTry

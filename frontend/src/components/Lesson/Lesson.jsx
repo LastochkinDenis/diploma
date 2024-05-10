@@ -1,18 +1,20 @@
 import "./LessonStyle.css";
 import { getPromotionCourse } from "../../api/coursePromotion";
 import { getLessonsSlug } from "../../api/courseDashboard";
-import { GetTopicsCourse, LessonApi } from "../../api/lessonApi";
+import { GetTopicsCourse, LessonApi, SubmitAnswerApi } from "../../api/lessonApi";
 
 import { useParams } from "react-router-dom";
 import { Component } from "react";
 import LessonPanel from "./componets/lessonPanel/LessonPanel";
 import TopicInfo from "./componets/TopicInfo/TopicInfo";
+import OpenQuestion from "./componets/OpenQuestion/OpenQuestion";
 
 class LessonWrap extends Component {
   constructor(props) {
     super(props);
     this.state = {
       course: { name: "" },
+      answerLink: '',
       dataAnswer: {},
       lessonsSlug: [],
       topics: [],
@@ -80,7 +82,9 @@ class LessonWrap extends Component {
     }));
   }
 
-  handeleSumbmitAnswer = () => {};
+  handeleSumbmitAnswer = async () => {
+    let data = await SubmitAnswerApi(this.state.dataAnswer, this.state.answerLink);
+  }
 
   printLesson = () => {
     if(this.state.typeActive.type === 'TextInfo') {
@@ -91,7 +95,23 @@ class LessonWrap extends Component {
       lessonSlug={this.props.lessonSlug}
        />
     }
+    else if(this.state.typeActive.type === 'OpenQuestion') {
+      return <OpenQuestion dataLesson={this.state.dataLesson}
+      idCourse={this.props.idCourse}
+      topicSlug={this.props.topicSlug}
+      lessonsSlug={this.state.lessonsSlug}
+      lessonSlug={this.props.lessonSlug}
+      setDataAnswer={this.setDataAnswer}
+      handeleSumbmitAnswer={this.handeleSumbmitAnswer}
+       />
+    }
   };
+
+  setDataAnswer = (data) => {
+    this.setState((prevState) => ({
+      ...prevState.dataAnswer, ...data
+    }));
+  }
 
   render() {
     return (

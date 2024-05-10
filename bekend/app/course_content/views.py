@@ -394,14 +394,21 @@ class GetLessonEdit(APIView):
     def getTaksProgramData(self, lesson):
         description = ''
         fileName = ''
+        prograLangueage = {
+                'py': 'Python', 
+                'jv': 'Java',
+                'c#': 'C#'
+            }
 
         if lesson.description:
             description = lesson.description.read()
+
         
         if lesson.conetntObject.testFile:
             fileName = str(lesson.conetntObject.testFile).split('/')[-1]
         
-        return {'description': description, 'name': lesson.name, 'type': 'ProgramTask', 'languageName': lesson.conetntObject.programLanguage, 'fileName': fileName}
+        return {'description': description, 'name': lesson.name, 'type': 'ProgramTask',
+                 'languageName': prograLangueage.get(lesson.conetntObject.programLanguage), 'fileName': fileName}
     
     def getQuestionTaskData(self, lesson):
         description = ''
@@ -614,7 +621,7 @@ class ProgramTaskEdit(APIView):
             navigate.save()
 
             if data.get('file', False):
-                programTask.programLanguage = prograLangueage.get(data.get('language'), '')
+                programTask.programLanguage = prograLangueage.get(data['changeType'].get('language'))
                 try:
                     programTask = self.updateFileTest(programTask, data.get('file'))
                 except TypeError:
@@ -622,7 +629,7 @@ class ProgramTaskEdit(APIView):
                     task.conetntObject.save()
                 programTask.save()
             else:
-                task.conetntObject = ProgramTask.objects.create(programLanguage=prograLangueage.get(data.get('language')), testFile='')
+                task.conetntObject = ProgramTask.objects.create(programLanguage=prograLangueage.get(data['changeType'].get('language')), testFile='')
             task.save()
             
 

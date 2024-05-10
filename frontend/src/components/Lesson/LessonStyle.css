@@ -9,6 +9,23 @@
 .lesson-content {
     margin-bottom: 2%;
 }
+.lesson-content-answer {
+    margin-top: 1%;
+    font-size: 22px;
+    padding: 1%;
+    border: 1px solid #000;
+    border-radius: 15px;
+    outline: none;
+}
+.lesson-content-button {
+    display: flex;
+}
+.lesson-content-button .course-button {
+    margin-right: 1%;
+}
+a.course-button {
+    font-weight: 450;
+}
 @media (max-width: 1530px) {
     .lesson {
         width: 80%;
@@ -24,4 +41,12 @@
         justify-content: start;
         align-items: center;
     }   
+}
+@media (max-width: 1030px) {
+    .lesson-content-button {
+        flex-direction: column;
+    }
+    .lesson-content-button .course-button {
+        margin-bottom: 1%;
+    }
 }

@@ -10,7 +10,7 @@ class UserTry(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     contentType = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     objectId = models.PositiveIntegerField()
-    object = GenericForeignKey('contentType', 'objectId')
+    objectContent = GenericForeignKey(ct_field='contentType', fk_field='objectId')
     result = models.BooleanField(default=False)
     tasks = models.ForeignKey(Task, on_delete=models.CASCADE, null=True)
     date = models.DateTimeField(auto_now_add=True, null=True)

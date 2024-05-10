@@ -23,3 +23,14 @@ export async function LessonApi(slug, slugTopic, slugLesson) {
 
     return data;
 }
+export async function SubmitAnswerApi(dataAnswer, link) {
+    let data = false;
+
+    await axios.post(link, dataAnswer)
+    .then(response => {
+        data = response.data;
+    })
+    .catch(error => console.log(error));
+
+    return data;
+}
