@@ -663,7 +663,7 @@ class ProgramTaskEdit(APIView):
 
         extensionFile = sefl.getFileExtension(file.get('fileName'))
 
-        if extension.get(lesson.programLanguage, '') == extensionFile or lesson.pk is None:
+        if '.json' == extensionFile or lesson.pk is None:
             lesson.testFile.save(file.get('fileName'), ContentFile(decode_file), save=True)
             lesson.save()
         else:

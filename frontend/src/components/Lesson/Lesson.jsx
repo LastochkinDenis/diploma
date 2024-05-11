@@ -9,6 +9,7 @@ import LessonPanel from "./componets/lessonPanel/LessonPanel";
 import TopicInfo from "./componets/TopicInfo/TopicInfo";
 import OpenQuestion from "./componets/OpenQuestion/OpenQuestion";
 import QuestionTask from "./componets/QuestionTask/QuestionTask";
+import ProgramTask from "./componets/ProgramTask/ProgramTask";
 
 class LessonWrap extends Component {
   constructor(props) {
@@ -111,6 +112,16 @@ class LessonWrap extends Component {
     }
     else if(this.state.typeActive.type === 'QuestionTask') {
       return <QuestionTask dataLesson={this.state.dataLesson}
+      idCourse={this.props.idCourse}
+      topicSlug={this.props.topicSlug}
+      lessonsSlug={this.state.lessonsSlug}
+      lessonSlug={this.props.lessonSlug}
+      setDataAnswer={this.setDataAnswer}
+      handeleSumbmitAnswer={this.handeleSumbmitAnswer}
+      dataAnswer={this.state.dataAnswer}
+       />
+    } else if(this.state.typeActive.type === 'ProgramoTask') {
+      return <ProgramTask dataLesson={this.state.dataLesson}
       idCourse={this.props.idCourse}
       topicSlug={this.props.topicSlug}
       lessonsSlug={this.state.lessonsSlug}

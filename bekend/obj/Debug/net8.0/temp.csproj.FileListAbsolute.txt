@@ -1,0 +1,14 @@
+/home/hamster/Mega_jokes/diploma/websit/bekend/bin/Debug/net8.0/temp
+/home/hamster/Mega_jokes/diploma/websit/bekend/bin/Debug/net8.0/temp.deps.json
+/home/hamster/Mega_jokes/diploma/websit/bekend/bin/Debug/net8.0/temp.runtimeconfig.json
+/home/hamster/Mega_jokes/diploma/websit/bekend/bin/Debug/net8.0/temp.dll
+/home/hamster/Mega_jokes/diploma/websit/bekend/bin/Debug/net8.0/temp.pdb
+/home/hamster/Mega_jokes/diploma/websit/bekend/obj/Debug/net8.0/temp.GeneratedMSBuildEditorConfig.editorconfig
+/home/hamster/Mega_jokes/diploma/websit/bekend/obj/Debug/net8.0/temp.AssemblyInfoInputs.cache
+/home/hamster/Mega_jokes/diploma/websit/bekend/obj/Debug/net8.0/temp.AssemblyInfo.cs
+/home/hamster/Mega_jokes/diploma/websit/bekend/obj/Debug/net8.0/temp.csproj.CoreCompileInputs.cache
+/home/hamster/Mega_jokes/diploma/websit/bekend/obj/Debug/net8.0/temp.dll
+/home/hamster/Mega_jokes/diploma/websit/bekend/obj/Debug/net8.0/refint/temp.dll
+/home/hamster/Mega_jokes/diploma/websit/bekend/obj/Debug/net8.0/temp.pdb
+/home/hamster/Mega_jokes/diploma/websit/bekend/obj/Debug/net8.0/temp.genruntimeconfig.cache
+/home/hamster/Mega_jokes/diploma/websit/bekend/obj/Debug/net8.0/ref/temp.dll

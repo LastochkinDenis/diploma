@@ -6,6 +6,7 @@ from course_content.models import Task, TopicInfo, Topic, TopicNavigate, Program
 from user.models import User
 from course.models import Course
 from user.getUser import getUser
+from .CodeTest import testPy
 
 
 from rest_framework.decorators import api_view, permission_classes
@@ -91,6 +92,8 @@ class Lesson(APIView):
             return Response(data=self.getOpenQuestion(lesson), status=status.HTTP_200_OK)
         if isinstance(lesson, Task) and isinstance(lesson.conetntObject, QuestionTask):
             return Response(data=self.getQuestionTask(lesson), status=status.HTTP_200_OK)
+        if isinstance(lesson, Task) and isinstance(lesson.conetntObject, ProgramTask):
+            return Response(data=self.getProgramoTask(lesson), status=status.HTTP_200_OK)
 
         return Response(status=status.HTTP_200_OK)
 
@@ -104,7 +107,26 @@ class Lesson(APIView):
         return {'name': lesson.name, 'description': text, 'type': 'TextInfo', 'languageName': "" }
 
     def getProgramoTask(self, lesson):
-        pass
+        description = ''
+        
+        userTry = lesson.usertry_set.all()
+        lastTry = None
+        result = ''
+
+        if userTry.exists():
+            userTry = userTry.latest('date')
+            lastTry = userTry.objectContent.program
+            result = userTry.result
+
+        
+        if lesson.description != '':
+            description = lesson.description.read()
+
+        return {'name': lesson.name, 'description': description,
+                'type': 'ProgramoTask', 'languageName': lesson.conetntObject.programLanguage, 
+                'lastAnswer': lastTry or '',
+                'result': result}
+
 
     def getOpenQuestion(self, lesson):
         description = ''
@@ -123,7 +145,7 @@ class Lesson(APIView):
             description = lesson.description.read()
 
         return {'name': lesson.name, 'description': description,
-                'type': 'OpenQuestion', 'languageName': "", 
+                'type': 'OpenQuestion', 'languageName': '', 
                 'lastAnswer': lastTry or '',
                 'result': result}
 
@@ -223,3 +245,42 @@ class QuestionTaskCheck(APIView):
 
         userTry.save()
         return userTry
+
+class ProgramTaskCheck(APIView):
+    permission_classes = [AuthorizedUserPermissions, UserEnrollmentCourse]
+
+    def post(self, request, slug, slugTopic, slugLesson):
+
+        data = request.data
+        result = False
+
+        user = getUser(request)
+
+        if user is None:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+        try:
+            lesson = Task.objects.get(slug=slugLesson)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        # try:
+        #     result = testPy(lesson, data.get('program', ''))
+        # except Exception:
+        #     pass
+
+        result = testPy(lesson, data.get('program', ''))
+        self.createUserTry(data.get('program', ''), result, lesson, user)
+        return Response(data={'result':result}, status=status.HTTP_200_OK)
+    
+    def createUserTry(self, answer, result, lesson, user):
+        userTry = UserTry()
+        userTry.result = result
+        userTry.tasks = lesson
+        userTry.user = user
+
+        userTry.objectContent = UserTryProgramTask.objects.create(program=answer)
+
+        userTry.save()
+        return userTry
+        

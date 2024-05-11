@@ -55,6 +55,9 @@ a.course-button {
 .answer-choice label input {
     margin-right: 1%;
 }
+.program-editor {
+    border: 1px solid #000;
+}
 @media (max-width: 1530px) {
     .lesson {
         width: 80%;
