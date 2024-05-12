@@ -38,10 +38,15 @@ class TopicNavigate(models.Model):
         verbose_name = 'Topic navigate'
         verbose_name_plural = 'Topics navigate'
 
+def courseTextInfoFilePath(instance, filename):
+    return 'course/course_' + instance.topicNavigate.first().idTopic.idCourse.name.replace(' ', '_').lower() + '/html'
+
 class TopicInfo(models.Model):
     name = models.CharField(max_length=50)
-    text = ArrayField(base_field=models.JSONField())
+    text = models.FileField(upload_to=courseTextInfoFilePath)
     slug = AutoSlugField(unique=True, populate_from='name', slugify=genarationSlug)
+    topicNavigate = GenericRelation(TopicNavigate, content_type_field='contentType', object_id_field='objectId')
+
 
     class Meta:
         verbose_name = 'Topic info'
@@ -52,26 +57,41 @@ def updateNameTopicInfo(sender, instance, **kwarg):
     if instance.name:
         instance.slug = genarationSlug(instance.name)
 
+def courseDescriptionFilePath(instance, filename):
+    return 'course/course_' + instance.topicNavigate.first().idTopic.idCourse.name.replace(' ', '_').lower() + '/html'
+
 class Task(models.Model):
     name = models.CharField(max_length=50)
-    desctiption = ArrayField(base_field=models.JSONField())
-
+    description = models.FileField(upload_to=courseDescriptionFilePath, default='')
     contentType = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     objectId = models.PositiveIntegerField()
     conetntObject = GenericForeignKey(ct_field='contentType', fk_field='objectId')
     topicNavigate = GenericRelation(TopicNavigate, content_type_field='contentType', object_id_field='objectId')
     slug = AutoSlugField(unique=True, populate_from='name', slugify=genarationSlug)
 
+    def getCourse(self):
+        return self.topicNavigate.first().idTopic.idCourse
+
     class Meta:
         verbose_name = 'Task'
         verbose_name_plural = 'Tasks'
 
 def courseProgramFilePath(instance, filename):
-    return 'course/course_' + instance.task.topicNavigate.idTopic.idCource.name.replace(' ', '_').lower() + '/program'
+    return 'course/course_' + instance.task.first().topicNavigate.first().idTopic.idCourse.name.replace(' ', '_').lower() + '/' + filename
 
 class ProgramTask(models.Model):
+
+    CHOICE_PROGRAM_LANGUAGE = (
+        ('py', 'python'),
+        ('ja', 'java'),
+        ('js', 'javascript'),
+        ('c#', 'c#'),
+        ('', '--')
+    )
+
     testFile = models.FileField(upload_to=courseProgramFilePath)
     task = GenericRelation(Task, content_type_field='contentType', object_id_field='objectId')
+    programLanguage = models.CharField(max_length=2, default='' ,choices=CHOICE_PROGRAM_LANGUAGE)
 
     class Meta:
         verbose_name = 'Program task'
@@ -80,6 +100,7 @@ class ProgramTask(models.Model):
 class QuestionTask(models.Model):
     choiceQuestions = ArrayField(base_field=models.CharField(max_length=50), size=10)
     choiceRight = ArrayField(base_field=models.CharField(max_length=50), size=10)
+    task = GenericRelation(Task, content_type_field='contentType', object_id_field='objectId')
 
     class Meta:
         verbose_name = 'Question task'
@@ -87,6 +108,7 @@ class QuestionTask(models.Model):
 
 class OpenQuestion(models.Model):
     rigthText = models.CharField(max_length=50)
+    task = GenericRelation(Task, content_type_field='contentType', object_id_field='objectId')
 
     class Meta:
         verbose_name = 'Open question'

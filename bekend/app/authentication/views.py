@@ -15,7 +15,7 @@ from rest_framework.exceptions import ValidationError
 from django.contrib.auth import authenticate
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
-import pytz 
+from jwt.exceptions import DecodeError, ExpiredSignatureError
 
 from django.utils import timezone
 
@@ -131,13 +131,13 @@ def getUserInfoApi(request):
     refresh = request.COOKIES.get('refresh', {})
 
     if access:
-        accessPyaload = AccessToken.getPyaload(access)
-
         try:
+            accessPyaload = AccessToken.getPyaload(access)
             user = User.objects.get(id=int(accessPyaload.get('idUser')))
         except ObjectDoesNotExist:
             return Response(status=status.HTTP_403_FORBIDDEN)
-
+        except (DecodeError, ExpiredSignatureError):
+            return Response(status=status.HTTP_403_FORBIDDEN)
         return Response({'user': {
             'email': user.email,
             'firstName': user.firstName,
@@ -195,8 +195,11 @@ def updateAcsesToken(requset):
 
     response = Response()
 
-    refresh = refreshToken.getPyaload(requset.COOKIES.get('refresh', ''))
-    exp = datetime.fromtimestamp(refresh.get('exp'))
+    try:
+        refresh = refreshToken.getPyaload(requset.COOKIES.get('refresh', ''))
+        exp = datetime.fromtimestamp(refresh.get('exp'))
+    except (DecodeError, ExpiredSignatureError):
+        pass    
 
     if exp < datetime.now():
         response = updateRefreshToken(response, refreshUser)

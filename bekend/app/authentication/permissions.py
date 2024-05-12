@@ -71,15 +71,10 @@ class AuthorizedUserPermissions(BasePermission):
         refresh = request.COOKIES.get('refresh', None)
         access = request.COOKIES.get('access', None)
 
-        try:
-            if not refresh and not refreshToken.chekToken(refresh):
-                return False
+        if not refresh and not refreshToken.chekToken(refresh):
+            return False
+    
+        if not access and not accessToken.chekToken(accessToken):
+            return False
         
-            if not access and not accessToken.chekToken(accessToken):
-                return False            
-        except ExpiredSignatureError:
-            return False
-        except DecodeError:
-            return False
-
         return True

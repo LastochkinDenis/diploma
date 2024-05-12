@@ -22,7 +22,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/1.0v/authentication/', include('authentication.urls')),
     path('api/1.0v/course/', include('course.urls')),
-    path('api/1.0v/coursecontent/', include('course_content.urls'))
+    path('api/1.0v/coursecontent/', include('course_content.urls')),
+    path('api/1.0v/courselesson/', include('course_lesson.urls')),
+    path('api/1.0v/user/', include('user.urls')),
 ]
 
 if settings.DEBUG:

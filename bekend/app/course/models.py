@@ -24,11 +24,15 @@ class Course(models.Model):
     status = models.CharField(max_length=1, choices=KINDS_OF_STATUS, default='d')
     tags = models.ManyToManyField('Tag', db_table='CourseTag')
     authors = models.ManyToManyField(User, db_table='AuthCourse')
+    students = models.ManyToManyField(User, db_table='StundetsCourse', related_name='stundets_course')
     slug = AutoSlugField(unique=True, populate_from='name', slugify=genarationSlug)
 
     class Meta:
         verbose_name = 'Course'
         verbose_name_plural = 'Courses'
+
+    def __str__(self) -> str:
+        return self.name
 
 @receiver(pre_save, sender=Course)
 def updateNameCourse(sender, instance, **kwarg):

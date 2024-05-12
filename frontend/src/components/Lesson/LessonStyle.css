@@ -1,0 +1,84 @@
+.lesson__wraper {
+    display: flex;
+    justify-content: space-between;
+}
+.lesson {
+    width: 75%;
+    margin-left: 1%;
+}
+.lesson-content {
+    margin-bottom: 2%;
+}
+.lesson-content-answer {
+    margin-top: 1%;
+    font-size: 22px;
+    padding: 1%;
+    border: 1px solid #000;
+    border-radius: 15px;
+    outline: none;
+}
+.lesson-content-button {
+    display: flex;
+}
+.lesson-content-button .course-button {
+    margin-right: 1%;
+}
+a.course-button {
+    font-weight: 450;
+}
+.result-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: green;
+    border: 1px solid green;
+    border-radius: 15px;
+    padding: 1%;
+    margin-right: 1%;
+}
+.result-wrong {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: red;
+    border: 1px solid red;
+    border-radius: 15px;
+    padding: 1%;
+    margin-right: 1%;
+}
+.answer-choice label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+}
+.answer-choice label input {
+    margin-right: 1%;
+}
+.program-editor {
+    border: 1px solid #000;
+}
+@media (max-width: 1530px) {
+    .lesson {
+        width: 80%;
+        margin-left: 1%;
+    }
+}
+@media (max-width: 1200px) {
+    
+}
+@media (max-width: 1030px) {
+    .lesson__wraper {
+        flex-direction: column;
+        justify-content: start;
+        align-items: center;
+    }   
+}
+@media (max-width: 1030px) {
+    .lesson-content-button {
+        flex-direction: column;
+    }
+    .lesson-content-button .course-button {
+        margin-bottom: 1%;
+    }
+}

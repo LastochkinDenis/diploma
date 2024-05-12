@@ -41,6 +41,7 @@ class UpdateSerializer(ModelSerializer):
     imageCourse = serializers.ImageField(required=False)
 
     def update(self, instance, validated_data):
+        
         instance.name = validated_data.get("name", instance.name)
         instance.description = validated_data.get("description", instance.description)
         instance.status = validated_data.get("status", instance.status)
@@ -52,4 +53,21 @@ class UpdateSerializer(ModelSerializer):
         model = Course
         fields = ['name','description','status', 'imageCourse']
 
-    
+class AuthorsSerializer(ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['id', 'lastName', 'firstName', 'email']
+
+class CourseRecomendSerializer(ModelSerializer):
+
+    def get_imageCourse(self, obj):
+        if obj.imageCourse:
+            return 'http://127.0.0.1:8000' + obj.imageCourse.url
+        return ''
+
+    imageCourse = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Course
+        fields = ['name', 'imageCourse', 'slug']

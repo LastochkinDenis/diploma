@@ -68,8 +68,10 @@ class AutenticationsUnconnected extends Component {
         this.state.fornData.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         
         let {user, erorrResponse} = await loginApi(this.state.fornData);
+
+        console.log(user);
         
-        if(Object.keys(user).length > 0){
+        if(user !== undefined && Object.keys(user).length > 0){
             this.props.putUserData(user);
             this.setState((state) => ({isLogin: true}));
         }
@@ -89,7 +91,8 @@ class AutenticationsUnconnected extends Component {
         if(this.state.isLogin)
             return <Navigate  to='/' />
         return (
-            <div className='authentivations__wraper'>
+            <div className='authentivations'>
+                <div className='authentivations__wraper'>
                 <h1>Авторизация</h1>
                 <hr />
                 <form onSubmit={this.handleFormSubmit}>
@@ -109,6 +112,7 @@ class AutenticationsUnconnected extends Component {
                     </div>
                     <button className='submitButton'>Войти</button>
                 </form>
+            </div>
             </div>
         )
     }

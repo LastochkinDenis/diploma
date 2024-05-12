@@ -1,3 +1,5 @@
+import { getCourseList } from './../../api/courseDashboard.js'
+import CourseDashboard from '../CourseAuthorDashboard/CourseDashboard.jsx';
 import './CourseHomePageStyle.css';
 
 import { useEffect, useState } from 'react';
@@ -6,10 +8,24 @@ import { Link } from 'react-router-dom';
 
 
 export default function CourseHomePage(props) {
-    const [haveUserCourse, sethaveUserCourse] = useState(false);
+    const [haveUserCourse, setHaveUserCourse] = useState(false);
+    const [courseList, setCourseList] = useState([])
+
+    useEffect(() => {
+         const getData = async () => {
+            let {courseList, error} = await getCourseList();
+
+            if(courseList && courseList.length > 0) {
+                setHaveUserCourse(true);
+                setCourseList(courseList);
+            }
+         };
+
+         getData();
+    }, []);
 
     if(haveUserCourse) {
-        return <Navigate to='/coursedashboard' />
+        return <CourseDashboard courseList={courseList} />
     }
     return (
         <div className='InformationForCreateCourse'>
@@ -31,7 +47,7 @@ export default function CourseHomePage(props) {
                 <p>Если вы готовы поделиться своими знаниями и вдохновить других на обучение, присоединяйтесь к нашему сообществу преподавателей. Создайте свой курс прямо сейчас и помогите другим достичь новых высот в своем обучении и развитии.</p>
             </section>
             <div class='wrapepr__button-create-corse'>
-                <Link to='/coursecreate' className='button-create-corse'>Содать курс</Link>
+                <Link to='/coursecreate' className='button-create-corse'>Создать курс</Link>
             </div>
         </div>
     )

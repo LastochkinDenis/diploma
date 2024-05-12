@@ -1,0 +1,22 @@
+.author-block-add input {
+    padding: 1%;
+    border: 1px solid #000;
+    border-radius: 15px;
+    outline: none;
+    width: 20%;
+    margin-right: 1%;
+}
+.author__wraper p {
+    font-size: 24px;
+}
+.author {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 30%;
+}
+.author button {
+    background-color: #fff;
+    border: none;
+    outline: none;
+}

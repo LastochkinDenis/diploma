@@ -1,7 +1,6 @@
 .course-main {
     width: 100%;
 }
-
 .course-main > hr {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -18,11 +17,17 @@
     justify-content: space-between;
 }
 .control-panale-serch-course {
-    width: 25%;
+    width: 40%;
 
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
     align-items: center;
+}
+.serch-course__wraper {
+    margin-right: 3%;
+}
+.control-panale-serch-course button {
+    margin-right: 3%;
 }
 .serch-course__wraper label {
     border: 1px solid #000;
@@ -57,33 +62,87 @@
     margin-top: 2%;
 }
 .course-item {
-    width: 100%;
+    width: 98%;
 
     border-radius: 15px;
 
     border: 1px solid #000;
     padding: 10pt;
+
+    margin-bottom: 3%;
+    position: relative;
 }
 .course-item:hover {
     box-shadow: 0px 5px 10px rgba(17, 16, 16, 24%);
 }
-.course-item > a {
+.course-item{
     display: flex;
     justify-content: space-between;
 }
 .course-item-header {
-    width: 15%;
+    width: 100%;
     display: flex;
-    justify-content: space-between;
+}
+.course-item > a {
+    width: 90%;
+}
+.context-menu button {
+    background-color: #fff;
+    border: none;
+    outline: none;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+.image-course {
+    border-radius: 5px;
+    width: 100px;
+    height: 90px;
+    margin-right: 2%;
 }
 .red-block {
     width: 100px;
     height: 90px;
     background-color: red;
     border-radius: 5px;
+    margin-right: 2%;
 }
-.context-menu button {
+.toll-menu {
+    border: 1px solid black;
+    width: 110pt;
+    border-radius: 5px;
+    display: block;
+    position: absolute;
     background-color: #fff;
+    right: 12px;
+    top: 52px;
+}
+.toll-menu > ul > li:hover {
+    background-color: rgba(71, 62, 62, 0.205);
+}
+.toll-menu button, .toll-menu a {
+    font-size: 18px;
+    background-color: rgba(255, 255, 255, 0);
     border: none;
     outline: none;
+    width: 100%;
+    text-align: left;
+    padding: 4%;
+}
+.toll-menu-active {
+    display: block;
+}
+@media (max-width: 1030px) {
+    .course-main {
+        width: 80%;
+    }
+}
+@media (max-width: 1030px) {
+    .control-panale {
+        display: block;
+    }
+    .control-panale-serch-course {
+        width: 100%;
+        margin-bottom: 1%;
+    }
 }

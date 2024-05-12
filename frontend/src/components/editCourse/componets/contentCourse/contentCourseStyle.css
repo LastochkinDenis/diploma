@@ -1,0 +1,75 @@
+.content-course {
+    margin-bottom: 5%;
+}
+.course-topic {
+    margin-bottom: 1%;
+}
+.course-topic-head {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    border-radius: 15px 15px 0 15px;
+    border: 1px solid #000;
+    padding: 2%;
+    width: 96%;
+}
+.course-topic-head p {
+    font-size: 32px;
+    margin-right: 1%;
+}
+.course-topic-head input {
+    font-size: 22px;
+    border: 1px solid #000;
+    padding: 3px;
+    border-radius: 15px;
+    width: 100%;
+    outline: none;
+}
+.course-topic-tasks {
+    width: 90%;
+    margin: 0 auto;
+    border: 1px solid #000;
+    border-top: 0;
+    padding: 2%;
+    border-radius: 0 0 15px 15px;
+}
+.course-topic-task {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1%;
+}
+.course-topic-task-info {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+}
+.course-topic-task-info-serial-number {
+    margin-right: 15px;
+    margin-left: 10px;
+}
+.course-topic-task-info p {
+    font-size: 24px;
+}
+.course-button {
+    min-width: 170px;
+    cursor: pointer;
+}
+.course-topic-task-info input {
+    border-radius: 15px;
+    border: 1px solid #000;
+    font-size: 22px;
+    width: 75%;
+    padding: 1%;
+    outline: none;
+}
+.delete-topic-button {
+    background-color: #fff;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+.course-topic-task-buttons {
+    display: flex;
+    align-items: center;
+}
