@@ -31,6 +31,9 @@ class Course(models.Model):
         verbose_name = 'Course'
         verbose_name_plural = 'Courses'
 
+    def __str__(self) -> str:
+        return self.name
+
 @receiver(pre_save, sender=Course)
 def updateNameCourse(sender, instance, **kwarg):
     if instance.name:

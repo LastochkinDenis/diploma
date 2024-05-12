@@ -22,6 +22,7 @@ import CoursePromotion from "./CoursePromotion/CoursePromotion";
 import MyTraining from "./MyTraining/MyTraining";
 import Lesson from "./Lesson/Lesson";
 import LessonRedirect from "./Lesson/LessonRedirect";
+import UserPage from "./UserPage/UserPaga";
 
 class AppUnconnect extends Component {
   constructor(props) {
@@ -41,6 +42,7 @@ class AppUnconnect extends Component {
       <main>
         <Routes>
             <Route path="/" element=<Home /> />
+            <Route path="/user" element=<UserPage /> />
             <Route path="/course/:idCourse/topic/:topicSlug/lesson/:lessonSlug" element=<Lesson /> /> 
             <Route path="/register" element=<Register />/>
             <Route path="/course/:idCourse/promotion" element=<CoursePromotion /> />

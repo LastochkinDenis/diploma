@@ -60,12 +60,6 @@ export default function Home(props) {
           </div>
         </div>
         <div className="home-serach-filter">
-          <div className="home-serach-filter-checkbox">
-            <label>
-              <input type="checkbox" />
-              <p>С сертификатом</p>
-            </label>
-          </div>
           <button className="course-button home-serach-button">
             <p>Поиск</p>
           </button>
