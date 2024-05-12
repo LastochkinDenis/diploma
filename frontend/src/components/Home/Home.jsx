@@ -5,9 +5,12 @@ import "./HomeStyle.css";
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { getCourseRecomer } from "../../api/homeApi";
+import { useNavigate } from "react-router-dom";
 
 export default function Home(props) {
   const [courseList, setCourseList] = useState([]);
+  let ref = useRef();
+  let navigate = useNavigate();
 
   useEffect(() => {
     let getData = async () => {
@@ -48,6 +51,10 @@ export default function Home(props) {
     return colums;
   };
 
+  const HandleSearch = () => {
+    navigate(`/courses/${ref.current.value}`);
+  }
+
   return (
     <div className="home">
       <div className="home-serach">
@@ -56,11 +63,11 @@ export default function Home(props) {
             <label for="search">
               <img src={MegnifyinGlassIcon} />
             </label>
-            <input id="search" placeholder="Поиск..." />
+            <input id="search" placeholder="Поиск..." ref={ref}/>
           </div>
         </div>
         <div className="home-serach-filter">
-          <button className="course-button home-serach-button">
+          <button onClick={HandleSearch} className="course-button home-serach-button">
             <p>Поиск</p>
           </button>
         </div>

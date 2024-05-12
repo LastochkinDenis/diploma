@@ -306,7 +306,22 @@ def PublishCourse(request, slug):
         return Response(status=status.HTTP_200_OK)
     except Course.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
+    
 
+@api_view(['GET'])
+def getSearchCourse(request, search=''):
+    q = Q(status__exact='d') | Q(status__exact='a')
+    
+    if search:
+        course = Course.objects.filter(q, name__icontains=search)
+    else:
+        course = Course.objects.filter(q)
+
+    serializer = CourseRecomendSerializer(data=course, many=True)
+    serializer.is_valid()
+
+    return Response(data=serializer.data, status=status.HTTP_200_OK)
+    
 """
     {
         "delete": [email],
