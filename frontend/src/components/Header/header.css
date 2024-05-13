@@ -11,7 +11,11 @@ header {
 
     padding: 1%;
 }
-
+.header__logo img {
+    width: 80px;
+    height: 80px;
+    border-radius: 100%;
+}
 .circle {
     background-color: red;
     border-radius: 100%;

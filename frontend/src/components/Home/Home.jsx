@@ -76,7 +76,7 @@ export default function Home(props) {
       <div className="course-recomend__wraper">
         <div className="course-recomend">{printCourseColum()}</div>
         <div className="block-course-button-recomend">
-          <button className="course-button">Посмоть больше</button>
+          <button onClick={() => {navigate('/courses/')}} className="course-button">Посмоть больше</button>
         </div>
       </div>
     </div>

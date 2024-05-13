@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import "./header.css";
 import MegnifyinGlassIcon from "../../icon/MegnifyinGlassIcon.svg";
 import burgerMenuIcon from "../../icon/burgerMenuIcon.svg";
+import Logo from '../../icon/Logo.svg';
 import { Link } from "react-router-dom";
 
 function Header(props) {
@@ -72,9 +73,6 @@ function Header(props) {
                   <a href="#">Профиль</a>
                 </li>
                 <li>
-                  <a href="#">Настройки</a>
-                </li>
-                <li>
                   <a href="#" onClick={logout}>
                     Выйти
                   </a>
@@ -94,7 +92,8 @@ function Header(props) {
   return (
     <header ref={refNavMenu}>
       <div className="header__logo">
-        <div className="circle"></div>
+      <img src={Logo} />
+        {/* <div className="circle"></div> */}
       </div>
       <button
         className="header__menu-button"
