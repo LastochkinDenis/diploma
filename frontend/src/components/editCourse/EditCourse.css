@@ -40,4 +40,5 @@ body {
 }
 .course-edit-block {
     flex: 1 1 auto;
+    padding-bottom: 3%;
 }

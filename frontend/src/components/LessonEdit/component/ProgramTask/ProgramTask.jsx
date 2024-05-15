@@ -40,18 +40,6 @@ export default function ProgramTask(props) {
         }
     };
 
-    const choiceType = () => {
-        if(props.languageName == 'Python') {
-            return '.py';
-        }
-        else if(props.languageName == 'Java') {
-            return '.java';
-        }
-        else if(props.languageName == 'C#'){
-            return '.cs';
-        }
-    }
-
     return (
         <div>
             <h2>Текст задания</h2>
@@ -73,14 +61,16 @@ export default function ProgramTask(props) {
                 <form>
                     <label className="add-file">
                         <p>Добавить файл для тестирование</p>
-                        <input type='file' onChange={handleChangeFile} accept={choiceType()} />
+                        <input type='file' onChange={handleChangeFile} accept='.json' />
                     </label>
                    <div className="help-modal__wraper">
                     <div className="help-modal-icon">
                         <span>?</span>
                     </div>
                     <div className="help-modal">
-                        <p>sadasdasdasdawdaaaa</p>
+                        <p>Для проведения тестирования програмной задчи нужно загрузить файл в формате json. Json дожен иметь следующую структуру {`[
+	{"inputData": [список вводимых данных], "result": резульат},
+]`}</p>
                     </div>
                    </div>
                 </form>

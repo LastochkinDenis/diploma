@@ -31,7 +31,7 @@ class CourseCreateUnconected extends Component {
     clearFormData = () => {
         this.state.formData = {
             name: '',
-            description: ''
+            description: '_'
         }
     }
 

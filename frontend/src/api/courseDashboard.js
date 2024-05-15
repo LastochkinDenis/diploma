@@ -71,7 +71,8 @@ export async function handleCourseEditApi(linkAPI, data) {
 
   let headers = {}
 
-  if(data.imageCourse || data.fileCourse) {
+  if(data.imageCourse) {
+    
     headers = {
       'Content-Type': 'multipart/form-data'
     }

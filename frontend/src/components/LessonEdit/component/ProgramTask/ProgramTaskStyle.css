@@ -5,11 +5,14 @@
 .help-modal {
     display: none;
     position: absolute;
-    top: 0;
+    bottom: 0;
     left: 80px;
     background-color: #D9D9D9;
     padding: 10%;
     border-radius: 15px;
+    width: 500px;
+    max-height: 300px;
+    z-index: 2;
 }
 .help-modal__wraper {
     position: relative;
