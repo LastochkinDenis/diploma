@@ -86,7 +86,7 @@ def testPy(lesson, program):
                 f.flush()
 
                 subprocess.run(["javac", f.name])
-                process = subprocess.run(["java", f.name], input=testInput, capture_output=True, text=True)
+                process = subprocess.run(["java", f.name], input=testInput, capture_output=True, text=True) 
         elif testLenguage == 'c#':
              with tempfile.NamedTemporaryFile("w", suffix=".cs") as f:
                 f.write(program)
@@ -100,8 +100,6 @@ def testPy(lesson, program):
 
                 subprocess.run(["dotnet", "build", f"{temp_dir.name}/temp.csproj"])
                 process = subprocess.run(["dotnet", "run", "--project", f"{temp_dir.name}/temp.csproj"], input=testInput, capture_output=True, text=True)
-
-                print(process.stdout.strip())
         try:
             assert str(process.stdout.strip()) == str(testData.get('result', ''))
         except AssertionError:
