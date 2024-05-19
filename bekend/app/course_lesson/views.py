@@ -113,11 +113,13 @@ class Lesson(APIView):
         lastTry = None
         result = ''
 
-        if userTry.exists():
-            userTry = userTry.latest('date')
-            lastTry = userTry.objectContent.program
-            result = userTry.result
-
+        try:
+            if userTry.exists():
+                userTry = userTry.latest('date')
+                lastTry = userTry.objectContent.program
+                result = userTry.result
+        except AttributeError:
+            pass
         
         if lesson.description != '':
             description = lesson.description.read()
@@ -125,7 +127,7 @@ class Lesson(APIView):
         return {'name': lesson.name, 'description': description,
                 'type': 'ProgramoTask', 'languageName': lesson.conetntObject.programLanguage, 
                 'lastAnswer': lastTry or '',
-                'result': result}
+                'result': result, 'resultText': ''}
 
 
     def getOpenQuestion(self, lesson):
@@ -135,11 +137,13 @@ class Lesson(APIView):
         lastTry = None
         result = ''
 
-        if userTry.exists():
-            userTry = userTry.latest('date')
-            lastTry = userTry.objectContent.answer
-            result = userTry.result
-
+        try:
+            if userTry.exists():
+                userTry = userTry.latest('date')
+                lastTry = userTry.objectContent.answer
+                result = userTry.result
+        except AttributeError:
+            pass
         
         if lesson.description != '':
             description = lesson.description.read()
@@ -155,11 +159,14 @@ class Lesson(APIView):
         userTry = lesson.usertry_set.all()
         lastTry = None
         result = ''
-
-        if userTry.exists():
-            userTry = userTry.latest('date')
-            lastTry = userTry.objectContent.choiceAnswer
-            result = userTry.result
+        
+        try:
+            if userTry.exists():
+                userTry = userTry.latest('date')
+                lastTry = userTry.objectContent.choiceAnswer
+                result = userTry.result
+        except AttributeError:
+            pass
         
         if lesson.description != '':
             description = lesson.description.read()
@@ -269,9 +276,9 @@ class ProgramTaskCheck(APIView):
         # except Exception:
         #     pass
 
-        result = testPy(lesson, data.get('program', ''))
+        result, resultText = testPy(lesson, data.get('program', ''))
         self.createUserTry(data.get('program', ''), result, lesson, user)
-        return Response(data={'result':result}, status=status.HTTP_200_OK)
+        return Response(data={'result':result, 'resultText': resultText}, status=status.HTTP_200_OK)
     
     def createUserTry(self, answer, result, lesson, user):
         userTry = UserTry()
@@ -283,4 +290,3 @@ class ProgramTaskCheck(APIView):
 
         userTry.save()
         return userTry
-        

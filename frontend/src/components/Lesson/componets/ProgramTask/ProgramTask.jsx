@@ -5,14 +5,14 @@ import MonacoEditor from "react-monaco-editor";
 export default function ProgramTask(props) {
   const [program, setProgram] = useState();
   const [settings, setSettings] = useState({});
+  const [resultText, setResulText] = useState("");
 
   useEffect(() => {
     let s = {};
-    if(props.dataLesson.lastAnswer) {
+    if (props.dataLesson.lastAnswer) {
       s.value = props.dataLesson.lastAnswer;
       setProgram(props.dataLesson.lastAnswer);
-    }
-    else {
+    } else {
       const defaultValueLenguage = {
         py: "",
         "c#": `namespace DeveloperApiCSharpSample {
@@ -27,12 +27,12 @@ export default function ProgramTask(props) {
           `,
         lv: "",
       };
-  
+
       s.value = defaultValueLenguage[props.dataLesson.languageName];
     }
 
     setSettings(s);
-  }, []);
+  }, [props.dataLesson.lastAnswer]);
 
   const printNextButton = () => {
     let index = props.lessonsSlug.indexOf(props.lessonSlug);
@@ -51,7 +51,6 @@ export default function ProgramTask(props) {
   };
 
   const handleChangeAnswer = (evt) => {
-    console.log(evt)
     setProgram(evt);
   };
 
@@ -80,6 +79,19 @@ export default function ProgramTask(props) {
     // }
   };
 
+  const PrintTermenalResult = () => {
+    const lines = props.dataLesson.resultText.split("\n");
+
+    return (
+      <div className="termenal-result">
+        <p>Результат проверки:</p>
+        {lines.map((line, index) => (
+          <p key={index}>{line}</p>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div>
       <h1>{props.dataLesson.name}</h1>
@@ -87,17 +99,31 @@ export default function ProgramTask(props) {
         <div
           dangerouslySetInnerHTML={{ __html: props.dataLesson.description }}
         />
+        {props.dataLesson.resultText && PrintTermenalResult()}
         <div className="program-editor">
-          <MonacoEditor {...settings}
+          <MonacoEditor
+            {...settings}
             onChange={handleChangeAnswer}
-           height="400" />
+            height="400"
+          />
         </div>
       </div>
       <div className="lesson-content-button">
         {PrintResult()}
-        <button className="course-button" onClick={SubmitAnswer}>
-          Проверить
-        </button>
+        {props.isLoad ? (
+          <button className="course-button course-button-load__wraper">
+            <div className="course-button-load">
+              <div className="course-button-load-item"></div>
+              <div className="course-button-load-item"></div>
+              <div className="course-button-load-item"></div>
+              <div className="course-button-load-item"></div>
+            </div>
+          </button>
+        ) : (
+          <button className="course-button" onClick={SubmitAnswer}>
+            <p>Проверить</p>
+          </button>
+        )}
         {printNextButton()}
       </div>
     </div>

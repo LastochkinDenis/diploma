@@ -38,6 +38,7 @@ class LessonWrap extends Component {
       ],
       typeActive: { type: "", languageName: "" },
       dataLesson: {},
+      isLoad: false
     };
   }
 
@@ -85,9 +86,10 @@ class LessonWrap extends Component {
   }
 
   handeleSumbmitAnswer = async () => {
+    this.setState(state => ({isLoad: true}))
     let data = await SubmitAnswerApi(this.state.dataAnswer, this.state.answerLink);
 
-    this.setState(state => ({dataLesson: {...this.state.dataLesson, result: data.result}}));
+    this.setState(state => ({isLoad: false, dataLesson: {...this.state.dataLesson, result: data.result, resultText: data.resultText}}));
   }
 
   printLesson = () => {
@@ -108,6 +110,7 @@ class LessonWrap extends Component {
       setDataAnswer={this.setDataAnswer}
       handeleSumbmitAnswer={this.handeleSumbmitAnswer}
       dataAnswer={this.state.dataAnswer}
+      isLoad={this.state.isLoad}
        />
     }
     else if(this.state.typeActive.type === 'QuestionTask') {
@@ -119,6 +122,7 @@ class LessonWrap extends Component {
       setDataAnswer={this.setDataAnswer}
       handeleSumbmitAnswer={this.handeleSumbmitAnswer}
       dataAnswer={this.state.dataAnswer}
+      isLoad={this.state.isLoad}
        />
     } else if(this.state.typeActive.type === 'ProgramoTask') {
       return <ProgramTask dataLesson={this.state.dataLesson}
@@ -129,6 +133,7 @@ class LessonWrap extends Component {
       setDataAnswer={this.setDataAnswer}
       handeleSumbmitAnswer={this.handeleSumbmitAnswer}
       dataAnswer={this.state.dataAnswer}
+      isLoad={this.state.isLoad}
        />
     }
   };

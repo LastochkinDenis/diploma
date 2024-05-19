@@ -17,26 +17,15 @@ export default function OpenQuestion(props) {
     }
   };
 
-  const handleChangeAnswer = (evt) => {
-    props.setDataAnswer({
+  const SubmitAnswer = async () => {
+    let inputAnswer = document.querySelector(".lesson-content-answer").value;
+
+    await props.setDataAnswer({
       dataAnswer: {
-        answer: evt.target.value,
+        answer: inputAnswer,
       },
       answerLink: `courselesson/course/${props.idCourse}/topic/${props.topicSlug}/lesson/${props.lessonSlug}/openquestion/check`,
     });
-  };
-
-  const SubmitAnswer = async () => {
-    if (Object.keys(props.dataAnswer).length == 0) {
-      let inputAnswer = document.querySelector(".lesson-content-answer").value;
-
-      await props.setDataAnswer({
-        dataAnswer: {
-          answer: inputAnswer,
-        },
-        answerLink: `courselesson/course/${props.idCourse}/topic/${props.topicSlug}/lesson/${props.lessonSlug}/openquestion/check`,
-      });
-    }
     props.handeleSumbmitAnswer();
   };
 
@@ -58,7 +47,6 @@ export default function OpenQuestion(props) {
           dangerouslySetInnerHTML={{ __html: props.dataLesson.description }}
         />
         <input
-          onChange={handleChangeAnswer}
           className="lesson-content-answer"
           maxLength={50}
           defaultValue={props.dataLesson.lastAnswer}
@@ -66,9 +54,20 @@ export default function OpenQuestion(props) {
       </div>
       <div className="lesson-content-button">
         {PrintResult()}
-        <button className="course-button" onClick={SubmitAnswer}>
-          Проверить
-        </button>
+        {props.isLoad ? (
+          <button className="course-button course-button-load__wraper">
+            <div className="course-button-load">
+              <div className="course-button-load-item"></div>
+              <div className="course-button-load-item"></div>
+              <div className="course-button-load-item"></div>
+              <div className="course-button-load-item"></div>
+            </div>
+          </button>
+        ) : (
+          <button className="course-button" onClick={SubmitAnswer}>
+            <p>Проверить</p>
+          </button>
+        )}
         {printNextButton()}
       </div>
     </div>

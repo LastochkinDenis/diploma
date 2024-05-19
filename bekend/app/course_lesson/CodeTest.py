@@ -4,45 +4,7 @@ import json
 import os
 import io
 import tempfile
-"""
-using System;
 
-
-class Program
-
-{
-
-    static void Main(string[] args)
-
-    {
-
-        Console.Write("Enter the first number: ");
-
-        int num1 = Convert.ToInt32(Console.ReadLine());
-
-
-        Console.Write("Enter the second number: ");
-
-        int num2 = Convert.ToInt32(Console.ReadLine());
-
-
-        int sum = AddTwoNumbers(num1, num2);
-
-
-        Console.WriteLine("The sum of the two numbers is: " + sum);
-
-    }
-
-
-    static int AddTwoNumbers(int num1, int num2)
-
-    {
-
-        return num1 + num2;
-
-    }
-
-}"""
 
 def testPy(lesson, program):
     result = True
@@ -61,8 +23,9 @@ def testPy(lesson, program):
     byte_string = lesson.conetntObject.testFile.read()
 
     data = json.loads(byte_string.decode('utf-8'))
+    resultText = ''
     
-    for testData in data:
+    for nuberTest ,testData in enumerate(data, start=1):
         testInput = ''
         for value in testData.get('inputData'):
             testInput += str(value) + '\n'
@@ -98,13 +61,24 @@ def testPy(lesson, program):
                 with open(f"{temp_dir.name}/Program.cs", "w") as f:
                     f.write(program)
 
-                subprocess.run(["dotnet", "build", f"{temp_dir.name}/temp.csproj"])
-                process = subprocess.run(["dotnet", "run", "--project", f"{temp_dir.name}/temp.csproj"], input=testInput, capture_output=True, text=True)
+                try:
+                    subprocess.run(["dotnet", "build", f"{temp_dir.name}/temp.csproj"])
+                    process = subprocess.run(["dotnet", "run", "--project", f"{temp_dir.name}/temp.csproj"], input=testInput, capture_output=True, text=True)
+                except subprocess.CalledProcessError as e:  
+                    resultText += process.stdout.strip()
         try:
             assert str(process.stdout.strip()) == str(testData.get('result', ''))
+            resultText += f'Test {nuberTest}: {process.stdout.strip()} == {str(testData.get("result", ""))}\n'
         except AssertionError:
             result = False
+            if process.stderr and testLenguage == 'c#':
+                resultText += f'Test {nuberTest}: {process.stdout.strip()}\n'
+            elif process.stderr:
+                resultText += process.stderr
+            else:
+                resultText += f'Test {nuberTest}: {process.stdout.strip()} != {str(testData.get("result", ""))}'
             break
         
-    return result
+    return result, resultText
+    
     
