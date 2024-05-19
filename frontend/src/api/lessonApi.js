@@ -1,36 +1,40 @@
-import axios from "axios";
+import axiosResquest from "../axios/reTryRequest";
 
+let axios = axiosResquest();
 
 export async function GetTopicsCourse(slug) {
-    let data = [];
+  let data = [];
 
-    await axios.get(`courselesson/course/${slug}/topics/`)
-    .then(response => {
-        data = response.data;
+  await axios
+    .get(`courselesson/course/${slug}/topics/`)
+    .then((response) => {
+      data = response.data;
     })
-    .catch(error => console.log(error));
+    .catch((error) => console.log(error));
 
-    return data;
+  return data;
 }
 export async function LessonApi(slug, slugTopic, slugLesson) {
-    let data = {};
+  let data = {};
 
-    await axios.get(`courselesson/course/${slug}/topic/${slugTopic}/lesson/${slugLesson}/`)
-    .then(response => {
-        data = response.data;
+  await axios
+    .get(`courselesson/course/${slug}/topic/${slugTopic}/lesson/${slugLesson}/`)
+    .then((response) => {
+      data = response.data;
     })
-    .catch(error => console.log(error));
+    .catch((error) => console.log(error));
 
-    return data;
+  return data;
 }
 export async function SubmitAnswerApi(dataAnswer, link) {
-    let data = false;
+  let data = false;
 
-    await axios.post(link, dataAnswer)
-    .then(response => {
-        data = response.data;
+  await axios
+    .post(link, dataAnswer)
+    .then((response) => {
+      data = response.data;
     })
-    .catch(error => console.log(error));
+    .catch((error) => console.log(error));
 
-    return data;
+  return data;
 }

@@ -1,56 +1,55 @@
-import axios from 'axios';
+import axiosResquest from "../axios/reTryRequest";
+
+let axios = axiosResquest();
 
 export async function regsiterApi(userData) {
-    let isCrate = false;
-    let erorrResponse = '';
+  let isCrate = false;
+  let erorrResponse = "";
 
-    await axios.post('authentication/register/', {
-        'user' : userData 
+  await axios
+    .post("authentication/register/", {
+      user: userData,
     })
-    .then(response => {
-        isCrate = response.data.isCrate;
+    .then((response) => {
+      isCrate = response.data.isCrate;
     })
-    .catch(error => {
-        erorrResponse = error.response.data.error;
+    .catch((error) => {
+      erorrResponse = error.response.data.error;
     });
-    
-    return {isCrate, erorrResponse};
-} 
+
+  return { isCrate, erorrResponse };
+}
 
 export async function loginApi(userData) {
+  let user = {};
+  let erorrResponse = "";
 
-    let user = {}
-    let erorrResponse = ''
-
-
-    await axios.post('authentication/login/',{
-        'user': userData
+  await axios
+    .post("authentication/login/", {
+      user: userData,
     })
-    .then(response => {
-        user = response.data; 
+    .then((response) => {
+      user = response.data;
     })
-    .catch(error => {
-        erorrResponse = error.response.data.error;
+    .catch((error) => {
+      erorrResponse = error.response.data.error;
     });
 
-    return {user, erorrResponse};
+  return { user, erorrResponse };
 }
 
 export async function logoutApi() {
+  let data;
 
-    let data;
-
-    await axios.post(
-        'http://localhost:8000/api/1.0v/authentication/logout/',
-        {}
-    )
-    .then(response => {
-        data = response.data
+  await axios
+    .post("http://localhost:8000/api/1.0v/authentication/logout/", {})
+    .then((response) => {
+      data = response.data;
     })
-    .catch(error => console.log(error));
-    
-    if (data === 'User log out') {
-        return true;
-    }
-    return false;
+    .catch((error) => console.log(error));
+
+  if (data === "User log out") {
+    return true;
+  }
+  return false;
 }

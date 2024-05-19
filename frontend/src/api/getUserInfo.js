@@ -1,5 +1,6 @@
-import { compose } from "@reduxjs/toolkit";
-import axios from "axios";
+import axiosResquest from "../axios/reTryRequest";
+
+let axios = axiosResquest();
 
 export async function getUserInfo() {
   let user;
@@ -24,5 +25,5 @@ export async function getUserCertificate() {
     })
     .catch((error) => console.log(error));
 
-    return certificate;
+  return certificate;
 }

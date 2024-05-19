@@ -1,5 +1,8 @@
-import axios from "axios";
+// import axios from "axios";
 import { connect } from "react-redux";
+import axiosResquest from "../axios/reTryRequest";
+
+let axios = axiosResquest();
 
 export async function courseCreate(data) {
   let isCreate = false;
@@ -69,26 +72,24 @@ export async function handleCourseEditApi(linkAPI, data) {
   let erorr = {};
   let isDone = false;
 
-  let headers = {}
+  let headers = {};
 
-  if(data.imageCourse) {
-    
+  if (data.imageCourse) {
     headers = {
-      'Content-Type': 'multipart/form-data'
-    }
-  }
-  else {
+      "Content-Type": "multipart/form-data",
+    };
+  } else {
     headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    }
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
   }
 
   await axios
     .put(`${linkAPI}`, data, {
       headers: {
-        ...headers
-      }
+        ...headers,
+      },
     })
     .then((response) => {
       isDone = true;
@@ -99,27 +100,27 @@ export async function handleCourseEditApi(linkAPI, data) {
 }
 
 export async function getCourseContent(courseSlug) {
+  let data = {};
 
-  let data = {}
-
-  await axios.get(`coursecontent/${courseSlug}/content/`)
-  .then(response => {
-    data = response.data
-  })
-  .catch(erorr => console.log(erorr));
+  await axios
+    .get(`coursecontent/${courseSlug}/content/`)
+    .then((response) => {
+      data = response.data;
+    })
+    .catch((erorr) => console.log(erorr));
 
   return data;
 }
 
 export async function getAuthorList(slug) {
+  let data = [];
 
-  let data = []
-
-  await axios.get(`course/${slug}/author/`)
-  .then(response => {
-    data = response.data
-  })
-  .catch(error => console.log(error));
+  await axios
+    .get(`course/${slug}/author/`)
+    .then((response) => {
+      data = response.data;
+    })
+    .catch((error) => console.log(error));
 
   return data;
 }
@@ -127,13 +128,14 @@ export async function getAuthorList(slug) {
 export async function addAuthorList(slug, email) {
   let data = [];
 
-  await axios.post(`course/${slug}/author/`, {
-    email: email
-  })
-  .then(response => {
-    data = response.data;
-  })
-  .catch(error => console.log(error));
+  await axios
+    .post(`course/${slug}/author/`, {
+      email: email,
+    })
+    .then((response) => {
+      data = response.data;
+    })
+    .catch((error) => console.log(error));
 
   return data;
 }
@@ -141,37 +143,40 @@ export async function addAuthorList(slug, email) {
 export async function deleteAuthorList(slug, email) {
   let data = [];
 
-  await axios.delete(`course/${slug}/author/`, {
-    data: {email: email}
-  })
-  .then(response => {
-    data = response.data;
-  })
-  .catch(error => console.log(error));
+  await axios
+    .delete(`course/${slug}/author/`, {
+      data: { email: email },
+    })
+    .then((response) => {
+      data = response.data;
+    })
+    .catch((error) => console.log(error));
 
   return data;
 }
 
 export async function getLessonsSlug(courseSlug, topicSlug) {
-  let data = []
+  let data = [];
 
-  await axios.get(`coursecontent/${courseSlug}/lessons/${topicSlug}/`)
-  .then(response => {
-    data = response.data;
-  })
-  .catch(error => console.log(error));
+  await axios
+    .get(`coursecontent/${courseSlug}/lessons/${topicSlug}/`)
+    .then((response) => {
+      data = response.data;
+    })
+    .catch((error) => console.log(error));
 
   return data;
 }
 
 export async function getDataLessonEdit(courseSlug, topicSlug, lessonSlug) {
-  let data = {}
+  let data = {};
 
-  await axios.get(`coursecontent/${courseSlug}/topic/${topicSlug}/lesson/${lessonSlug}/`)
-  .then(response => {
-    data = response.data
-  })
-  .catch(error => console.log(error));
+  await axios
+    .get(`coursecontent/${courseSlug}/topic/${topicSlug}/lesson/${lessonSlug}/`)
+    .then((response) => {
+      data = response.data;
+    })
+    .catch((error) => console.log(error));
 
   return data;
 }
@@ -179,16 +184,17 @@ export async function getDataLessonEdit(courseSlug, topicSlug, lessonSlug) {
 export async function PublishCourse(slug) {
   let data = false;
 
-  await axios.post(`course/${slug}/publish/`)
-  .then(response => {
-    if(response.status == 200) {
-      data = true;
-    }
-  })
-  .catch(error => {
-    console.log(error);
-    data = false;
-  })
+  await axios
+    .post(`course/${slug}/publish/`)
+    .then((response) => {
+      if (response.status == 200) {
+        data = true;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      data = false;
+    });
 
   return data;
 }
