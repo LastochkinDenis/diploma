@@ -9,7 +9,6 @@ export default function CourseList(props) {
   const [courses, setCourses] = useState([]);
   let { search } = useParams();
   let ref = useRef(undefined);
-  
 
   useEffect(() => {
     const getData = async () => {
@@ -23,7 +22,7 @@ export default function CourseList(props) {
     };
 
     getData();
-  }, []);
+  }, [search]);
 
   const handleSubmit = async () => {
     let data = await getSearch(ref.current.value);
@@ -38,7 +37,10 @@ export default function CourseList(props) {
             <label for="search">
               <img src={MegnifyinGlassIcon} />
             </label>
-            <input id="search" ref={ref} placeholder="Поиск..." />
+            <input id="search" ref={ref} placeholder="Поиск..." onKeyDown={(evt) => {
+              if(evt.key == 'Enter')
+                handleSubmit();
+            }} />
           </div>
         </div>
         <div className="home-serach-filter">
