@@ -19,7 +19,7 @@ export default function Topic(props) {
 
     let amountTask = Object.keys(props.topic.content).length + 1;
     setSerialNumberAdd(`${props.topic.info.serialNumber}.${amountTask}`);
-  }, [props.topic.info.slug]);
+  }, [props.topic.info.slug, props.topic.content]);
 
   useEffect(() => {
     if (topic.info.isCreate) {

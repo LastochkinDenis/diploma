@@ -19,6 +19,15 @@ class Content extends Component {
     this.setState((state) => ({ content: data }));
   }
 
+  async componentDidUpdate(pervProps, prevState) {
+    if (this.props.isUpdate === false && pervProps.isUpdate === true) {
+      let data = await getCourseContent(this.props.courseSlug);
+      console.log('--------------------')
+      console.log(data);
+      this.setState((state) => ({ content: data }));
+    }
+  }
+
   handleCreateTopic = () => {
     let newSerialNumber = Object.keys(this.state.content).length + 1;
     let newTopic = {
@@ -57,12 +66,15 @@ class Content extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (
-      Object.keys(this.state.content).length ==
-      Object.keys(nextState.content).length
-    ) {
-      return false;
-    }
+    // if(nextProps.isUpdate == false && this.props.isUpdate == true) {
+    //   return true
+    // }
+    // if (
+    //   Object.keys(this.state.content).length ==
+    //   Object.keys(nextState.content).length
+    // ) {
+    //   return false;
+    // }
     return true;
   }
 
@@ -109,6 +121,7 @@ class Content extends Component {
 
 export default function ContentCourse(props) {
   const [course] = useOutletContext();
+  let isUpdate = useOutletContext()[7];
   let setLinkRequestForServer = useOutletContext()[4];
 
   if (course.slug)
@@ -116,6 +129,7 @@ export default function ContentCourse(props) {
       <Content
         courseSlug={course.slug}
         setLinkRequestForServer={setLinkRequestForServer}
+        isUpdate={isUpdate}
       />
     );
   return <p></p>;

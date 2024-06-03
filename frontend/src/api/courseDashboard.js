@@ -1,12 +1,12 @@
-// import axios from "axios";
+import axios from "axios";
 import { connect } from "react-redux";
 import axiosResquest from "../axios/reTryRequest";
 
-let axios = axiosResquest();
+let axiosR = axiosResquest();
 
 export async function courseCreate(data) {
   let isCreate = false;
-  let errros = { q: 1 };
+  let errros = { };
 
   await axios
     .post("course/cratecourse/", {
@@ -29,7 +29,7 @@ export async function getCourseList() {
   let courseList = [];
   let error;
 
-  await axios
+  await axiosR
     .get("course/courselist/")
     .then((response) => {
       courseList = response.data;
@@ -57,7 +57,7 @@ export async function deleteCourse(courseSlug) {
 export async function getInfoDesctiptionCourse(idCourse) {
   let data = {};
 
-  await axios
+  await axiosR
     .get(`course/${idCourse}/description/`)
     .then((response) => {
       data = response.data.course;
@@ -102,7 +102,7 @@ export async function handleCourseEditApi(linkAPI, data) {
 export async function getCourseContent(courseSlug) {
   let data = {};
 
-  await axios
+  await axiosR
     .get(`coursecontent/${courseSlug}/content/`)
     .then((response) => {
       data = response.data;
@@ -115,7 +115,7 @@ export async function getCourseContent(courseSlug) {
 export async function getAuthorList(slug) {
   let data = [];
 
-  await axios
+  await axiosR
     .get(`course/${slug}/author/`)
     .then((response) => {
       data = response.data;
@@ -128,7 +128,7 @@ export async function getAuthorList(slug) {
 export async function addAuthorList(slug, email) {
   let data = [];
 
-  await axios
+  await axiosR
     .post(`course/${slug}/author/`, {
       email: email,
     })
@@ -143,7 +143,7 @@ export async function addAuthorList(slug, email) {
 export async function deleteAuthorList(slug, email) {
   let data = [];
 
-  await axios
+  await axiosR
     .delete(`course/${slug}/author/`, {
       data: { email: email },
     })
@@ -158,7 +158,7 @@ export async function deleteAuthorList(slug, email) {
 export async function getLessonsSlug(courseSlug, topicSlug) {
   let data = [];
 
-  await axios
+  await axiosR
     .get(`coursecontent/${courseSlug}/lessons/${topicSlug}/`)
     .then((response) => {
       data = response.data;
@@ -171,7 +171,7 @@ export async function getLessonsSlug(courseSlug, topicSlug) {
 export async function getDataLessonEdit(courseSlug, topicSlug, lessonSlug) {
   let data = {};
 
-  await axios
+  await axiosR
     .get(`coursecontent/${courseSlug}/topic/${topicSlug}/lesson/${lessonSlug}/`)
     .then((response) => {
       data = response.data;

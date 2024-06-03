@@ -74,6 +74,7 @@ export default function EditCourse(props) {
       
       result = await handleCourseEditApi(linkRequestForServer, dataToUpdate);
       setIsUpdate(false);
+      setDataToUpdate({});
     }
 
     return result;
@@ -100,6 +101,7 @@ export default function EditCourse(props) {
               setLinkRequestForServer,
               dataToUpdate,
               setDataToUpdate,
+              isUpdate
             ]}
           />
         </div>

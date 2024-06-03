@@ -1,11 +1,12 @@
+import axios from 'axios';
 import axiosResquest from "../axios/reTryRequest";
 
-let axios = axiosResquest();
+let axiosR = axiosResquest();
 
 export async function getPromotionCourse(slug) {
   let data = [];
 
-  await axios
+  await axiosR
     .get(`course/${slug}/description/`)
     .then((response) => {
       data = response.data;
