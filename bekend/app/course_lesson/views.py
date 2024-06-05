@@ -271,9 +271,9 @@ class ProgramTaskCheck(APIView):
         except ObjectDoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         
-        # try:
-        #     result = testPy(lesson, data.get('program', ''))
-        # except Exception:
+       # try:
+        #    result, resultText = testPy(lesson, data.get('program', ''))
+       # except Exception:
         #     pass
 
         result, resultText = testPy(lesson, data.get('program', ''))

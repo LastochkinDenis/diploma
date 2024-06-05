@@ -10,7 +10,7 @@ def testPy(lesson, program):
     result = True
     
     programLenguges = {
-        'py': 'python',
+        'py': 'python3',
         'jv': 'java',
         'c#': 'c#'
     }
@@ -34,7 +34,7 @@ def testPy(lesson, program):
 
         process = ''
 
-        if testLenguage == 'python':
+        if testLenguage == 'python3':
             process = subprocess.run(
                 [testLenguage, '-c', program],
                 input=testInput,
