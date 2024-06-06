@@ -21,7 +21,6 @@
     "monaco-editor-core": "^0.48.0",
     "monaco-languageclient": "^8.3.1",
     "path-browserify": "^1.0.1",
-    "pm2": "^5.4.0",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
@@ -34,6 +33,7 @@
     "style-loader": "^4.0.0",
     "ts-loader": "^9.5.1",
     "url": "^0.11.3",
+    "url-loader": "^4.1.1",
     "util": "^0.12.5",
     "web-vitals": "^2.1.0",
     "webpack": "^5.91.0"
@@ -43,7 +43,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "serve": "serve -s build"
+    "serve": "serve -s build",
+    "webpack": "webpack --config webpack.config.js"
   },
   "eslintConfig": {
     "extends": [
@@ -64,7 +65,8 @@
     ]
   },
   "devDependencies": {
-    "monaco-editor-webpack-plugin": "^7.1.0"
+    "monaco-editor-webpack-plugin": "^7.1.0",
+    "webpack-cli": "^5.1.4"
   },
   "main": "index.js",
   "license": "MIT"

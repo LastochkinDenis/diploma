@@ -36,9 +36,7 @@ module.exports = {
       },
       {
         test: /\.(png|jpg|gif|svg)$/,
-        use: {
-          loader: "file-loader",
-        },
+	type: "asset/resource",
       },
       {
         test: /\.ts$/,
@@ -94,7 +92,7 @@ module.exports = {
       patterns: [
         {
           from: path.resolve(__dirname, 'src/icon'),
-          to: path.resolve(__dirname, 'dist/images'),
+          to: path.resolve(__dirname, 'dist/'),
         },
       ],
     }),
