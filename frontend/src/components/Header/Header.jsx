@@ -69,7 +69,7 @@ function Header(props) {
           >
             <nav>
               <ul>
-                <li>
+		<li>
                   <a href="#">Профиль</a>
                 </li>
                 <li>
@@ -107,7 +107,7 @@ function Header(props) {
       <nav className={`header__nav ${isOpenMenu ? " active" : ""}`}>
         <ul className={"header__nav-list"}>
           <li className="header__nav-item">
-            <a href="#">Каталог</a>
+            <a href="/">Каталог</a>
           </li>
           {user.email && (
             <li className="header__nav-item">

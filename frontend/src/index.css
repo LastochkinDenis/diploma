@@ -1,3 +1,39 @@
-body {
+* {
   margin: 0;
+  padding: 0;
+}
+@font-face {
+  font-family: 'M PLUS Rounded 1c';
+  src: url('./fonts/MPLUSRounded1c-Regular.ttf');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'M PLUS Rounded 1c';
+  src: url('./fonts/MPLUSRounded1c-Bold.ttf');
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'M PLUS Rounded 1c';
+  src: url('./fonts/MPLUSRounded1c-Medium.ttf');
+  font-weight:500;
+}
+body {
+  font-family: 'M PLUS Rounded 1c';
+  font-weight: 400;
+  font-size: 18px;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+ul {
+  list-style: none;
+}
+
+.flex-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
