@@ -4,23 +4,21 @@ import { Navigate } from 'react-router-dom';
 import { getLinkRedercet } from '../../api/rederectLesson';
 
 export default function LessonRedirect(props) {
-    const [link, setLink] = useState(undefined);
+    const [linkData, setLinkData] = useState({});
     const { idCourse } = useParams();
-    console.log(idCourse);
 
     useEffect(() => {
         const getData = async () => {
             let data = await getLinkRedercet(idCourse);
-            setLink(data.link)
+            setLinkData(data)
         }
         getData();
     }, []);
 
-    if(link) {
-        console.log(link);
-        return <Navigate to={link} />
+    if(linkData.link !== '' && linkData.error === '') {
+        return <Navigate to={linkData.link} />
     }
     else {
-        return <p></p>
+        return <h2>В курсе нет тем</h2>
     }
 }
