@@ -144,6 +144,7 @@ export default function Topic(props) {
           index={index}
           courseSlug={props.courseSlug}
           topicSlug={topic.info.slug}
+          key={serialNumber}
         />
       );
       index++;

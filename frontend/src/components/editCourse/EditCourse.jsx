@@ -36,9 +36,12 @@ export default function EditCourse(props) {
       evt.preventDefault();
       evt.returnValue = "";
     };
-
-    window.addEventListener("beforeunload", onUnload);
-
+    if(isUpdate) {
+      window.addEventListener("beforeunload", onUnload);
+    }
+    else {
+      window.removeEventListener("beforeunload", onUnload);
+    }
     return () => window.removeEventListener("beforeunload", onUnload);
   }, []);
 
@@ -50,7 +53,7 @@ export default function EditCourse(props) {
         evt.preventDefault();
         setShowModalSave(true);
 
-        let link = evt.target.href.replace("http://localhost:3000/#", "");
+        let link = evt.target.href.replace("http://luminari.ru/", "");
 
         setLinkClick(link);
       }

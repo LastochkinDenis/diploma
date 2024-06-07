@@ -27,7 +27,7 @@ export default function Home(props) {
 
     for (let course of courseList) {
       colums.push(
-        <div className="block-course">
+        <div className="block-course" key={index}>
           <Link to={`/course/${course.slug}/promotion`}>
             <div className="text">
               <p>{course.name}</p>

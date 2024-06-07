@@ -26,13 +26,10 @@ export default function CoursePromotion(props) {
   const EnrollmentCourse = async () => {
     let result = await enrollmentCourseApi(idCourse);
 
-    console.log(result);
-
     setPromotion({...promotion, enrollment: result});
   };
 
   const printButtonEnrollment = () => {
-    console.log(promotion.enrollment)
     if (promotion.enrollment) {
       return <button className="enrollment-button">Вы записаны на курс</button>;
     } else {

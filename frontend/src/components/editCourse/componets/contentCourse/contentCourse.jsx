@@ -22,8 +22,6 @@ class Content extends Component {
   async componentDidUpdate(pervProps, prevState) {
     if (this.props.isUpdate === false && pervProps.isUpdate === true) {
       let data = await getCourseContent(this.props.courseSlug);
-      console.log('--------------------')
-      console.log(data);
       this.setState((state) => ({ content: data }));
     }
   }
@@ -50,7 +48,6 @@ class Content extends Component {
     let topicList = [];
 
     for (let topic of Object.values(this.state.content)) {
-      console.log(topic)
       topicList.push(
         <Topic
           topic={topic}
@@ -66,15 +63,6 @@ class Content extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    // if(nextProps.isUpdate == false && this.props.isUpdate == true) {
-    //   return true
-    // }
-    // if (
-    //   Object.keys(this.state.content).length ==
-    //   Object.keys(nextState.content).length
-    // ) {
-    //   return false;
-    // }
     return true;
   }
 

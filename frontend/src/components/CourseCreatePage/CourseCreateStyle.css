@@ -1,3 +1,8 @@
+.form-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .form__wraper {
     background-color: #E1E8FA;
 

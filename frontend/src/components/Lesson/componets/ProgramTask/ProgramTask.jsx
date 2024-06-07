@@ -25,7 +25,13 @@ export default function ProgramTask(props) {
       }
   }
           `,
-        lv: "",
+        lv: `import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        
+    }
+}`,
       };
 
       s.value = defaultValueLenguage[props.dataLesson.languageName];

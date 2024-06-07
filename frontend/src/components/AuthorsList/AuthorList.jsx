@@ -54,8 +54,8 @@ export default function AuthorList(props) {
             <div className='authors__wraper'>
                 <p>Список преподователей</p>
                 <div className='authors'>
-                    {authors.map(author => {
-                        return <div className='author'>
+                    {authors.map((author, index) => {
+                        return <div className='author' key={index}>
                             <p className='author-name'>{`${author.lastName} ${author.firstName}`}</p>
                             <button onClick={() => deleteAuthor(author.email)}>
                                 <img src={cros} />

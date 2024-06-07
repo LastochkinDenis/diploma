@@ -9,10 +9,10 @@ export async function getLinkRedercet(slug) {
   await axios
     .get(`/courselesson/course/${slug}/rederect/`)
     .then((response) => {
-      if(response.response.status === 200) {
+      if(response.status === 200) {
         data = {link: response.data.link, error: ''};
       }
-      else if(response.response.status === 400) {
+      else if(response.status === 400) {
         data = {error: "the course haven't topic", link: ''};
       }
     })
