@@ -55,7 +55,7 @@ export default function EditCourse(props) {
 
         let link = evt.target.href.replace("http://luminari.ru/", "");
 
-        setLinkClick(link);
+        setLinkClick("/" + link);
       }
     };
 
