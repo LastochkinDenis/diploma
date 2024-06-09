@@ -48,8 +48,11 @@ export default function CoursePromotion(props) {
         </div>
         <div className="promtion-course-enrollment">
           <div className="promtion-course-image">
-            <img />
-            <div className="red-block"></div>
+		{promotion.imageCourse ? 
+              <img src={promotion.imageCourse} />
+             : 
+              <div className="red-block"></div>
+            }
           </div>
           <p className="promtion-course-name">{promotion.name}</p>
           <div className="promtion-course-enrollment__wraper">

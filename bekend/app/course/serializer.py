@@ -12,7 +12,7 @@ class CourseSerializer(ModelSerializer):
 
     def get_imageCourse(self, obj):
         if obj.imageCourse:
-            return 'http://127.0.0.1:8000' + obj.imageCourse.url
+            return obj.imageCourse.url
         return ''
 
 
@@ -63,7 +63,7 @@ class CourseRecomendSerializer(ModelSerializer):
 
     def get_imageCourse(self, obj):
         if obj.imageCourse:
-            return 'http://127.0.0.1:8000' + obj.imageCourse.url
+            return obj.imageCourse.url
         return ''
 
     imageCourse = serializers.SerializerMethodField()
