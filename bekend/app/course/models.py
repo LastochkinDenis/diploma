@@ -19,7 +19,7 @@ class Course(models.Model):
     )
     
     name = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     imageCourse = models.ImageField(upload_to=courseImagePath, null=True)
     status = models.CharField(max_length=1, choices=KINDS_OF_STATUS, default='d')
     tags = models.ManyToManyField('Tag', db_table='CourseTag')

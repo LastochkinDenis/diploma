@@ -29,7 +29,7 @@ class CourseCreateUnconected extends Component {
   clearFormData = () => {
     this.state.formData = {
       name: "",
-      description: "_",
+      description: "",
     };
   };
 
@@ -115,11 +115,9 @@ class CourseCreateUnconected extends Component {
                 <p className="error-mesage">{this.state.errorDescripton}</p>
               )}
             </div>
-            <input
-              type="submit"
-              content="Создать курс"
-              className="submitButton"
-            />
+            <button className="submitButton">
+            Создать курс
+            </button>
           </form>
         </div>
       </div>
