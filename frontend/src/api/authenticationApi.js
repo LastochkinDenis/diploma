@@ -42,7 +42,7 @@ export async function logoutApi() {
   let data;
 
   await axios
-    .post("http://localhost:8000/api/1.0v/authentication/logout/", {})
+    .post("authentication/logout/", {})
     .then((response) => {
       data = response.data;
     })

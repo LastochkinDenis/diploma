@@ -75,6 +75,8 @@ class Lesson(APIView):
 
         lesson = None
 
+        user = getUser(request)
+
         try:
             lesson = Task.objects.get(slug=slugLesson)
         except ObjectDoesNotExist:
@@ -89,11 +91,11 @@ class Lesson(APIView):
         if isinstance(lesson, TopicInfo):
             return Response(data=self.getTopicInfo(lesson), status=status.HTTP_200_OK)
         if isinstance(lesson, Task) and isinstance(lesson.conetntObject, OpenQuestion):
-            return Response(data=self.getOpenQuestion(lesson), status=status.HTTP_200_OK)
+            return Response(data=self.getOpenQuestion(lesson, user), status=status.HTTP_200_OK)
         if isinstance(lesson, Task) and isinstance(lesson.conetntObject, QuestionTask):
-            return Response(data=self.getQuestionTask(lesson), status=status.HTTP_200_OK)
+            return Response(data=self.getQuestionTask(lesson, user), status=status.HTTP_200_OK)
         if isinstance(lesson, Task) and isinstance(lesson.conetntObject, ProgramTask):
-            return Response(data=self.getProgramoTask(lesson), status=status.HTTP_200_OK)
+            return Response(data=self.getProgramoTask(lesson, user), status=status.HTTP_200_OK)
 
         return Response(status=status.HTTP_200_OK)
 
@@ -106,10 +108,10 @@ class Lesson(APIView):
 
         return {'name': lesson.name, 'description': text, 'type': 'TextInfo', 'languageName': "" }
 
-    def getProgramoTask(self, lesson):
+    def getProgramoTask(self, lesson, user):
         description = ''
         
-        userTry = lesson.usertry_set.all()
+        userTry = lesson.usertry_set.filter(user=user)
         lastTry = None
         result = ''
 
@@ -130,10 +132,10 @@ class Lesson(APIView):
                 'result': result, 'resultText': ''}
 
 
-    def getOpenQuestion(self, lesson):
+    def getOpenQuestion(self, lesson, user):
         description = ''
         
-        userTry = lesson.usertry_set.all()
+        userTry = lesson.usertry_set.filter(user=user)
         lastTry = None
         result = ''
 
@@ -153,10 +155,10 @@ class Lesson(APIView):
                 'lastAnswer': lastTry or '',
                 'result': result}
 
-    def getQuestionTask(self, lesson):
+    def getQuestionTask(self, lesson, user):
         description = ''
 
-        userTry = lesson.usertry_set.all()
+        userTry = lesson.usertry_set.filter(user=user)
         lastTry = None
         result = ''
         

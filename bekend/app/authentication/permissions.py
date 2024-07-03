@@ -4,7 +4,6 @@ from .jwtToken import RefreshToken, AccessToken
 from rest_framework.permissions import BasePermission
 from jwt.exceptions import ExpiredSignatureError, DecodeError
 
-
 def catchErrorToken(func):
 
     def wraper(*args, **kwargs):
@@ -36,7 +35,7 @@ class AuthenticationPermissions(BasePermission):
 class LogoutPermissions(BasePermission):
 
     def has_permission(self, request, view):
-        refresh = request.COOKIES.get('refresh', {})
+        refresh = request.COOKIES.get('refresh', None)
 
         if refresh:
             return True
