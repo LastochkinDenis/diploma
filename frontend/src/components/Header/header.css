@@ -37,6 +37,9 @@ header {
     display: inline-flex;
     align-items: center;
 }
+.header__nav-item {
+    white-space: nowrap;
+}
 .header__nav-list li {
     float: left;
     margin: 0 10px;

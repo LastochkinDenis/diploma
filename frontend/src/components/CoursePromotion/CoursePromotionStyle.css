@@ -6,15 +6,11 @@
 .promtion-course-description {
     width: 80%;
 }
-/* .promtion-course-image {
-    margin-bottom: 1%;
-} */
+.promtion-course-enrollment {
+  max-width: 300px;
+}
 .promtion-course-name {
   font-size: 26px;
-}
-.promtion-course-image .red-block {
-    width: 170px;
-    height: 130px;
 }
 .promtion-course-image img {
     max-width: 170px;
@@ -52,4 +48,14 @@
 }
 .rotate {
     transform: rotate(-90deg);
+}
+@media (max-width: 700px) {
+  .promtion-course-enrollment {
+    max-width: 100%;
+  }
+  .promtion-course-head  {
+    flex-direction: column;
+    padding: 10px;
+  }
+
 }

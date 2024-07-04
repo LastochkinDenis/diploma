@@ -1,5 +1,5 @@
 .content-course {
-    margin-bottom: 5%;
+    padding-bottom: 5%;
 }
 .course-topic {
     margin-bottom: 1%;
@@ -72,4 +72,19 @@
 .course-topic-task-buttons {
     display: flex;
     align-items: center;
+}
+@media (max-width:1030px) {
+    .course-topic-task-info .red-block {
+        display: none;
+    }
+}
+@media (max-width:540px) {
+    .course-topic-tasks .course-topic-task {
+        align-items: flex-start;
+        flex-direction: column;
+        margin-bottom: 5%;
+    }
+    .course-topic-task-info {
+         margin-bottom: 3%;
+    }
 }

@@ -36,10 +36,9 @@ export default function EditCourse(props) {
       evt.preventDefault();
       evt.returnValue = "";
     };
-    if(isUpdate) {
+    if (isUpdate) {
       window.addEventListener("beforeunload", onUnload);
-    }
-    else {
+    } else {
       window.removeEventListener("beforeunload", onUnload);
     }
     return () => window.removeEventListener("beforeunload", onUnload);
@@ -70,11 +69,9 @@ export default function EditCourse(props) {
   }, [isUpdate]);
 
   const HandleSaveChange = async (evt) => {
-
     let result = false;
 
-    if(Object.keys(dataToUpdate).length >= 1) {
-      
+    if (Object.keys(dataToUpdate).length >= 1) {
       result = await handleCourseEditApi(linkRequestForServer, dataToUpdate);
       setIsUpdate(false);
       setDataToUpdate({});
@@ -93,7 +90,7 @@ export default function EditCourse(props) {
         />
       )}
       <div className="course-edit__wraper">
-        <CoursePanal course={course} setCourse={setCourse}/>
+        <CoursePanal course={course} setCourse={setCourse} />
         <div className="course-edit-block">
           <Outlet
             context={[
@@ -104,15 +101,15 @@ export default function EditCourse(props) {
               setLinkRequestForServer,
               dataToUpdate,
               setDataToUpdate,
-              isUpdate
+              isUpdate,
             ]}
           />
         </div>
       </div>
       <div className="course-edit-footer">
-        <button className="save-button" onClick={HandleSaveChange}>
-          Сохранить
-        </button>
+          <button className="save-button" onClick={HandleSaveChange}>
+            Сохранить
+          </button>
       </div>
     </div>
   );

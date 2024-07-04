@@ -96,15 +96,16 @@
 }
 .image-course {
     border-radius: 5px;
-    width: 100px;
-    height: 90px;
+    width: 132px;
+    height: 132px;
     margin-right: 2%;
 }
 .red-block {
-    width: 100px;
-    height: 90px;
+    width: 132px;
+    height: 132px;
     background-image: url('../../icon/Logo.svg');
     background-position: 50% 50%;
+    background-repeat: no-repeat;
     border-radius: 5px;
     margin-right: 2%;
 }
@@ -134,9 +135,9 @@
     display: block;
 }
 @media (max-width: 1030px) {
-    .course-main {
+    /* .course-main {
         width: 80%;
-    }
+    } */
 }
 @media (max-width: 1030px) {
     .control-panale {
@@ -145,5 +146,10 @@
     .control-panale-serch-course {
         width: 100%;
         margin-bottom: 1%;
+    }
+}
+@media (max-width: 540px) {
+    .course-item-header {
+        flex-direction: column;
     }
 }

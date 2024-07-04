@@ -46,13 +46,17 @@
   margin-bottom: 3%;
   height: 110px;
 }
+.course-recomend .red-block {
+  max-width: 100px;
+  max-height: 90px;
+}
 .image img {
   max-width: 100px;
   max-height: 90px;
 }
 .course-recomend {
   display: grid;
-  grid-template-columns: repeat(3, 32.6%);
+  grid-template-columns: repeat(3, 1fr);
   grid-gap: 1%;
   margin-bottom: 1%;
 }
@@ -65,14 +69,14 @@
   .course-recomend {
     margin-left: 1%;
     margin-bottom: 5%;
-    grid-template-columns: repeat(2, 49%);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 @media (max-width: 600px) {
   .course-recomend {
     margin-left: 1%;
     margin-bottom: 50%;
-    grid-template-columns: 99%;
+    grid-template-columns: 1fr;
   }
   .home-serach {
     flex-direction: column;
