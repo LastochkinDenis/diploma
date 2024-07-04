@@ -35,7 +35,7 @@ SECRET_KEY = DJANGO_SECRET_KEY
 DEBUG = True
 
 ALLOWED_HOSTS = [
-
+    "http://luminari.ru"
 ]
 
 
@@ -159,9 +159,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 FRONTEND_DOMEN = 'localhost:3000'
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    'http://127.0.0.1:8000',
-    # "http://luminari.ru",
+    # 'http://localhost:3000',
+    # 'http://127.0.0.1:8000',
+    "http://luminari.ru",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -172,9 +172,9 @@ AUTH_USER_MODEL = 'user.User'
 
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-    # "http://luminari.ru",
+    # 'http://localhost:3000',
+    # 'http://127.0.0.1:3000',
+    "http://luminari.ru",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
