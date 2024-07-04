@@ -1,3 +1,5 @@
+import ButtonLoad from "../../../ButtonLoader/ButtonLoad";
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -90,7 +92,8 @@ export default function QuestionTask(props) {
       </div>
       <div className="lesson-content-button">
         {PrintResult()}
-        {props.isLoad ? (
+        <ButtonLoad buttonText={"Проверить"} statusLoad={props.isLoad}  callback={SubmitAnswer}/>
+        {/* {props.isLoad ? (
           <button className="course-button course-button-load__wraper">
             <div className="course-button-load">
               <div className="course-button-load-item"></div>
@@ -103,7 +106,7 @@ export default function QuestionTask(props) {
           <button className="course-button" onClick={SubmitAnswer}>
             <p>Проверить</p>
           </button>
-        )}
+        )} */}
         {printNextButton()}
       </div>
     </div>

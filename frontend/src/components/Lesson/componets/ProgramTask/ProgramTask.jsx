@@ -1,3 +1,5 @@
+import ButtonLoad from "../../../ButtonLoader/ButtonLoad";
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import MonacoEditor from "react-monaco-editor";
@@ -116,7 +118,8 @@ public class Main {
       </div>
       <div className="lesson-content-button">
         {PrintResult()}
-        {props.isLoad ? (
+        <ButtonLoad buttonText={"Проверить"} statusLoad={props.isLoad}  callback={SubmitAnswer}/>
+        {/* {props.isLoad ? (
           <button className="course-button course-button-load__wraper">
             <div className="course-button-load">
               <div className="course-button-load-item"></div>
@@ -129,7 +132,7 @@ public class Main {
           <button className="course-button" onClick={SubmitAnswer}>
             <p>Проверить</p>
           </button>
-        )}
+        )} */}
         {printNextButton()}
       </div>
     </div>

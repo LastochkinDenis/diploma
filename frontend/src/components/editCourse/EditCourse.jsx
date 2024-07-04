@@ -5,6 +5,7 @@ import {
   handleCourseEditApi,
 } from "../../api/courseDashboard";
 import ModalSave from "./componets/modalSave/ModalSave";
+import ButtonLoad from "../ButtonLoader/ButtonLoad";
 
 import { Outlet, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -12,6 +13,7 @@ import { useState, useEffect } from "react";
 export default function EditCourse(props) {
   const { idCourse } = useParams();
   const [isUpdate, setIsUpdate] = useState(false);
+  const [isLoad, setIsLoad] = useState(false);
   const [course, setCourse] = useState({
     name: "",
     description: "",
@@ -71,11 +73,15 @@ export default function EditCourse(props) {
   const HandleSaveChange = async (evt) => {
     let result = false;
 
+    setIsLoad(true);
+
     if (Object.keys(dataToUpdate).length >= 1) {
       result = await handleCourseEditApi(linkRequestForServer, dataToUpdate);
       setIsUpdate(false);
       setDataToUpdate({});
     }
+
+    setIsLoad(false);
 
     return result;
   };
@@ -107,9 +113,10 @@ export default function EditCourse(props) {
         </div>
       </div>
       <div className="course-edit-footer">
-          <button className="save-button" onClick={HandleSaveChange}>
+          <ButtonLoad buttonText={"Сохранить"} statusLoad={isLoad} callback={HandleSaveChange} />
+          {/* <button className="save-button" onClick={HandleSaveChange}>
             Сохранить
-          </button>
+          </button> */}
       </div>
     </div>
   );
