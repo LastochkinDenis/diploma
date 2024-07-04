@@ -119,20 +119,6 @@ public class Main {
       <div className="lesson-content-button">
         {PrintResult()}
         <ButtonLoad buttonText={"Проверить"} statusLoad={props.isLoad}  callback={SubmitAnswer}/>
-        {/* {props.isLoad ? (
-          <button className="course-button course-button-load__wraper">
-            <div className="course-button-load">
-              <div className="course-button-load-item"></div>
-              <div className="course-button-load-item"></div>
-              <div className="course-button-load-item"></div>
-              <div className="course-button-load-item"></div>
-            </div>
-          </button>
-        ) : (
-          <button className="course-button" onClick={SubmitAnswer}>
-            <p>Проверить</p>
-          </button>
-        )} */}
         {printNextButton()}
       </div>
     </div>
