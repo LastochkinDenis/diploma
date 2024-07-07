@@ -29,6 +29,7 @@ header {
     justify-content: space-between;
 
     width: 65%;
+    z-index: 2;
 }
 .header__nav-activate {
     background-color: red;
@@ -143,6 +144,7 @@ header {
     top: -12%;
 
     margin-left: -40px;
+    z-index: 2;
 } 
 .header__profile-menu.activeF {
     top: 100px;

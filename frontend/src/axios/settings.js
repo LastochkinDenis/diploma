@@ -1,6 +1,6 @@
 import axios from "axios";
 
-axios.defaults.baseURL = 'http://luminari.ru"/api/1.0v/';
+axios.defaults.baseURL = 'https://luminari.ru/api/1.0v/';
 axios.defaults.withCredentials = true;
 
 let refresh = false;

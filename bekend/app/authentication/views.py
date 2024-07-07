@@ -191,7 +191,12 @@ def updateAcsesToken(requset):
     try:
         refreshUser = RefreshUser.objects.get(refresh=requset.COOKIES.get('refresh', ''))
     except ObjectDoesNotExist:
-        return Response('', status=status.HTTP_403_FORBIDDEN)
+        response = Response()
+        response.delete_cookie('access', path='/')
+        response.delete_cookie('refresh', path='/')
+        response.status_code = status.HTTP_403_FORBIDDEN
+
+        return response
 
     response = Response()
 
