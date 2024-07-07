@@ -1,9 +1,0 @@
-from .views import RegiestUser, InfoUser
-
-from django.urls import path
-
-
-urlpatterns = [
-    path('register/', RegiestUser.as_view()),
-    path('userinfo/', InfoUser.as_view())
-]
